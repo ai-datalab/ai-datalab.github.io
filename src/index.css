@@ -1,9 +1,9 @@
 /* Hallmark · shape: catalogue · genre: modern-minimal · theme: Cobalt (by request) · direction: the product performs (taste-skill) · redesign: full
- * hero: copy beside a working report panel (field map over a sortable repo table) · nav: inline + sticky section tabs · footer: two-column colophon · imagery: the product, each screen whole · signature: the plotted point
+ * hero: copy beside a working report panel (the platform and its components on one rail, with live stars) · nav: inline + sticky section tabs · footer: two-column colophon · imagery: the product, each screen whole · signature: the plotted point
  * axes: light/grotesk-sans/cool · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: E, whole screens are scaled down, so their small text is a texture rather than readable
- * motif: the field map's point (cobalt core, wash halo) is the mark, the bullet, the primary key's detail, the screenshot corner and the graphite band
- * fragments: the repo table, the screen stage, the setup walk and the checklists are working pieces built only from data.ts, the preview images and live GitHub data */
+ * motif: the plotted point (cobalt core, wash halo) is the mark, the bullet, the primary key's detail, where each component meets the platform's rail, the screenshot corner and the graphite band
+ * fragments: the platform panel, the screen stage, the setup walk and the checklists are working pieces built only from data.ts, the preview images and live GitHub data */
 /* Hallmark · reworded "what's new" to "what’s new" · typographic apostrophe, already live before this theme */
 /* Hallmark · reworded "4days" to the current age · live relative pushed date from GitHub, changes daily */
 :root {
@@ -35,7 +35,7 @@
   --shadow-key-press: inset 0 1px 2px oklch(21% 0.028 262 / 0.14);
   --shadow-tray: inset 0 1px 2px oklch(21% 0.028 262 / 0.08);
   --tracking-display: -0.028em;
-  /* The plotted point: a solid core inside a wash halo, exactly as the field map draws it (r7 in r20). */
+  /* The plotted point: a solid core inside a wash halo, as the hero and the graphite band draw it (r7 in r20). */
   --plot: radial-gradient(circle closest-side, var(--color-accent) 0 34%, var(--color-halo) 37% 99%, transparent 100%);
   --plot-on: radial-gradient(circle closest-side, var(--color-accent-ink) 0 34%, var(--color-halo-on) 37% 99%, transparent 100%);
   --plot-dark: radial-gradient(circle closest-side, var(--color-accent-2) 0 34%, var(--color-halo-dark) 37% 99%, transparent 100%);
@@ -142,7 +142,7 @@ main:focus { outline: none; }
 
 .key:hover { transform: translateY(-1px); }
 .key:active { transform: translateY(3px); box-shadow: var(--shadow-key-press); }
-.key:disabled, .key[aria-disabled="true"], .chips button:disabled, .picker input:disabled { cursor: not-allowed; opacity: 0.5; transform: none; }
+.key:disabled, .key[aria-disabled="true"], .picker input:disabled { cursor: not-allowed; opacity: 0.5; transform: none; }
 
 .key-primary {
   background: var(--color-accent);
@@ -275,9 +275,12 @@ main:focus { outline: none; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas: "copy map" "facts map";
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto;
+  align-content: center;
   gap: var(--space-xl) var(--space-2xl);
   align-items: start;
+  /* Fills the first screen, so the section tabs land at its bottom edge. */
+  min-height: calc(100svh - 200px);
 }
 
 .opening { grid-area: copy; display: flex; flex-direction: column; gap: var(--space-lg); }
@@ -298,154 +301,113 @@ main:focus { outline: none; }
   box-shadow: var(--shadow-card);
 }
 
-.hero-map .fieldmap { padding: 0; background: none; border: 0; box-shadow: none; }
+/* The platform: AI-DataHub on top, each component hanging from one rail below it. */
+.platform { margin: 0; }
+.platform a { color: inherit; text-decoration: none; }
 
-/* The repo table: the hub's own repos, sortable on live GitHub numbers. */
-.repo-table {
-  width: 100%;
-  margin-top: var(--space-sm);
-  border-collapse: collapse;
-  font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
-}
-
-.repo-table th,
-.repo-table td { height: 44px; padding: 0 var(--space-xs); border-top: 1px solid var(--color-rule); text-align: left; font-weight: 400; }
-
-.repo-table thead th { border-top: 0; border-bottom: 1px solid var(--color-rule-2); color: var(--color-muted); font: 500 var(--text-xs)/1 var(--font-display); }
-.repo-table .num { text-align: right; white-space: nowrap; color: var(--color-ink-2); }
-.repo-table thead .num { color: var(--color-muted); }
-
-.repo-table thead button {
-  display: inline-flex;
+.platform-hub {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "kicker meta" "name meta" "note meta";
+  gap: var(--space-3xs) var(--space-md);
   align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-xs);
-  min-height: 44px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-}
-
-.repo-table thead button:hover { color: var(--color-ink); }
-.repo-table thead button[aria-pressed='true'] { color: var(--color-accent-deep); }
-.repo-table thead button:focus-visible { outline-offset: -2px; }
-
-.sort-mark { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; rotate: 45deg; translate: 0 -2px; opacity: 0.4; }
-.repo-table thead button[aria-pressed='true'] .sort-mark { opacity: 1; }
-
-.repo-table tbody th { padding-left: 0; }
-
-.repo-table tbody th a {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  min-height: 44px;
-  padding-left: var(--space-xs);
-  color: var(--color-ink);
-  font: 600 var(--text-md)/1.2 var(--font-display);
-  letter-spacing: -0.01em;
-  text-decoration: none;
-}
-
-.repo-table tbody th a::before {
-  content: "";
-  flex: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 4px var(--color-key-face), inset 0 0 0 5.5px var(--color-rule-2);
-}
-
-.repo-table tbody th a:focus-visible { outline-offset: -2px; }
-.repo-table tbody tr { transition: background-color var(--dur-micro) var(--ease-out); }
-.repo-table tbody tr.is-active { background: var(--color-accent-wash); }
-.repo-table tbody tr.is-active th a::before { box-shadow: none; background: var(--plot); }
-.repo-table tbody tr.is-active th a { text-decoration: underline; text-decoration-color: var(--color-accent); }
-
-/* Field map */
-.fieldmap {
-  margin: 0;
-  padding: var(--space-md) var(--space-xs) var(--space-xs);
-  background: var(--color-key-face);
-  border: 1px solid var(--color-rule-2);
-  border-radius: var(--cut-l) 4px;
-  box-shadow: var(--shadow-card);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-accent-wash);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--cut) 4px;
+  transition: background-color var(--dur-short) var(--ease-out);
 }
 
 @supports (corner-shape: bevel) {
-  .fieldmap { border-radius: var(--cut-l) 4px var(--cut-l) 4px; corner-shape: bevel round bevel round; }
+  .platform-hub { border-radius: var(--cut) 4px var(--cut) 4px; corner-shape: bevel round bevel round; }
 }
 
-.fieldmap svg { width: 100%; height: auto; font-family: var(--font-body); }
+.platform-kicker { grid-area: kicker; color: var(--color-accent-deep); font: 500 var(--text-xs)/1.3 var(--font-display); }
+.platform-hub strong { grid-area: name; font: 600 var(--text-2xl)/1.1 var(--font-display); letter-spacing: var(--tracking-display); }
+.platform-note { grid-area: note; color: var(--color-ink-2); font-size: var(--text-sm); }
+.platform-hub .platform-meta { grid-area: meta; }
 
-.grid-minor { fill: none; stroke: var(--color-rule); stroke-width: 0.6; }
-.grid-major { stroke: var(--color-rule-2); stroke-width: 1; }
-.axis { fill: none; stroke: var(--color-ink); stroke-width: 1.25; }
-.axis-tick { fill: var(--color-muted); font: 500 13px var(--font-display); }
-.axis-name { fill: var(--color-ink); font: 600 12px var(--font-display); }
+.platform-hub:hover,
+.platform-hub.is-active { background: var(--color-halo); }
+.platform-hub:hover strong,
+.platform-hub:focus-visible strong { text-decoration: underline; text-decoration-color: var(--color-accent); }
 
-.point text,
-.hub-band text {
-  font: 600 17px var(--font-display);
-  letter-spacing: -0.01em;
-  fill: var(--color-ink);
+.platform-parts { position: relative; list-style: none; margin: 0; padding: var(--space-sm) 0 0; }
+
+/* The rail: down from the platform to the last component's point. */
+.platform-parts::before {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: 0;
+  bottom: 22px;
+  width: 1.5px;
+  background: var(--color-accent);
 }
 
-.point .dot { fill: var(--color-accent); stroke: var(--color-key-face); stroke-width: 2; }
-
-.point .halo {
-  fill: var(--color-accent);
-  opacity: 0.16;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+.part {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 10rem) minmax(0, 1fr) auto;
+  grid-template-areas: "label name meta";
+  align-items: center;
+  gap: var(--space-2xs) var(--space-md);
+  min-height: 48px;
+  padding: var(--space-2xs) var(--space-xs) var(--space-2xs) 48px;
+  border-bottom: 1px solid var(--color-rule);
+  transition: background-color var(--dur-micro) var(--ease-out);
 }
 
-.point:hover .halo,
-.point.is-active .halo,
-.point:focus-visible .halo { opacity: 0.3; transform: scale(1.35); }
-
-.point:focus-visible,
-.hub-band:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-
-.point:focus-visible text,
-.hub-band:focus-visible text { text-decoration: underline; }
-
-.hub-band rect {
-  fill: var(--color-accent-wash);
-  stroke: var(--color-accent);
-  stroke-width: 1;
-  transition: fill var(--dur-short) var(--ease-out);
+.part::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: var(--color-key-face);
+  box-shadow: inset 0 0 0 1.5px var(--color-accent);
 }
 
-.hub-band text { font-size: 14px; fill: var(--color-accent-deep); }
+.part:hover::before,
+.part.is-active::before { left: 6px; width: 32px; height: 32px; box-shadow: none; background: var(--plot); }
 
-.hub-band:hover rect,
-.hub-band.is-active rect,
-.hub-band:focus-visible rect { fill: var(--color-halo); }
+.part-label { grid-area: label; color: var(--color-muted); font: 500 var(--text-sm)/1.25 var(--font-display); }
+.part strong { grid-area: name; font: 600 var(--text-md)/1.25 var(--font-display); letter-spacing: -0.01em; }
+.part .platform-meta { grid-area: meta; }
+
+.part:hover,
+.part.is-active { background: var(--color-accent-wash); }
+.part:hover strong,
+.part:focus-visible strong { text-decoration: underline; text-decoration-color: var(--color-accent); }
+.part:hover .part-label,
+.part.is-active .part-label { color: var(--color-accent-deep); }
+.part:focus-visible,
+.platform-hub:focus-visible { outline-offset: -2px; }
+
+/* What each solution is: its component, or the platform. */
+.kind { display: inline-flex; align-self: flex-start; color: var(--color-accent-deep); font: 500 var(--text-xs)/1.3 var(--font-display); letter-spacing: 0.01em; }
+
+.kind-platform {
+  padding: var(--space-3xs) var(--space-xs);
+  background: var(--color-accent-wash);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--cut) 3px;
+}
+
+.picker label .kind { color: var(--color-accent-2); }
+.picker label .kind-platform { background: none; border-color: var(--color-accent-2); }
 
 .map-caption { margin-top: var(--space-sm); min-height: 3.2em; font-size: var(--text-sm); color: var(--color-muted); padding-left: var(--space-xs); }
 .map-caption strong { color: var(--color-ink); font-weight: 600; }
 
-/* The page's one orchestrated moment: the axes draw, then the solutions land. */
+/* The page's one orchestrated moment: the platform lands, then its components, one by one. */
 @media (prefers-reduced-motion: no-preference) {
-  .draw {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: draw 0.9s var(--ease-in-out) 0.15s forwards;
-  }
-
   .reveal {
     opacity: 0;
     animation: land 0.45s var(--ease-out) var(--d, 1s) forwards;
-  }
-
-  @keyframes draw {
-    to { stroke-dashoffset: 0; }
   }
 
   @keyframes land {
@@ -509,59 +471,8 @@ main:focus { outline: none; }
 
 .section-tint { background: var(--color-paper-2); border-block: 1px solid var(--color-rule); }
 
-/* Filter keys on a sunken tray */
-.chips {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
-  padding: var(--space-2xs) var(--space-2xs) var(--space-xs);
-  margin-bottom: var(--space-xl);
-  background: var(--color-paper-3);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--cut) 4px;
-  box-shadow: var(--shadow-tray);
-}
-
-.chips button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  min-height: 44px;
-  padding: 0 var(--space-md);
-  border: 1px solid var(--color-rule-2);
-  border-radius: 6px;
-  background: var(--color-key-face);
-  color: var(--color-ink-2);
-  font: 500 var(--text-sm)/1 var(--font-display);
-  box-shadow: var(--shadow-key);
-  cursor: pointer;
-  transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
-}
-
-.chips button:hover { transform: translateY(-1px); color: var(--color-ink); }
-
-.chips button[aria-pressed='true'] {
-  transform: translateY(3px);
-  background: var(--color-paper-2);
-  color: var(--color-accent-deep);
-  box-shadow: var(--shadow-key-press);
-}
-
-.chips button[aria-pressed='true']::before { content: ""; width: 16px; height: 16px; margin-left: calc(-1 * var(--space-2xs)); background: var(--plot); }
-
-/* Card meta: area strip and stars */
+/* Card meta: stars */
 .card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md); }
-
-.strip { display: inline-flex; align-items: center; gap: var(--space-xs); }
-
-.strip span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1.5px solid var(--color-rule-2);
-}
-
-.strip span.on { border-color: var(--color-accent); box-shadow: inset 0 0 0 5px var(--color-accent), 0 0 0 3px var(--color-accent-wash); }
 
 .stars {
   display: inline-flex;
@@ -637,6 +548,18 @@ main:focus { outline: none; }
 }
 
 .sheet-name { display: flex; flex-direction: column; gap: var(--space-sm); }
+.sheet-name .kind { margin-left: var(--space-xl); }
+.sheet-hub h3 { font-size: var(--text-3xl); }
+
+/* Between the platform and its components. */
+.index-group {
+  padding: var(--space-xl) 0 0;
+  border-top: 1px solid var(--color-rule-2);
+  color: var(--color-muted);
+  font: 500 var(--text-sm)/1.3 var(--font-display);
+}
+
+.index-group + .sheet { border-top: 0; padding-top: var(--space-lg); }
 
 .sheet h3 { position: relative; padding-left: var(--space-xl); font-size: var(--text-2xl); font-weight: 600; letter-spacing: var(--tracking-display); }
 
@@ -707,6 +630,7 @@ main:focus { outline: none; }
 }
 
 .stage-caption strong { color: var(--color-ink); font: 600 var(--text-sm)/1.6 var(--font-display); }
+.stage-caption .kind { margin-right: var(--space-xs); }
 /* Which one: the graphite band */
 .band { background: var(--color-graphite); color: var(--color-graphite-ink); }
 .band h2 { color: var(--color-graphite-ink); }
@@ -723,7 +647,7 @@ main:focus { outline: none; }
   right: 0;
   bottom: 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   height: 24px;
   align-items: center;
   color: var(--color-graphite-muted);
@@ -1042,11 +966,13 @@ main:focus { outline: none; }
 .pairs { margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-rule-2); }
 .pairs h2 { font-size: var(--text-xl); letter-spacing: -0.02em; margin-bottom: var(--space-lg); }
 .pairs ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--space-md); }
+.pairs-parts ul { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
 .pairs li { background: var(--color-key-face); border: 1px solid var(--color-rule-2); box-shadow: var(--shadow-card); }
 
 .pairs a { display: flex; flex-direction: column; gap: var(--space-2xs); padding: var(--space-lg); text-decoration: none; height: 100%; }
 .pairs strong { font: 600 var(--text-lg)/1.2 var(--font-display); letter-spacing: -0.015em; }
 .pairs span { color: var(--color-ink-2); font-size: var(--text-sm); }
+.pairs .kind { color: var(--color-accent-deep); font-size: var(--text-xs); }
 .pairs a:hover strong { text-decoration: underline; text-decoration-color: var(--color-accent); }
 
 /* Footer */
@@ -1093,16 +1019,8 @@ main:focus { outline: none; }
   .hero-grid { gap: var(--space-xl); }
   .hero-map { padding: var(--space-md) var(--space-sm) var(--space-2xs); }
 
-  /* The map scales down with the viewport, so its text needs larger user units to stay readable. */
-  .point text { font-size: 27px; }
-  .hub-band text { font-size: 21px; }
-  .axis-tick,
-  .axis-name { font-size: 20px; }
-
   .section { padding: var(--space-2xl) 0; }
   .section-head { grid-template-columns: minmax(0, 1fr); gap: var(--space-sm); }
-
-  .chips { display: flex; }
 
   .answer,
   .walk-panel { padding: var(--space-lg); }
@@ -1114,6 +1032,8 @@ main:focus { outline: none; }
   .sheet-name .card-meta,
   .sheet-body { padding-left: 0; }
   .sheet h3 { padding-left: 32px; }
+  .sheet-name .kind { margin-left: 32px; }
+  .sheet-hub h3 { font-size: var(--text-2xl); }
   .sheet h3::before { left: 2px; }
   .sheet.is-peek h3::before { left: -4px; }
 
@@ -1136,9 +1056,9 @@ main:focus { outline: none; }
 }
 
 @media (max-width: 520px) {
-  .col-measures { display: none; }
-  .repo-table th,
-  .repo-table td { padding: 0 var(--space-2xs); }
+  .part { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "label meta" "name meta"; padding-block: var(--space-xs); }
+  .platform-hub { padding: var(--space-md); }
+  .field-axis { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

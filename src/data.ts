@@ -1,11 +1,15 @@
-export type Area = 'adoption' | 'value' | 'cost' | 'governance'
+// Each component covers one thing. AI-DataHub is the platform that brings them together.
+export type Component = 'adoption' | 'value' | 'cost' | 'agents' | 'github'
 
-export const areaLabels: Record<Area, string> = {
+export const componentLabels: Record<Component, string> = {
   adoption: 'Adoption',
   value: 'Value',
-  cost: 'Cost',
-  governance: 'Governance',
+  cost: 'Consumption & cost',
+  agents: 'Agents',
+  github: 'GitHub Copilot',
 }
+
+export const components = Object.keys(componentLabels) as Component[]
 
 export interface Video {
   label: string
@@ -19,7 +23,8 @@ export interface Solution {
   repo: string
   summary: string
   question: string
-  areas: Area[]
+  /** The one thing this component covers. The platform has none. */
+  component?: Component
   runsAs: string[]
   measures: string[]
   beforeYouStart: string[]
@@ -28,20 +33,17 @@ export interface Solution {
   preview: { src: string; alt: string }
   includes?: string[]
   related?: string[]
-  /** Position on the hero field map: x 0..1 across areas, y 0..1 from people to agents. */
-  map: { x: number; y: number }
   stars: number
 }
 
 export const solutions: Solution[] = [
   {
-    id: 'analytics-hub',
-    name: 'Analytics Hub',
+    id: 'ai-datahub',
+    name: 'AI-DataHub',
     repo: 'microsoft/AnalyticsHub-Dashboard',
     summary:
-      'One installer sets up an app on Microsoft Fabric or Azure that shows Copilot and agent adoption, value, consumption and governance in one place.',
-    question: 'I want adoption, value and cost in one app, refreshed every day.',
-    areas: ['adoption', 'value', 'cost', 'governance'],
+      'The platform that brings it together: one installer sets up an app on Microsoft Fabric or Azure with Copilot and agent adoption, value, consumption and governance in one place.',
+    question: 'I want it all in one app, refreshed every day.',
     runsAs: ['The app', 'Power BI', 'Fabric', 'Azure'],
     measures: [
       'Copilot and agent use across the organisation',
@@ -56,19 +58,18 @@ export const solutions: Solution[] = [
       'A Windows 10 or 11 PC. No admin rights needed',
     ],
     videos: [{ label: 'The app, page by page', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard#videos', length: '2 min' }],
-    preview: { src: 'previews/analytics-hub.gif', alt: 'The Analytics Hub app, cycling through its pages on sample data' },
+    preview: { src: 'previews/analytics-hub.gif', alt: 'The AI-DataHub app, cycling through its pages on sample data' },
     includes: ['valuelens', 'consumption-central'],
-    map: { x: 0.42, y: 0.5 },
     stars: 10,
   },
   {
     id: 'ai-in-one',
+    component: 'adoption',
     name: 'AI in One',
     repo: 'microsoft/AI-in-One-Dashboard',
     summary:
       'One dashboard for every Microsoft 365 Copilot, Copilot Chat and agent adoption signal, with row-level security and privacy controls built in.',
     question: 'Who is using Copilot and agents, and where do we need enablement?',
-    areas: ['adoption'],
     runsAs: ['The app', 'Power BI', 'SharePoint', 'Local CSV', 'Fabric'],
     measures: [
       'Use of licensed Copilot, unlicensed Copilot Chat and agents over time',
@@ -90,18 +91,17 @@ export const solutions: Solution[] = [
       { label: 'Setup guide', url: 'https://youtu.be/z4FWazaBDS8', length: '10 min 12 s' },
     ],
     preview: { src: 'previews/ai-in-one.png', alt: 'The AI in One app’s Overview tab on sample data' },
-    related: ['valuelens', 'analytics-hub'],
-    map: { x: 0.12, y: 0.3 },
+    related: ['valuelens', 'ai-datahub'],
     stars: 102,
   },
   {
     id: 'valuelens',
+    component: 'value',
     name: 'ValueLens',
     repo: 'microsoft/ValueLens-for-Microsoft-Copilot',
     summary:
       'The hours and value Microsoft 365 Copilot and agents deliver, by team, tool and task, as an app or a Power BI report.',
     question: 'What value are we getting from Copilot, and is it worth the cost?',
-    areas: ['value', 'adoption'],
     runsAs: ['The app', 'Power BI', 'Fabric', 'Azure', 'SharePoint', 'Local CSV'],
     measures: [
       'Hours saved and value delivered, by team, tool and task',
@@ -124,18 +124,17 @@ export const solutions: Solution[] = [
       { label: 'Fabric setup', url: 'https://youtu.be/-pAuSQSP5pc' },
     ],
     preview: { src: 'previews/valuelens.gif', alt: 'The ValueLens app, cycling through its pages on sample data' },
-    related: ['ai-in-one', 'consumption-central', 'analytics-hub'],
-    map: { x: 0.37, y: 0.2 },
+    related: ['ai-in-one', 'consumption-central', 'ai-datahub'],
     stars: 23,
   },
   {
     id: 'github-copilot-panel',
+    component: 'github',
     name: 'GitHub Copilot Panel',
     repo: 'microsoft/GitHubCopilotPanel',
     summary:
       'GitHub Copilot adoption, engagement depth and realised value, as a Power BI template on the Viva Insights GitHub Copilot query output.',
     question: 'Are our developers moving from autocomplete to delegation, and what is that worth?',
-    areas: ['adoption', 'value'],
     runsAs: ['Power BI', 'Local CSV', 'Viva Insights'],
     measures: [
       'Reach: who has a seat, and who actually uses it',
@@ -150,18 +149,17 @@ export const solutions: Solution[] = [
     ],
     videos: [{ label: 'Intro', url: 'https://youtu.be/EwzHwbXsWoU', length: '2 min 18 s' }],
     preview: { src: 'previews/github-copilot-panel.gif', alt: 'The GitHub Copilot Panel report, cycling through its pages on synthetic sample data' },
-    related: ['analytics-hub', 'valuelens', 'consumption-central'],
-    map: { x: 0.25, y: 0.07 },
+    related: ['ai-datahub', 'valuelens', 'consumption-central'],
     stars: 1,
   },
   {
     id: 'consumption-central',
+    component: 'cost',
     name: 'Consumption Central',
     repo: 'microsoft/ConsumptionCentral-for-Microsoft-Copilot',
     summary:
       'Copilot credit consumption and cost across Cowork and Work IQ, Copilot Studio, GitHub Copilot and Azure AI Foundry, as an app or a Power BI report.',
     question: 'What are we consuming, what does it cost, and where can we trim?',
-    areas: ['cost'],
     runsAs: ['The app', 'Power BI', 'Fabric'],
     measures: [
       'Credit consumption and cost, in six tabs',
@@ -180,18 +178,17 @@ export const solutions: Solution[] = [
       { label: 'Setup guide', url: 'https://youtu.be/0fgvP8mutTo', length: '10 min 49 s' },
     ],
     preview: { src: 'previews/consumption-central.gif', alt: 'The Consumption Central app, cycling through its tabs on sample data' },
-    related: ['analytics-hub', 'valuelens', 'github-copilot-panel'],
-    map: { x: 0.64, y: 0.62 },
+    related: ['ai-datahub', 'valuelens', 'github-copilot-panel'],
     stars: 31,
   },
   {
     id: 'agent-monitor',
+    component: 'agents',
     name: 'Agent Monitor',
     repo: 'Keithland89/agent-inventory',
     summary:
       'Tenant-wide inventory, monitoring and governance for Agent Builder, Copilot Studio, agent flows and Azure AI Foundry agents, built on APIs a normal admin can use.',
     question: 'Which agents exist across the tenant, who owns them, and which need attention?',
-    areas: ['governance', 'cost'],
     runsAs: ['The app', 'Power BI', 'Local CSV'],
     measures: [
       'Every agent across Copilot Studio, Agent Builder, agent flows and Azure AI Foundry',
@@ -207,7 +204,6 @@ export const solutions: Solution[] = [
     videos: [],
     preview: { src: 'previews/agent-monitor.png', alt: 'Agent Monitor’s executive overview page on anonymised sample data' },
     related: ['consumption-central'],
-    map: { x: 0.88, y: 0.82 },
     stars: 2,
   },
 ]
@@ -251,19 +247,27 @@ export interface LogEntry {
 export const log: LogEntry[] = [
   { date: '2026-11-01', solution: 'valuelens', text: 'The installer branch is merged, and the app picks up a round of design fixes.', url: 'https://github.com/microsoft/ValueLens-for-Microsoft-Copilot/pull/216' },
   { date: '2026-11-01', solution: 'consumption-central', text: 'The Fabric App gets the same design fixes as ValueLens.', url: 'https://github.com/microsoft/ConsumptionCentral-for-Microsoft-Copilot/pull/79' },
-  { date: '2026-10-27', solution: 'analytics-hub', text: 'Links that keep your place, a phone layout, and plainer errors.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/pull/217' },
+  { date: '2026-10-27', solution: 'ai-datahub', text: 'Links that keep your place, a phone layout, and plainer errors.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/pull/217' },
   { date: '2026-10-27', solution: 'agent-monitor', text: 'A pinned filter dock, denser tables and tighter page layouts.', url: 'https://github.com/Keithland89/agent-inventory/pull/12' },
-  { date: '2026-10-26', solution: 'analytics-hub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/releases/tag/installer-v0.6.8' },
+  { date: '2026-10-26', solution: 'ai-datahub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/releases/tag/installer-v0.6.8' },
   { date: '2026-10-25', solution: 'ai-in-one', text: 'The app now copes with missing users, Agent 365 and empty interactions files.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/pull/81' },
   { date: '2026-10-14', solution: 'github-copilot-panel', text: 'A two-minute intro video walks through the report, page by page.', url: 'https://github.com/microsoft/GitHubCopilotPanel/pull/8' },
   { date: '2026-10-06', solution: 'ai-in-one', text: 'AI in One 2.0 released.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/releases/tag/AIO-v2.0.0' },
 ]
 
 export const steps = [
-  { title: 'Pick a solution', text: 'Start from the question you need answered. If you want all of it, start with Analytics Hub.' },
+  { title: 'Pick a solution', text: 'Start from the question you need answered. If you want all of it, start with AI-DataHub.' },
   { title: 'Try it on sample data', text: 'Watch the demo, or open the app on sample data. There is nothing to install.' },
   { title: 'Line up your admins', text: 'Each repo has a "Before you start" list that says who grants what. Send it round early.' },
   { title: 'Install and share', text: 'Run the installer or open the Power BI template, then share the app with the people who need it.' },
 ]
 
 export const byId = (id: string) => solutions.find((s) => s.id === id)
+
+export const hub = solutions.find((s) => !s.component)!
+
+/** The components, in the order they are shown. */
+export const parts = components.map((c) => solutions.find((s) => s.component === c)!)
+
+/** The platform first, then its components. */
+export const ordered = [hub, ...parts]

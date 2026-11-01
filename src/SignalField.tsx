@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react'
-import { areaLabels, solutions, type Area } from './data'
+import { componentLabels, components, hub as platform, parts } from './data'
 
-// The field map again, drawn as a character field on the theme's 8 by 16 cell.
-// Each solution is a plotted point; the one the picker has chosen grows its halo.
+// The platform again, drawn as a character field on the theme's 8 by 16 cell.
+// AI-DataHub is the band across the top; each component is a plotted point in
+// its own column below. The one the picker has chosen grows its halo.
 const RAMP = ' .:-=+*#%@'
 const CELL_W = 8
 const CELL_H = 16
-const areas = Object.keys(areaLabels) as Area[]
 
 const hash = (c: number, r: number) => {
   let h = (c * 374761393 + r * 668265263) | 0
@@ -56,9 +56,10 @@ export function SignalField({ active }: Props) {
       const narrow = w < 640
       const scale = narrow ? 0.62 : 1
 
-      const pts = solutions.filter((s) => s.id !== 'analytics-hub').map((s) => ({ id: s.id, x: X(s.map.x), y: Y(s.map.y), right: s.map.x > 0.6 }))
-      const hub = { x0: X(0.03), x1: X(0.72), y: Y(0.5) }
-      const hubOn = active === 'analytics-hub'
+      const n = parts.length
+      const pts = parts.map((s, i) => ({ id: s.id, x: X((i + 0.5) / n), y: Y(i % 2 ? 0.42 : 0.22), right: i === n - 1 }))
+      const hub = { x0: X(0.04), x1: X(0.96), y: Y(0.78) }
+      const hubOn = active === platform.id
 
       ctx.font = `13px ${tok('--font-outlier')}`
       const labels = pts
@@ -70,12 +71,12 @@ export function SignalField({ active }: Props) {
           const lx = pt.right ? pt.x - off - tw : pt.x + off
           return { text: pt.id, x: lx, y: on ? pt.y : pt.y - 22, w: tw, on }
         })
-      if (!narrow || hubOn) labels.push({ text: 'analytics-hub', x: hub.x0, y: hub.y - 30, w: ctx.measureText('analytics-hub').width, on: hubOn })
+      if (!narrow || hubOn) labels.push({ text: platform.id, x: hub.x0, y: hub.y - 30, w: ctx.measureText(platform.id).width, on: hubOn })
       const underLabel = (cx: number, cy: number) => labels.some((l) => cx > l.x - 6 && cx < l.x + l.w + 6 && cy > l.y - 12 && cy < l.y + 8)
 
       const cols = Math.ceil(w / CELL_W)
       const rows = Math.floor(h / CELL_H)
-      const dividers = [0.25, 0.5, 0.75].map((f) => Math.floor(X(f) / CELL_W))
+      const dividers = pts.slice(1).map((_, i) => Math.floor(X((i + 1) / n) / CELL_W))
       ctx.textBaseline = 'middle'
       ctx.font = `12px ${tok('--font-outlier')}`
 
@@ -150,8 +151,8 @@ export function SignalField({ active }: Props) {
     <div className="field" aria-hidden="true">
       <canvas ref={canvasRef} className="field-canvas" />
       <div ref={axisRef} className="wrap field-axis">
-        {areas.map((a) => (
-          <span key={a}>{areaLabels[a]}</span>
+        {components.map((c) => (
+          <span key={c}>{componentLabels[c]}</span>
         ))}
       </div>
     </div>

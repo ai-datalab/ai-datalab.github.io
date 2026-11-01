@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
-import { FieldMap } from './FieldMap'
+import { useEffect, useState } from 'react'
+import { Platform } from './Platform'
 import { SignalField } from './SignalField'
-import { areaLabels, byId, log, related, solutions, steps, type Area, type Solution } from './data'
+import { byId, componentLabels, hub, log, ordered, parts, related, steps, type Solution } from './data'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 
 const sections = [
@@ -12,7 +12,7 @@ const sections = [
   { id: 'related', label: 'Related' },
 ] as const
 
-const allAreas = Object.keys(areaLabels) as Area[]
+const count = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][parts.length] ?? String(parts.length)
 
 function useRoute() {
   const get = () => window.location.hash.replace(/^#/, '')
@@ -43,7 +43,8 @@ function useMedia(query: string) {
 export default function App() {
   const route = useRoute()
   const live = useLiveRepoStats()
-  const detail = route.startsWith('/s/') ? byId(route.slice(3)) : undefined
+  // Old links to the hub's previous name still land on it.
+  const detail = route.startsWith('/s/') ? byId(route.slice(3) === 'analytics-hub' ? hub.id : route.slice(3)) : undefined
 
   useEffect(() => {
     document.title = detail ? `${detail.name} | AI-DataLab` : 'AI-DataLab: Copilot and agent analytics by Keith McGrane'
@@ -110,8 +111,8 @@ function Home({ live }: { live: Live }) {
           <div className="opening">
             <h1>Copilot and agent analytics you run in your own tenant.</h1>
             <p className="lede">
-              AI-DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. They
-              show who uses them, the value they deliver, what they cost and which agents need attention.
+              AI-DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. Each
+              component covers one thing, and {hub.name} brings them together in one platform.
             </p>
             <div className="cta-row">
               <a className="key key-primary" href="#solutions">Browse the solutions</a>
@@ -124,17 +125,16 @@ function Home({ live }: { live: Live }) {
             <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
           </ul>
           <div className="hero-map cut" data-ui="report">
-            <FieldMap active={hover} onActive={setHover} />
+            <Platform active={hover} onActive={setHover} meta={(s) => <Stars s={s} live={live} />} />
             <p className="map-caption" aria-live="polite">
               {hovered ? (
                 <>
                   <strong>{hovered.name}</strong> answers “{hovered.question}”
                 </>
               ) : (
-                'Each solution, plotted by what it measures and whose activity it covers. Point at one to see the question it answers.'
+                `${hub.name} on top, its ${count} components below. Each is its own repo. Point at one to see the question it answers.`
               )}
             </p>
-            <RepoTable live={live} active={hover} onActive={setHover} />
           </div>
         </div>
       </section>
@@ -177,15 +177,8 @@ function SectionTabs() {
   )
 }
 
-function AreaStrip({ areas }: { areas: Area[] }) {
-  const label = `Measures ${areas.map((a) => areaLabels[a].toLowerCase()).join(', ')}`
-  return (
-    <span className="strip" role="img" aria-label={label} title={label}>
-      {allAreas.map((a) => (
-        <span key={a} className={areas.includes(a) ? 'on' : ''} />
-      ))}
-    </span>
-  )
+function Kind({ s }: { s: Solution }) {
+  return <span className={`kind ${s.component ? '' : 'kind-platform'}`}>{s.component ? componentLabels[s.component] : 'The platform'}</span>
 }
 
 function Stars({ s, live }: { s: Solution; live: Live }) {
@@ -197,74 +190,10 @@ function Stars({ s, live }: { s: Solution; live: Live }) {
   )
 }
 
-type SortKey = 'stars' | 'pushed' | null
-
-// A working fragment: the hub's own repos as a report table. It sorts on live
-// GitHub numbers and cross-highlights with the field map above it.
-function RepoTable({ live, active, onActive }: { live: Live; active: string | null; onActive: (id: string | null) => void }) {
-  const [sort, setSort] = useState<SortKey>(null)
-  const hasLive = solutions.every((s) => live[s.id]?.pushedAt)
-  const starsOf = (s: Solution) => live[s.id]?.stars ?? s.stars
-  const pushedOf = (s: Solution) => new Date(live[s.id]?.pushedAt ?? 0).getTime()
-  const rows = useMemo(() => {
-    const r = [...solutions]
-    if (sort === 'stars') r.sort((a, b) => starsOf(b) - starsOf(a))
-    if (sort === 'pushed') r.sort((a, b) => pushedOf(b) - pushedOf(a))
-    return r
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, live])
-  const sortButton = (key: Exclude<SortKey, null>, label: string) => (
-    <th scope="col" className="num" aria-sort={sort === key ? 'descending' : 'none'}>
-      <button type="button" aria-pressed={sort === key} onClick={() => setSort(sort === key ? null : key)}>
-        {label}
-        <span className="sort-mark" aria-hidden="true" />
-      </button>
-    </th>
-  )
-  return (
-    <table className="repo-table" aria-label="The solutions">
-      <thead>
-        <tr>
-          <th scope="col">Solution</th>
-          <th scope="col" className="col-measures">Measures</th>
-          {sortButton('stars', 'Stars')}
-          {hasLive && sortButton('pushed', 'Last pushed')}
-        </tr>
-      </thead>
-      <tbody onMouseLeave={() => onActive(null)}>
-        {rows.map((s) => (
-          <tr
-            key={s.id}
-            className={active === s.id ? 'is-active' : undefined}
-            onMouseEnter={() => onActive(s.id)}
-            onFocus={() => onActive(s.id)}
-            onBlur={() => onActive(null)}
-          >
-            <th scope="row">
-              <a href={`#/s/${s.id}`}>{s.name}</a>
-            </th>
-            <td className="col-measures"><AreaStrip areas={s.areas} /></td>
-            <td className="num">{starsOf(s)}</td>
-            {hasLive && <td className="num">{relative(live[s.id]?.pushedAt)}</td>}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}
-
 function SolutionsSection({ live }: { live: Live }) {
-  const [filter, setFilter] = useState<Area | 'all'>('all')
-  const hub = solutions[0]
-  const shownRest = useMemo(() => {
-    const rest = solutions.slice(1)
-    return filter === 'all' ? rest : rest.filter((s) => s.areas.includes(filter))
-  }, [filter])
-  const showHub = filter === 'all' || hub.areas.includes(filter)
-  const shown = showHub ? [hub, ...shownRest] : shownRest
   const [peek, setPeek] = useState<string | null>(null)
-  const peekId = shown.some((s) => s.id === peek) ? peek : shown[0]?.id
-  const peeked = shown.find((s) => s.id === peekId)
+  const peekId = peek ?? hub.id
+  const peeked = byId(peekId)
 
   // Scrolling the index plays the screens: the row crossing the middle of the
   // viewport takes the stage. Hover and focus still win while they happen.
@@ -278,75 +207,61 @@ function SolutionsSection({ live }: { live: Live }) {
     )
     document.querySelectorAll<HTMLElement>('.sheet[data-id]').forEach((el) => obs.observe(el))
     return () => obs.disconnect()
-  }, [filter])
+  }, [])
+
+  const sheet = (s: Solution, body: React.ReactNode) => (
+    <article
+      key={s.id}
+      className={`sheet ${s.component ? '' : 'sheet-hub'} ${peekId === s.id ? 'is-peek' : ''}`}
+      data-id={s.id}
+      onMouseEnter={() => setPeek(s.id)}
+      onFocus={() => setPeek(s.id)}
+    >
+      <div className="sheet-name">
+        <Kind s={s} />
+        <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
+        <div className="card-meta">
+          <Stars s={s} live={live} />
+        </div>
+      </div>
+      <div className="sheet-body">
+        <span className="shot sheet-shot" aria-hidden="true">
+          <img src={s.preview.src} alt="" loading="lazy" />
+        </span>
+        {body}
+      </div>
+    </article>
+  )
 
   return (
     <section id="solutions" className="section">
       <div className="wrap">
         <div className="section-head">
-          <h2>The solutions</h2>
-          <p>Each one is a public GitHub repo with setup guides and sample data.</p>
-        </div>
-        <div className="chips" role="group" aria-label="Filter by what it measures">
-          <button type="button" aria-pressed={filter === 'all'} onClick={() => setFilter('all')}>All</button>
-          {allAreas.map((a) => (
-            <button key={a} type="button" aria-pressed={filter === a} onClick={() => setFilter(a)}>
-              {areaLabels[a]}
-            </button>
-          ))}
+          <h2>One platform, {count} components</h2>
+          <p>Use {hub.name} for all of it in one app, or start with the one component you need. Each is a public GitHub repo with setup guides and sample data.</p>
         </div>
 
         <div className="index">
           <div className="index-rows">
-            {showHub && (
-              <article
-                className={`sheet sheet-hub ${peekId === hub.id ? 'is-peek' : ''}`}
-                data-id={hub.id}
-                onMouseEnter={() => setPeek(hub.id)}
-                onFocus={() => setPeek(hub.id)}
-              >
-                <div className="sheet-name">
-                  <h3><a href={`#/s/${hub.id}`}>{hub.name}</a></h3>
-                  <div className="card-meta">
-                    <AreaStrip areas={hub.areas} />
-                    <Stars s={hub} live={live} />
-                  </div>
+            {sheet(
+              hub,
+              <>
+                <p className="summary">{hub.summary}</p>
+                <p className="includes">
+                  Includes <a href="#/s/valuelens">ValueLens</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>.
+                </p>
+                <RunsAs list={hub.runsAs} />
+                <div className="card-actions">
+                  <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
+                  <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
                 </div>
-                <div className="sheet-body">
-                  <span className="shot sheet-shot" aria-hidden="true">
-                    <img src={hub.preview.src} alt="" loading="lazy" />
-                  </span>
-                  <p className="summary">{hub.summary}</p>
-                  <p className="includes">
-                    Includes <a href="#/s/valuelens">ValueLens</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>.
-                  </p>
-                  <RunsAs list={hub.runsAs} />
-                  <div className="card-actions">
-                    <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
-                    <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
-                  </div>
-                </div>
-              </article>
+              </>,
             )}
-            {shownRest.map((s) => (
-              <article
-                key={s.id}
-                className={`sheet ${peekId === s.id ? 'is-peek' : ''}`}
-                data-id={s.id}
-                onMouseEnter={() => setPeek(s.id)}
-                onFocus={() => setPeek(s.id)}
-              >
-                <div className="sheet-name">
-                  <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
-                  <div className="card-meta">
-                    <AreaStrip areas={s.areas} />
-                    <Stars s={s} live={live} />
-                  </div>
-                </div>
-                <div className="sheet-body">
-                  <span className="shot sheet-shot" aria-hidden="true">
-                    <img src={s.preview.src} alt="" loading="lazy" />
-                  </span>
+            <p className="index-group">The components, one thing each</p>
+            {parts.map((s) =>
+              sheet(
+                s,
+                <>
                   <p className="question">“{s.question}”</p>
                   <p className="summary">{s.summary}</p>
                   <RunsAs list={s.runsAs} />
@@ -357,20 +272,20 @@ function SolutionsSection({ live }: { live: Live }) {
                       <a className="text-link" href={s.videos[0].url} target="_blank" rel="noreferrer">Watch the {s.videos[0].label.toLowerCase()}</a>
                     )}
                   </div>
-                </div>
-              </article>
-            ))}
+                </>,
+              ),
+            )}
           </div>
           <div className="stage" aria-hidden="true" data-ui="screen">
             <div className="stage-frame cut">
-              {shown.map((s) => (
+              {ordered.map((s) => (
                 <span key={s.id} className={`shot stage-shot ${peekId === s.id ? 'is-on' : ''}`}>
                   <img src={s.preview.src} alt="" loading="lazy" />
                 </span>
               ))}
             </div>
             <p className="stage-caption">
-              <strong>{peeked?.name}</strong>
+              <strong>{peeked && <Kind s={peeked} />} {peeked?.name}</strong>
               <span>Sample data. Every name shown is invented.</span>
             </p>
           </div>
@@ -390,8 +305,7 @@ function RunsAs({ list, hideLabel = false }: { list: string[]; hideLabel?: boole
 }
 
 function WhichOne() {
-  const order = ['ai-in-one', 'valuelens', 'github-copilot-panel', 'consumption-central', 'agent-monitor', 'analytics-hub']
-  const list = order.map((id) => byId(id)!)
+  const list = [...parts, hub]
   const [pick, setPick] = useState(list[0].id)
   const s = byId(pick)!
   return (
@@ -415,6 +329,7 @@ function WhichOne() {
             ))}
           </fieldset>
           <div className="answer cut" aria-live="polite">
+            <Kind s={s} />
             <h3>Use {s.name}</h3>
             <p>{s.summary}</p>
             <ul className="plotted">
@@ -429,7 +344,7 @@ function WhichOne() {
 }
 
 function WhatsNew({ live }: { live: Live }) {
-  const hasLive = solutions.every((s) => live[s.id]?.pushedAt)
+  const hasLive = ordered.every((s) => live[s.id]?.pushedAt)
   return (
     <section id="whats-new" className="section">
       <div className="wrap">
@@ -452,10 +367,10 @@ function WhatsNew({ live }: { live: Live }) {
         {hasLive && (
           <p className="pulse">
             Last pushed:{' '}
-            {solutions.map((s, i) => (
+            {ordered.map((s, i) => (
               <span key={s.id}>
                 {s.name} {relative(live[s.id]?.pushedAt)}
-                {i < solutions.length - 1 ? '; ' : '.'}
+                {i < ordered.length - 1 ? '; ' : '.'}
               </span>
             ))}
           </p>
@@ -484,7 +399,7 @@ function Checklist({ items }: { items: string[] }) {
 // each step asks for, for the solution picked in step one.
 function GetStarted() {
   const [step, setStep] = useState(0)
-  const [chosen, setChosen] = useState(solutions[0].id)
+  const [chosen, setChosen] = useState(hub.id)
   const s = byId(chosen)!
   const narrow = useMedia('(max-width: 960px)')
   const panel = (
@@ -492,11 +407,11 @@ function GetStarted() {
       {step === 0 && (
         <fieldset className="walk-pick">
           <legend>Pick a solution</legend>
-          {solutions.map((o) => (
+          {ordered.map((o) => (
             <label key={o.id} className={chosen === o.id ? 'is-picked' : undefined}>
               <input type="radio" name="start" value={o.id} checked={chosen === o.id} onChange={() => setChosen(o.id)} />
               <span>
-                <strong>{o.name}</strong>
+                <strong>{o.name} <Kind s={o} /></strong>
                 <span>{o.question}</span>
               </span>
             </label>
@@ -602,16 +517,18 @@ function Related() {
 }
 
 function SolutionPage({ s, live }: { s: Solution; live: Live }) {
-  const pairs = [...(s.includes ?? []), ...(s.related ?? [])].map((id) => byId(id)).filter((p): p is Solution => Boolean(p))
+  const pairs = s.component
+    ? [...(s.includes ?? []), ...(s.related ?? [])].map((id) => byId(id)).filter((p): p is Solution => Boolean(p))
+    : parts
   return (
     <article className="detail">
       <div className="wrap">
         <a className="back" href="#solutions">All solutions</a>
         <div className="detail-head">
+          <Kind s={s} />
           <h1>{s.name}</h1>
           <p className="lede">{s.summary}</p>
           <div className="card-meta">
-            <AreaStrip areas={s.areas} />
             <Stars s={s} live={live} />
             {live[s.id]?.pushedAt && <span className="muted">Updated {relative(live[s.id]?.pushedAt)}</span>}
           </div>
@@ -659,12 +576,13 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           </section>
         </div>
         {pairs.length > 0 && (
-          <section className="pairs">
-            <h2>{s.includes ? 'Includes and pairs with' : 'Pairs with'}</h2>
+          <section className={`pairs ${s.component ? '' : 'pairs-parts'}`}>
+            <h2>{s.component ? 'Pairs with' : 'The components'}</h2>
             <ul>
               {pairs.map((p) => (
                 <li key={p.id} className="cut">
                   <a href={`#/s/${p.id}`}>
+                    <Kind s={p} />
                     <strong>{p.name}</strong>
                     <span>{p.question}</span>
                   </a>

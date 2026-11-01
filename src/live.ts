@@ -3,7 +3,7 @@ import { solutions } from './data'
 
 export type Live = Record<string, { stars: number; pushedAt?: string }>
 
-const CACHE_KEY = 'datalab-live-v1'
+const CACHE_KEY = 'datalab-live-v2'
 const CACHE_MS = 60 * 60 * 1000
 
 // Star counts and last-push dates come from the public GitHub API. If that
