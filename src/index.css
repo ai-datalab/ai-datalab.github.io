@@ -1,7 +1,7 @@
 /* Hallmark · shape: catalogue · genre: modern-minimal · theme: Cobalt (by request) · direction: the product performs (taste-skill) · redesign: full
- * hero: copy beside a working report panel (field map over a sortable repo table) · nav: inline + sticky section tabs · footer: two-column colophon · imagery: the product, at true size · signature: the plotted point
+ * hero: copy beside a working report panel (field map over a sortable repo table) · nav: inline + sticky section tabs · footer: two-column colophon · imagery: the product, each screen whole · signature: the plotted point
  * axes: light/grotesk-sans/cool · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: E, the true-size stage crops each screen rather than showing it whole
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: E, whole screens are scaled down, so their small text is a texture rather than readable
  * motif: the field map's point (cobalt core, wash halo) is the mark, the bullet, the primary key's detail, the screenshot corner and the graphite band
  * fragments: the repo table, the screen stage, the setup walk and the checklists are working pieces built only from data.ts, the preview images and live GitHub data */
 /* Hallmark · reworded "what's new" to "what’s new" · typographic apostrophe, already live before this theme */
@@ -589,14 +589,12 @@ main:focus { outline: none; }
   font: 500 var(--text-xs)/1.2 var(--font-display);
 }
 
-/* Product screenshots: the corner is bitten out and the plotted point sits in the bite. */
+/* Product screenshots, shown whole: the plotted point sits just off the top-left corner, never over the screen. */
 .shot { position: relative; display: block; }
 
 .shot img {
   width: 100%;
   border-radius: 4px;
-  -webkit-mask: radial-gradient(circle 36px at 0 0, transparent 98%, var(--color-ink) 100%);
-  mask: radial-gradient(circle 36px at 0 0, transparent 98%, var(--color-ink) 100%);
 }
 
 .shot::after {
@@ -604,9 +602,9 @@ main:focus { outline: none; }
   position: absolute;
   left: 0;
   top: 0;
-  width: 56px;
-  height: 56px;
-  translate: -50% -50%;
+  width: 36px;
+  height: 36px;
+  translate: -78% -78%;
   background: var(--plot);
   pointer-events: none;
 }
@@ -623,7 +621,7 @@ main:focus { outline: none; }
 
 .index {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   gap: var(--space-2xl);
   align-items: start;
 }
@@ -676,17 +674,17 @@ main:focus { outline: none; }
 
 .stage-frame {
   position: relative;
-  height: min(76svh, 720px);
+  display: grid;
+  padding: var(--space-lg);
   background: var(--color-paper-3);
   border: 1px solid var(--color-rule-2);
   box-shadow: var(--shadow-tray);
-  overflow: hidden;
 }
 
-/* Each screen at its own pixel size, cropped by the frame's right and bottom edges. */
+/* Each screen shown whole; the screens share one cell so the frame keeps the tallest one's height. */
 .stage-shot {
-  position: absolute;
-  inset: var(--space-2xl) 0 0 var(--space-2xl);
+  grid-area: 1 / 1;
+  align-self: center;
   opacity: 0;
   transition: opacity 200ms var(--ease-out);
 }
@@ -694,13 +692,8 @@ main:focus { outline: none; }
 .stage-shot.is-on { opacity: 1; }
 
 .stage-shot img {
-  width: 100%;
-  height: 100%;
-  object-fit: none;
-  object-position: 0 0;
-  border: solid var(--color-rule-2);
-  border-width: 1px 0 0 1px;
-  border-radius: 4px 0 0;
+  height: auto;
+  border: 1px solid var(--color-rule-2);
 }
 
 .stage-caption {
@@ -919,7 +912,7 @@ main:focus { outline: none; }
 .walk-body .muted { margin-top: var(--space-2xs); }
 
 .walk-shot { align-self: stretch; margin: var(--space-xs) 0 var(--space-xs) var(--space-md); }
-.walk-shot img { height: 240px; object-fit: none; object-position: 28px 24px; background: var(--color-paper-2); border: 1px solid var(--color-rule-2); }
+.walk-shot img { height: auto; border: 1px solid var(--color-rule-2); }
 
 .steps li > .walk-panel { grid-column: 1 / -1; margin-top: var(--space-md); }
 
@@ -1077,9 +1070,10 @@ main:focus { outline: none; }
 
   .stage { display: none; }
 
-  /* Without the stage, each row carries its own window onto the screen, still at true size. */
+  /* Without the stage, each row carries its own whole screen. */
   .sheet-shot { display: block; margin: var(--space-sm) 0 var(--space-xs) var(--space-md); }
-  .sheet-shot img { height: 260px; object-fit: none; object-position: 28px 24px; background: var(--color-paper-2); border: 1px solid var(--color-rule-2); }
+  .sheet-shot::after { content: none; }
+  .sheet-shot img { height: auto; border: 1px solid var(--color-rule-2); }
 
   .answer,
   .walk-panel { position: static; min-height: 0; }
