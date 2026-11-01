@@ -248,7 +248,7 @@ function SolutionsSection({ live }: { live: Live }) {
               <>
                 <p className="summary">{hub.summary}</p>
                 <p className="includes">
-                  Includes <a href="#/s/valuelens">ValueLens</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>.
+                  Includes <a href="#/s/valuelens">ValueLens</a>, <a href="#/s/agent-monitor">Agent Monitor</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>. <a href="#/s/github-copilot-panel">GitHub Copilot Panel</a> isn’t in it yet.
                 </p>
                 <RunsAs list={hub.runsAs} />
                 <div className="card-actions">
@@ -584,6 +584,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
                   <a href={`#/s/${p.id}`}>
                     <Kind s={p} />
                     <strong>{p.name}</strong>
+                    {!s.component && p.notInHub && <span className="not-in-hub">Not in {s.name} yet</span>}
                     <span>{p.question}</span>
                   </a>
                 </li>

@@ -974,6 +974,9 @@ main:focus { outline: none; }
 .pairs span { color: var(--color-ink-2); font-size: var(--text-sm); }
 .pairs .kind { color: var(--color-accent-deep); font-size: var(--text-xs); }
 .pairs a:hover strong { text-decoration: underline; text-decoration-color: var(--color-accent); }
+.not-in-hub { display: inline-block; margin-inline-start: var(--space-2xs); padding: 0 var(--space-xs); border: 1px dashed var(--color-rule-2); border-radius: 999px; color: var(--color-ink-2); font: 500 var(--text-xs)/1.6 var(--font-body); white-space: nowrap; }
+.pairs .not-in-hub { align-self: flex-start; margin-inline-start: 0; font-size: var(--text-xs); }
+.part-label .not-in-hub { display: block; width: fit-content; margin: var(--space-3xs) 0 0; }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--color-rule-2); padding: var(--space-2xl) 0 var(--space-3xl); }

@@ -25,6 +25,8 @@ export interface Solution {
   question: string
   /** The one thing this component covers. The platform has none. */
   component?: Component
+  /** A component that is not inside the AI-DataHub app yet. */
+  notInHub?: boolean
   runsAs: string[]
   measures: string[]
   beforeYouStart: string[]
@@ -49,6 +51,7 @@ export const solutions: Solution[] = [
       'Copilot and agent use across the organisation',
       'Hours and value delivered, through the ValueLens report',
       'Credit consumption and cost, with the Consumption Central add-on',
+      'Agent inventory and activity, through Agent Monitor',
       'Fresh data every day, kept in your own tenant',
     ],
     beforeYouStart: [
@@ -59,7 +62,7 @@ export const solutions: Solution[] = [
     ],
     videos: [{ label: 'The app, page by page', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard#videos', length: '2 min' }],
     preview: { src: 'previews/analytics-hub.gif', alt: 'The AI-DataHub app, cycling through its pages on sample data' },
-    includes: ['valuelens', 'consumption-central'],
+    includes: ['valuelens', 'agent-monitor', 'consumption-central'],
     stars: 10,
   },
   {
@@ -130,6 +133,7 @@ export const solutions: Solution[] = [
   {
     id: 'github-copilot-panel',
     component: 'github',
+    notInHub: true,
     name: 'GitHub Copilot Panel',
     repo: 'microsoft/GitHubCopilotPanel',
     summary:

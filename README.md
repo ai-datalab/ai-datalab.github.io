@@ -1,7 +1,7 @@
 # AI-DataLab
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
-AI-DataHub, the platform that brings them together, and its components: AI in One (adoption),
+AI-DataHub, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
 ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (agents) and GitHub Copilot Panel (GitHub Copilot).
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
