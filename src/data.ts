@@ -191,14 +191,14 @@ export const solutions: Solution[] = [
     name: 'Agent Monitor',
     repo: 'Keithland89/Agent-Monitor',
     summary:
-      'Tenant-wide inventory, monitoring and governance for Agent Builder, Copilot Studio, agent flows and Azure AI Foundry agents, built on APIs a normal admin can use.',
+      'Tenant-wide agent inventory and risk for Agent Builder, Copilot Studio, agent flows and Azure AI Foundry agents, built on APIs a normal admin can use. Usage and cost live in AI-DataHub.',
     question: 'Which agents exist across the tenant, who owns them, and which need attention?',
     runsAs: ['The app', 'Power BI', 'Local CSV'],
     measures: [
       'Every agent across Copilot Studio, Agent Builder, agent flows and Azure AI Foundry',
-      'Owners, configuration and risk signals',
-      'Copilot Credits per agent, and Azure AI spend',
-      '16 report pages over 166 measures, with anonymised sample data to explore',
+      'Who built and owns each one, and what it can reach',
+      'A risk score with its reasons, and what to fix first',
+      'Shadow AI and lifecycle review, with anonymised sample data to explore',
     ],
     beforeYouStart: [
       'Power Platform Administrator, Global Reader or AI Administrator, for the inventory',
@@ -206,8 +206,8 @@ export const solutions: Solution[] = [
       'Everything is read-only: nothing configures or controls an agent',
     ],
     videos: [],
-    preview: { src: 'previews/agent-monitor.png', alt: 'Agent Monitor’s executive overview page on anonymised sample data' },
-    related: ['consumption-central'],
+    preview: { src: 'previews/agent-monitor.gif', alt: 'The Agent-Monitor app, cycling through its pages on anonymised sample data' },
+    related: ['ai-datahub'],
     stars: 2,
   },
 ]
