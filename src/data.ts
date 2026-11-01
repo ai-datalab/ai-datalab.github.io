@@ -129,6 +129,32 @@ export const solutions: Solution[] = [
     stars: 23,
   },
   {
+    id: 'github-copilot-panel',
+    name: 'GitHub Copilot Panel',
+    repo: 'microsoft/GitHubCopilotPanel',
+    summary:
+      'GitHub Copilot adoption, engagement depth and realised value, as a Power BI template on the Viva Insights GitHub Copilot query output.',
+    question: 'Are our developers moving from autocomplete to delegation, and what is that worth?',
+    areas: ['adoption', 'value'],
+    runsAs: ['Power BI', 'Local CSV', 'Viva Insights'],
+    measures: [
+      'Reach: who has a seat, and who actually uses it',
+      'Depth: the move from autocomplete to delegation',
+      'Value: what that depth is worth, with every assumption in one table',
+      'Seven pages over 120 measures, with synthetic sample data to explore',
+    ],
+    beforeYouStart: [
+      'The Viva Insights GitHub Copilot Export query output, as CSVs or through the Viva Insights connector',
+      'Power BI Desktop',
+      'Your own seat cost, engineer cost and seat count, to replace the placeholder figures',
+    ],
+    videos: [{ label: 'Intro', url: 'https://youtu.be/EwzHwbXsWoU', length: '2 min 18 s' }],
+    preview: { src: 'previews/github-copilot-panel.gif', alt: 'The GitHub Copilot Panel report, cycling through its pages on synthetic sample data' },
+    related: ['analytics-hub', 'valuelens', 'consumption-central'],
+    map: { x: 0.25, y: 0.07 },
+    stars: 1,
+  },
+  {
     id: 'consumption-central',
     name: 'Consumption Central',
     repo: 'microsoft/ConsumptionCentral-for-Microsoft-Copilot',
@@ -154,7 +180,7 @@ export const solutions: Solution[] = [
       { label: 'Setup guide', url: 'https://youtu.be/0fgvP8mutTo', length: '10 min 49 s' },
     ],
     preview: { src: 'previews/consumption-central.gif', alt: 'The Consumption Central app, cycling through its tabs on sample data' },
-    related: ['analytics-hub', 'valuelens'],
+    related: ['analytics-hub', 'valuelens', 'github-copilot-panel'],
     map: { x: 0.64, y: 0.62 },
     stars: 31,
   },
@@ -229,6 +255,7 @@ export const log: LogEntry[] = [
   { date: '2026-10-27', solution: 'agent-monitor', text: 'A pinned filter dock, denser tables and tighter page layouts.', url: 'https://github.com/Keithland89/agent-inventory/pull/12' },
   { date: '2026-10-26', solution: 'analytics-hub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/releases/tag/installer-v0.6.8' },
   { date: '2026-10-25', solution: 'ai-in-one', text: 'The app now copes with missing users, Agent 365 and empty interactions files.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/pull/81' },
+  { date: '2026-10-14', solution: 'github-copilot-panel', text: 'A two-minute intro video walks through the report, page by page.', url: 'https://github.com/microsoft/GitHubCopilotPanel/pull/8' },
   { date: '2026-10-06', solution: 'ai-in-one', text: 'AI in One 2.0 released.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/releases/tag/AIO-v2.0.0' },
 ]
 

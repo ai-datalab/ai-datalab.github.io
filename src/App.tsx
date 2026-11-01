@@ -199,7 +199,7 @@ function SolutionsSection({ live }: { live: Live }) {
       <div className="wrap">
         <div className="section-head">
           <h2>The solutions</h2>
-          <p>Five solutions, each a public GitHub repo with an installer, setup guides and sample data.</p>
+          <p>Each one is a public GitHub repo with setup guides and sample data.</p>
         </div>
         <div className="chips" role="group" aria-label="Filter by what it measures">
           <button type="button" aria-pressed={filter === 'all'} onClick={() => setFilter('all')}>All</button>
@@ -297,7 +297,7 @@ function RunsAs({ list, hideLabel = false }: { list: string[]; hideLabel?: boole
 }
 
 function WhichOne() {
-  const order = ['ai-in-one', 'valuelens', 'consumption-central', 'agent-monitor', 'analytics-hub']
+  const order = ['ai-in-one', 'valuelens', 'github-copilot-panel', 'consumption-central', 'agent-monitor', 'analytics-hub']
   const list = order.map((id) => byId(id)!)
   const [pick, setPick] = useState(list[0].id)
   const s = byId(pick)!

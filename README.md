@@ -1,7 +1,7 @@
 # AI-DataLab
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
-Analytics Hub, AI in One, ValueLens, Consumption Central and Agent Monitor.
+Analytics Hub, AI in One, ValueLens, GitHub Copilot Panel, Consumption Central and Agent Monitor.
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
