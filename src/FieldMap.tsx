@@ -59,7 +59,7 @@ export function FieldMap({ active, onActive }: Props) {
           onBlur={() => onActive(null)}
           aria-label="Analytics Hub, covering adoption, value and cost"
         >
-          <rect x={px(0.03)} y={py(0.5) - 15} width={px(0.72) - px(0.03)} height={30} rx={15} />
+          <rect x={px(0.03)} y={py(0.5) - 15} width={px(0.72) - px(0.03)} height={30} rx={4} />
           <text x={px(0.04) + 14} y={py(0.5) + 5}>Analytics Hub: adoption, value and cost</text>
         </a>
 

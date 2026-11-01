@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { FieldMap } from './FieldMap'
+import { SignalField } from './SignalField'
 import { areaLabels, byId, log, related, solutions, steps, type Area, type Solution } from './data'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 
@@ -76,7 +77,7 @@ function Header() {
           <a href="#solutions">Solutions</a>
           <a href="#which-one">Which one?</a>
           <a href="#get-started">Get started</a>
-          <a className="gh" href="https://github.com/Keithland89" target="_blank" rel="noreferrer">
+          <a className="key key-sm gh" href="https://github.com/Keithland89" target="_blank" rel="noreferrer">
             <GitHubIcon /> <span>Keithland89</span>
           </a>
         </nav>
@@ -91,37 +92,37 @@ function Home({ live }: { live: Live }) {
   return (
     <>
       <section className="hero">
-        <div className="wrap hero-grid">
-          <div className="hero-copy">
-            <h1>Copilot and agent analytics you run in your own tenant.</h1>
-            <p className="lede">
-              DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. They
-              show who uses them, the value they deliver, what they cost and which agents need attention.
-            </p>
-            <div className="cta-row">
-              <a className="btn btn-primary" href="#solutions">Browse the solutions</a>
-              <a className="btn" href="#which-one">Find the right one</a>
+        <div className="wrap">
+          <h1>Copilot and agent analytics you run in your own tenant.</h1>
+          <div className="hero-grid">
+            <div className="hero-copy">
+              <p className="lede">
+                DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. They
+                show who uses them, the value they deliver, what they cost and which agents need attention.
+              </p>
+              <div className="cta-row">
+                <a className="key key-primary" href="#solutions">Browse the solutions</a>
+                <a className="key" href="#which-one">Find the right one</a>
+              </div>
+              <ul className="facts plotted">
+                <li><strong>Free and open source.</strong> You pay only for the Fabric, Azure or Power Platform capacity it runs on.</li>
+                <li><strong>Your data stays put.</strong> Everything reads from, and stays in, your own tenant.</li>
+                <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
+              </ul>
+            </div>
+            <div className="hero-map">
+              <FieldMap active={hover} onActive={setHover} />
+              <p className="map-caption" aria-live="polite">
+                {hovered ? (
+                  <>
+                    <strong>{hovered.name}</strong> answers “{hovered.question}”
+                  </>
+                ) : (
+                  'Each solution, plotted by what it measures and whose activity it covers. Point at one to see the question it answers.'
+                )}
+              </p>
             </div>
           </div>
-          <div className="hero-map">
-            <FieldMap active={hover} onActive={setHover} />
-            <p className="map-caption" aria-live="polite">
-              {hovered ? (
-                <>
-                  <strong>{hovered.name}</strong> answers “{hovered.question}”
-                </>
-              ) : (
-                'Each solution, plotted by what it measures and whose activity it covers. Point at one to see the question it answers.'
-              )}
-            </p>
-          </div>
-        </div>
-        <div className="wrap">
-          <ul className="facts">
-            <li><strong>Free and open source.</strong> You pay only for the Fabric, Azure or Power Platform capacity it runs on.</li>
-            <li><strong>Your data stays put.</strong> Everything reads from, and stays in, your own tenant.</li>
-            <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
-          </ul>
         </div>
       </section>
       <SectionTabs />
@@ -191,7 +192,8 @@ function SolutionsSection({ live }: { live: Live }) {
     return filter === 'all' ? rest : rest.filter((s) => s.areas.includes(filter))
   }, [filter])
   const showHub = filter === 'all' || hub.areas.includes(filter)
-
+  const [peek, setPeek] = useState<string | null>(null)
+  const peekId = shownRest.some((s) => s.id === peek) ? peek : shownRest[0]?.id
   return (
     <section id="solutions" className="section">
       <div className="wrap">
@@ -209,9 +211,11 @@ function SolutionsSection({ live }: { live: Live }) {
         </div>
 
         {showHub && (
-          <article className="hub-card">
+          <article className="hub-card cut">
             <a className="hub-media" href={`#/s/${hub.id}`} tabIndex={-1} aria-hidden="true">
-              <img src={hub.preview.src} alt="" loading="lazy" />
+              <span className="shot">
+                <img src={hub.preview.src} alt="" loading="lazy" />
+              </span>
             </a>
             <div className="hub-body">
               <div className="card-meta">
@@ -225,34 +229,57 @@ function SolutionsSection({ live }: { live: Live }) {
               </p>
               <RunsAs list={hub.runsAs} />
               <div className="card-actions">
-                <a className="btn btn-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
-                <a className="btn" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
+                <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
+                <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
               </div>
             </div>
           </article>
         )}
 
         {shownRest.length > 0 && (
-          <div className="sheet-grid">
-            {shownRest.map((s) => (
-              <article key={s.id} className="sheet">
-                <div className="card-meta">
-                  <AreaStrip areas={s.areas} />
-                  <Stars s={s} live={live} />
-                </div>
-                <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
-                <p className="question">“{s.question}”</p>
-                <p className="summary">{s.summary}</p>
-                <RunsAs list={s.runsAs} />
-                <div className="card-actions">
-                  <a className="text-link" href={`#/s/${s.id}`}>Details</a>
-                  <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
-                  {s.videos[0] && (
-                    <a className="text-link" href={s.videos[0].url} target="_blank" rel="noreferrer">Watch the {s.videos[0].label.toLowerCase()}</a>
-                  )}
-                </div>
-              </article>
-            ))}
+          <div className="index">
+            <div className="index-rows">
+              {shownRest.map((s) => (
+                <article
+                  key={s.id}
+                  className={`sheet ${peekId === s.id ? 'is-peek' : ''}`}
+                  onMouseEnter={() => setPeek(s.id)}
+                  onFocus={() => setPeek(s.id)}
+                >
+                  <div className="sheet-name">
+                    <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
+                    <div className="card-meta">
+                      <AreaStrip areas={s.areas} />
+                      <Stars s={s} live={live} />
+                    </div>
+                  </div>
+                  <div className="sheet-body">
+                    <span className="shot sheet-shot" aria-hidden="true">
+                      <img src={s.preview.src} alt="" loading="lazy" />
+                    </span>
+                    <p className="question">“{s.question}”</p>
+                    <p className="summary">{s.summary}</p>
+                    <RunsAs list={s.runsAs} />
+                    <div className="card-actions">
+                      <a className="text-link" href={`#/s/${s.id}`}>Details</a>
+                      <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
+                      {s.videos[0] && (
+                        <a className="text-link" href={s.videos[0].url} target="_blank" rel="noreferrer">Watch the {s.videos[0].label.toLowerCase()}</a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="peek" aria-hidden="true">
+              <div className="peek-frame cut">
+                {shownRest.map((s) => (
+                  <span key={s.id} className={`shot ${peekId === s.id ? 'is-on' : ''}`}>
+                    <img src={s.preview.src} alt="" loading="lazy" />
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -275,12 +302,15 @@ function WhichOne() {
   const [pick, setPick] = useState(list[0].id)
   const s = byId(pick)!
   return (
-    <section id="which-one" className="section section-ink">
+    <section id="which-one" className="section band">
       <div className="wrap">
         <div className="section-head">
           <h2>Which one do I need?</h2>
           <p>Start from the question your leaders are asking.</p>
         </div>
+      </div>
+      <SignalField active={pick} />
+      <div className="wrap">
         <div className="picker">
           <fieldset>
             <legend className="sr-only">Pick a question</legend>
@@ -291,13 +321,13 @@ function WhichOne() {
               </label>
             ))}
           </fieldset>
-          <div className="answer" aria-live="polite">
+          <div className="answer cut" aria-live="polite">
             <h3>Use {s.name}</h3>
             <p>{s.summary}</p>
-            <ul>
+            <ul className="plotted">
               {s.measures.slice(0, 3).map((m) => <li key={m}>{m}</li>)}
             </ul>
-            <a className="btn btn-signal" href={`#/s/${s.id}`}>Open {s.name}</a>
+            <a className="key key-primary" href={`#/s/${s.id}`}>Open {s.name}</a>
           </div>
         </div>
       </div>
@@ -403,26 +433,28 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
             {live[s.id]?.pushedAt && <span className="muted">Updated {relative(live[s.id]?.pushedAt)}</span>}
           </div>
           <div className="cta-row">
-            <a className="btn btn-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
+            <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
             </a>
             {s.tryFirst && (
-              <a className="btn" href={s.tryFirst.url} target="_blank" rel="noreferrer">{s.tryFirst.label}</a>
+              <a className="key" href={s.tryFirst.url} target="_blank" rel="noreferrer">{s.tryFirst.label}</a>
             )}
           </div>
         </div>
         <figure className="detail-media">
-          <img src={s.preview.src} alt={s.preview.alt} />
+          <span className="shot">
+            <img src={s.preview.src} alt={s.preview.alt} />
+          </span>
           <figcaption>Sample data. Every name shown is invented.</figcaption>
         </figure>
         <div className="detail-grid">
           <section>
             <h2>What it shows</h2>
-            <ul className="ticks">{s.measures.map((m) => <li key={m}>{m}</li>)}</ul>
+            <ul className="plotted">{s.measures.map((m) => <li key={m}>{m}</li>)}</ul>
           </section>
           <section>
             <h2>Before you start</h2>
-            <ul className="boxes">{s.beforeYouStart.map((m) => <li key={m}>{m}</li>)}</ul>
+            <ul className="plotted rings">{s.beforeYouStart.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="muted">The README has the full list, by who does what.</p>
           </section>
           <section>
@@ -448,7 +480,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
             <h2>{s.includes ? 'Includes and pairs with' : 'Pairs with'}</h2>
             <ul>
               {pairs.map((p) => (
-                <li key={p.id}>
+                <li key={p.id} className="cut">
                   <a href={`#/s/${p.id}`}>
                     <strong>{p.name}</strong>
                     <span>{p.question}</span>
