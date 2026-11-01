@@ -6,7 +6,7 @@ import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 const sections = [
   { id: 'solutions', label: 'Solutions' },
   { id: 'which-one', label: 'Which one do I need?' },
-  { id: 'whats-new', label: "What's new" },
+  { id: 'whats-new', label: 'What’s new' },
   { id: 'get-started', label: 'Get started' },
   { id: 'related', label: 'Related' },
 ] as const
@@ -225,7 +225,7 @@ function SolutionsSection({ live }: { live: Live }) {
               </p>
               <RunsAs list={hub.runsAs} />
               <div className="card-actions">
-                <a className="btn btn-primary" href={`#/s/${hub.id}`}>See what's inside</a>
+                <a className="btn btn-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
                 <a className="btn" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
               </div>
             </div>
@@ -292,8 +292,7 @@ function WhichOne() {
             ))}
           </fieldset>
           <div className="answer" aria-live="polite">
-            <p className="answer-label">Use</p>
-            <h3>{s.name}</h3>
+            <h3>Use {s.name}</h3>
             <p>{s.summary}</p>
             <ul>
               {s.measures.slice(0, 3).map((m) => <li key={m}>{m}</li>)}
@@ -312,7 +311,7 @@ function WhatsNew({ live }: { live: Live }) {
     <section id="whats-new" className="section">
       <div className="wrap">
         <div className="section-head">
-          <h2>What's new</h2>
+          <h2>What’s new</h2>
           <p>Recent changes across the repos.</p>
         </div>
         <ol className="log">
@@ -371,7 +370,7 @@ function Related() {
       <div className="wrap">
         <div className="section-head">
           <h2>Related</h2>
-          <p>Other places to look, including Power CAT's Agent Inventory, which pairs well with Agent Monitor.</p>
+          <p>Other places to look, including Power CAT’s Agent Inventory, which pairs well with Agent Monitor.</p>
         </div>
         <ul className="related">
           {related.map((r) => (
@@ -396,13 +395,13 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
       <div className="wrap">
         <a className="back" href="#solutions">All solutions</a>
         <div className="detail-head">
+          <h1>{s.name}</h1>
+          <p className="lede">{s.summary}</p>
           <div className="card-meta">
             <AreaStrip areas={s.areas} />
             <Stars s={s} live={live} />
             {live[s.id]?.pushedAt && <span className="muted">Updated {relative(live[s.id]?.pushedAt)}</span>}
           </div>
-          <h1>{s.name}</h1>
-          <p className="lede">{s.summary}</p>
           <div className="cta-row">
             <a className="btn btn-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
@@ -473,7 +472,7 @@ function Footer() {
           <p>Built by Keith McGrane (<a href="https://github.com/Keithland89">@Keithland89</a>).</p>
         </div>
         <p className="disclaimer">
-          These are community templates, provided as-is. They are not official Microsoft Copilot reports, and they aren't
+          These are community templates, provided as-is. They are not official Microsoft Copilot reports, and they aren’t
           covered by Microsoft support. Report problems as issues in each repo. You own the data you extract.
         </p>
       </div>
