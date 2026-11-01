@@ -1,4 +1,4 @@
-# DataLab
+# AI-DataLab
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
 Analytics Hub, AI in One, ValueLens, Consumption Central and Agent Monitor.
