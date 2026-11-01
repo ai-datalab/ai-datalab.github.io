@@ -29,6 +29,17 @@ function useRoute() {
   return route
 }
 
+function useMedia(query: string) {
+  const [match, setMatch] = useState(() => window.matchMedia(query).matches)
+  useEffect(() => {
+    const mq = window.matchMedia(query)
+    const on = () => setMatch(mq.matches)
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [query])
+  return match
+}
+
 export default function App() {
   const route = useRoute()
   const live = useLiveRepoStats()
@@ -56,11 +67,14 @@ export default function App() {
   )
 }
 
+// The mark: the L of Lab drawn as a chart's axes, cut like a Cobalt key,
+// holding one plotted point exactly as the field map draws it.
 function Logo() {
   return (
     <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
-      <path d="M11 3h10M13 3v9L5 26a2 2 0 0 0 1.8 3h18.4a2 2 0 0 0 1.8-3L19 12V3" />
-      <path className="logo-liquid" d="M8.2 21.2c2.6-1.6 4.6.8 7.6-.4s4.3-1 7.9.4L25.8 26H6.2Z" />
+      <circle className="logo-halo" cx="20" cy="12" r="9" />
+      <path className="logo-axes" d="M3 6 6 3H9V23H29V26L26 29H3Z" />
+      <circle className="logo-point" cx="20" cy="12" r="5" />
     </svg>
   )
 }
@@ -92,36 +106,35 @@ function Home({ live }: { live: Live }) {
   return (
     <>
       <section className="hero">
-        <div className="wrap">
-          <h1>Copilot and agent analytics you run in your own tenant.</h1>
-          <div className="hero-grid">
-            <div className="hero-copy">
-              <p className="lede">
-                AI-DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. They
-                show who uses them, the value they deliver, what they cost and which agents need attention.
-              </p>
-              <div className="cta-row">
-                <a className="key key-primary" href="#solutions">Browse the solutions</a>
-                <a className="key" href="#which-one">Find the right one</a>
-              </div>
-              <ul className="facts plotted">
-                <li><strong>Free and open source.</strong> You pay only for the Fabric, Azure or Power Platform capacity it runs on.</li>
-                <li><strong>Your data stays put.</strong> Everything reads from, and stays in, your own tenant.</li>
-                <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
-              </ul>
+        <div className="wrap hero-grid">
+          <div className="opening">
+            <h1>Copilot and agent analytics you run in your own tenant.</h1>
+            <p className="lede">
+              AI-DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. They
+              show who uses them, the value they deliver, what they cost and which agents need attention.
+            </p>
+            <div className="cta-row">
+              <a className="key key-primary" href="#solutions">Browse the solutions</a>
+              <a className="key" href="#which-one">Find the right one</a>
             </div>
-            <div className="hero-map">
-              <FieldMap active={hover} onActive={setHover} />
-              <p className="map-caption" aria-live="polite">
-                {hovered ? (
-                  <>
-                    <strong>{hovered.name}</strong> answers “{hovered.question}”
-                  </>
-                ) : (
-                  'Each solution, plotted by what it measures and whose activity it covers. Point at one to see the question it answers.'
-                )}
-              </p>
-            </div>
+          </div>
+          <ul className="facts plotted">
+            <li><strong>Free and open source.</strong> You pay only for the Fabric, Azure or Power Platform capacity it runs on.</li>
+            <li><strong>Your data stays put.</strong> Everything reads from, and stays in, your own tenant.</li>
+            <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
+          </ul>
+          <div className="hero-map cut" data-ui="report">
+            <FieldMap active={hover} onActive={setHover} />
+            <p className="map-caption" aria-live="polite">
+              {hovered ? (
+                <>
+                  <strong>{hovered.name}</strong> answers “{hovered.question}”
+                </>
+              ) : (
+                'Each solution, plotted by what it measures and whose activity it covers. Point at one to see the question it answers.'
+              )}
+            </p>
+            <RepoTable live={live} active={hover} onActive={setHover} />
           </div>
         </div>
       </section>
@@ -184,6 +197,62 @@ function Stars({ s, live }: { s: Solution; live: Live }) {
   )
 }
 
+type SortKey = 'stars' | 'pushed' | null
+
+// A working fragment: the hub's own repos as a report table. It sorts on live
+// GitHub numbers and cross-highlights with the field map above it.
+function RepoTable({ live, active, onActive }: { live: Live; active: string | null; onActive: (id: string | null) => void }) {
+  const [sort, setSort] = useState<SortKey>(null)
+  const hasLive = solutions.every((s) => live[s.id]?.pushedAt)
+  const starsOf = (s: Solution) => live[s.id]?.stars ?? s.stars
+  const pushedOf = (s: Solution) => new Date(live[s.id]?.pushedAt ?? 0).getTime()
+  const rows = useMemo(() => {
+    const r = [...solutions]
+    if (sort === 'stars') r.sort((a, b) => starsOf(b) - starsOf(a))
+    if (sort === 'pushed') r.sort((a, b) => pushedOf(b) - pushedOf(a))
+    return r
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort, live])
+  const sortButton = (key: Exclude<SortKey, null>, label: string) => (
+    <th scope="col" className="num" aria-sort={sort === key ? 'descending' : 'none'}>
+      <button type="button" aria-pressed={sort === key} onClick={() => setSort(sort === key ? null : key)}>
+        {label}
+        <span className="sort-mark" aria-hidden="true" />
+      </button>
+    </th>
+  )
+  return (
+    <table className="repo-table" aria-label="The solutions">
+      <thead>
+        <tr>
+          <th scope="col">Solution</th>
+          <th scope="col" className="col-measures">Measures</th>
+          {sortButton('stars', 'Stars')}
+          {hasLive && sortButton('pushed', 'Last pushed')}
+        </tr>
+      </thead>
+      <tbody onMouseLeave={() => onActive(null)}>
+        {rows.map((s) => (
+          <tr
+            key={s.id}
+            className={active === s.id ? 'is-active' : undefined}
+            onMouseEnter={() => onActive(s.id)}
+            onFocus={() => onActive(s.id)}
+            onBlur={() => onActive(null)}
+          >
+            <th scope="row">
+              <a href={`#/s/${s.id}`}>{s.name}</a>
+            </th>
+            <td className="col-measures"><AreaStrip areas={s.areas} /></td>
+            <td className="num">{starsOf(s)}</td>
+            {hasLive && <td className="num">{relative(live[s.id]?.pushedAt)}</td>}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
 function SolutionsSection({ live }: { live: Live }) {
   const [filter, setFilter] = useState<Area | 'all'>('all')
   const hub = solutions[0]
@@ -192,8 +261,25 @@ function SolutionsSection({ live }: { live: Live }) {
     return filter === 'all' ? rest : rest.filter((s) => s.areas.includes(filter))
   }, [filter])
   const showHub = filter === 'all' || hub.areas.includes(filter)
+  const shown = showHub ? [hub, ...shownRest] : shownRest
   const [peek, setPeek] = useState<string | null>(null)
-  const peekId = shownRest.some((s) => s.id === peek) ? peek : shownRest[0]?.id
+  const peekId = shown.some((s) => s.id === peek) ? peek : shown[0]?.id
+  const peeked = shown.find((s) => s.id === peekId)
+
+  // Scrolling the index plays the screens: the row crossing the middle of the
+  // viewport takes the stage. Hover and focus still win while they happen.
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const hit = entries.find((e) => e.isIntersecting)
+        if (hit) setPeek((hit.target as HTMLElement).dataset.id ?? null)
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    )
+    document.querySelectorAll<HTMLElement>('.sheet[data-id]').forEach((el) => obs.observe(el))
+    return () => obs.disconnect()
+  }, [filter])
+
   return (
     <section id="solutions" className="section">
       <div className="wrap">
@@ -210,78 +296,85 @@ function SolutionsSection({ live }: { live: Live }) {
           ))}
         </div>
 
-        {showHub && (
-          <article className="hub-card cut">
-            <a className="hub-media" href={`#/s/${hub.id}`} tabIndex={-1} aria-hidden="true">
-              <span className="shot">
-                <img src={hub.preview.src} alt="" loading="lazy" />
-              </span>
-            </a>
-            <div className="hub-body">
-              <div className="card-meta">
-                <AreaStrip areas={hub.areas} />
-                <Stars s={hub} live={live} />
-              </div>
-              <h3><a href={`#/s/${hub.id}`}>{hub.name}</a></h3>
-              <p className="summary">{hub.summary}</p>
-              <p className="includes">
-                Includes <a href="#/s/valuelens">ValueLens</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>.
-              </p>
-              <RunsAs list={hub.runsAs} />
-              <div className="card-actions">
-                <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
-                <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
-              </div>
-            </div>
-          </article>
-        )}
-
-        {shownRest.length > 0 && (
-          <div className="index">
-            <div className="index-rows">
-              {shownRest.map((s) => (
-                <article
-                  key={s.id}
-                  className={`sheet ${peekId === s.id ? 'is-peek' : ''}`}
-                  onMouseEnter={() => setPeek(s.id)}
-                  onFocus={() => setPeek(s.id)}
-                >
-                  <div className="sheet-name">
-                    <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
-                    <div className="card-meta">
-                      <AreaStrip areas={s.areas} />
-                      <Stars s={s} live={live} />
-                    </div>
+        <div className="index">
+          <div className="index-rows">
+            {showHub && (
+              <article
+                className={`sheet sheet-hub ${peekId === hub.id ? 'is-peek' : ''}`}
+                data-id={hub.id}
+                onMouseEnter={() => setPeek(hub.id)}
+                onFocus={() => setPeek(hub.id)}
+              >
+                <div className="sheet-name">
+                  <h3><a href={`#/s/${hub.id}`}>{hub.name}</a></h3>
+                  <div className="card-meta">
+                    <AreaStrip areas={hub.areas} />
+                    <Stars s={hub} live={live} />
                   </div>
-                  <div className="sheet-body">
-                    <span className="shot sheet-shot" aria-hidden="true">
-                      <img src={s.preview.src} alt="" loading="lazy" />
-                    </span>
-                    <p className="question">“{s.question}”</p>
-                    <p className="summary">{s.summary}</p>
-                    <RunsAs list={s.runsAs} />
-                    <div className="card-actions">
-                      <a className="text-link" href={`#/s/${s.id}`}>Details</a>
-                      <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
-                      {s.videos[0] && (
-                        <a className="text-link" href={s.videos[0].url} target="_blank" rel="noreferrer">Watch the {s.videos[0].label.toLowerCase()}</a>
-                      )}
-                    </div>
+                </div>
+                <div className="sheet-body">
+                  <span className="shot sheet-shot" aria-hidden="true">
+                    <img src={hub.preview.src} alt="" loading="lazy" />
+                  </span>
+                  <p className="summary">{hub.summary}</p>
+                  <p className="includes">
+                    Includes <a href="#/s/valuelens">ValueLens</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>.
+                  </p>
+                  <RunsAs list={hub.runsAs} />
+                  <div className="card-actions">
+                    <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
+                    <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
                   </div>
-                </article>
-              ))}
-            </div>
-            <div className="peek" aria-hidden="true">
-              <div className="peek-frame cut">
-                {shownRest.map((s) => (
-                  <span key={s.id} className={`shot ${peekId === s.id ? 'is-on' : ''}`}>
+                </div>
+              </article>
+            )}
+            {shownRest.map((s) => (
+              <article
+                key={s.id}
+                className={`sheet ${peekId === s.id ? 'is-peek' : ''}`}
+                data-id={s.id}
+                onMouseEnter={() => setPeek(s.id)}
+                onFocus={() => setPeek(s.id)}
+              >
+                <div className="sheet-name">
+                  <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
+                  <div className="card-meta">
+                    <AreaStrip areas={s.areas} />
+                    <Stars s={s} live={live} />
+                  </div>
+                </div>
+                <div className="sheet-body">
+                  <span className="shot sheet-shot" aria-hidden="true">
                     <img src={s.preview.src} alt="" loading="lazy" />
                   </span>
-                ))}
-              </div>
-            </div>
+                  <p className="question">“{s.question}”</p>
+                  <p className="summary">{s.summary}</p>
+                  <RunsAs list={s.runsAs} />
+                  <div className="card-actions">
+                    <a className="text-link" href={`#/s/${s.id}`}>Details</a>
+                    <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
+                    {s.videos[0] && (
+                      <a className="text-link" href={s.videos[0].url} target="_blank" rel="noreferrer">Watch the {s.videos[0].label.toLowerCase()}</a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
-        )}
+          <div className="stage" aria-hidden="true" data-ui="screen">
+            <div className="stage-frame cut">
+              {shown.map((s) => (
+                <span key={s.id} className={`shot stage-shot ${peekId === s.id ? 'is-on' : ''}`}>
+                  <img src={s.preview.src} alt="" loading="lazy" />
+                </span>
+              ))}
+            </div>
+            <p className="stage-caption">
+              <strong>{peeked?.name}</strong>
+              <span>Sample data. Every name shown is invented.</span>
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -372,7 +465,89 @@ function WhatsNew({ live }: { live: Live }) {
   )
 }
 
+function Checklist({ items }: { items: string[] }) {
+  return (
+    <ul className="checklist">
+      {items.map((m) => (
+        <li key={m}>
+          <label>
+            <input type="checkbox" />
+            <span>{m}</span>
+          </label>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// A working fragment: the four steps drive a panel that shows the real thing
+// each step asks for, for the solution picked in step one.
 function GetStarted() {
+  const [step, setStep] = useState(0)
+  const [chosen, setChosen] = useState(solutions[0].id)
+  const s = byId(chosen)!
+  const narrow = useMedia('(max-width: 960px)')
+  const panel = (
+    <div id="walk-panel" className="walk-panel cut" data-ui="setup">
+      {step === 0 && (
+        <fieldset className="walk-pick">
+          <legend>Pick a solution</legend>
+          {solutions.map((o) => (
+            <label key={o.id} className={chosen === o.id ? 'is-picked' : undefined}>
+              <input type="radio" name="start" value={o.id} checked={chosen === o.id} onChange={() => setChosen(o.id)} />
+              <span>
+                <strong>{o.name}</strong>
+                <span>{o.question}</span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
+      )}
+      {step === 1 && (
+        <div className="walk-body">
+          <p className="walk-title">{s.name}</p>
+          <span className="shot walk-shot" aria-hidden="true">
+            <img src={s.preview.src} alt="" loading="lazy" />
+          </span>
+          {s.tryFirst ? (
+            <a className="key key-primary" href={s.tryFirst.url} target="_blank" rel="noreferrer">{s.tryFirst.label}</a>
+          ) : (
+            <a className="key" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
+          )}
+          {s.videos.length > 0 && (
+            <>
+              <p className="walk-label">Videos</p>
+              <ul className="videos">
+                {s.videos.map((v) => (
+                  <li key={v.url}>
+                    <a href={v.url} target="_blank" rel="noreferrer">{v.label}</a>
+                    {v.length && <span className="muted"> ({v.length})</span>}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
+      {step === 2 && (
+        <div className="walk-body">
+          <p className="walk-title">{s.name}</p>
+          <p className="walk-label">Before you start</p>
+          <Checklist key={s.id} items={s.beforeYouStart} />
+          <p className="muted">The README has the full list, by who does what.</p>
+        </div>
+      )}
+      {step === 3 && (
+        <div className="walk-body">
+          <p className="walk-title">{s.name}</p>
+          <RunsAs list={s.runsAs} />
+          <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
+            <GitHubIcon /> Open the repo
+          </a>
+        </div>
+      )}
+    </div>
+  )
   return (
     <section id="get-started" className="section section-tint">
       <div className="wrap">
@@ -380,15 +555,23 @@ function GetStarted() {
           <h2>Get started</h2>
           <p>Admin approvals usually take the longest, so ask for them early.</p>
         </div>
-        <ol className="steps">
-          {steps.map((st, i) => (
-            <li key={st.title}>
-              <span className="step-n" aria-hidden="true">{i + 1}</span>
-              <h3>{st.title}</h3>
-              <p>{st.text}</p>
-            </li>
-          ))}
-        </ol>
+        <div className="walk">
+          <ol className="steps">
+            {steps.map((st, i) => (
+              <li key={st.title} className={step === i ? 'is-on' : undefined}>
+                <span className="step-n" aria-hidden="true">{i + 1}</span>
+                <h3>
+                  <button type="button" aria-pressed={step === i} aria-controls="walk-panel" onClick={() => setStep(i)}>
+                    {st.title}
+                  </button>
+                </h3>
+                <p>{st.text}</p>
+                {narrow && step === i && panel}
+              </li>
+            ))}
+          </ol>
+          {!narrow && panel}
+        </div>
       </div>
     </section>
   )
@@ -454,7 +637,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           </section>
           <section>
             <h2>Before you start</h2>
-            <ul className="plotted rings">{s.beforeYouStart.map((m) => <li key={m}>{m}</li>)}</ul>
+            <Checklist key={s.id} items={s.beforeYouStart} />
             <p className="muted">The README has the full list, by who does what.</p>
           </section>
           <section>
