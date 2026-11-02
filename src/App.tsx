@@ -8,9 +8,8 @@ import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 const sections = [
   { id: 'solutions', label: 'Solutions' },
   { id: 'which-one', label: 'Which one do I need?' },
-  { id: 'whats-new', label: 'What’s new' },
   { id: 'get-started', label: 'Get started' },
-  { id: 'related', label: 'Related' },
+  { id: 'whats-new', label: 'What’s new' },
 ] as const
 
 const count = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][parts.length] ?? String(parts.length)
@@ -28,17 +27,6 @@ function useRoute() {
     return () => window.removeEventListener('hashchange', on)
   }, [])
   return route
-}
-
-function useMedia(query: string) {
-  const [match, setMatch] = useState(() => window.matchMedia(query).matches)
-  useEffect(() => {
-    const mq = window.matchMedia(query)
-    const on = () => setMatch(mq.matches)
-    mq.addEventListener('change', on)
-    return () => mq.removeEventListener('change', on)
-  }, [query])
-  return match
 }
 
 export default function App() {
@@ -135,37 +123,20 @@ function Header({ current }: { current?: string }) {
   )
 }
 
-// Every page of every screen recording, dealt out one product at a time.
-const wallFrames: [string, number][] = [
-  ['valuelens', 7], ['consumption-central', 8], ['github-copilot-panel', 7],
-  ['agent-monitor', 6], ['analytics-hub', 6], ['ai-in-one', 1],
-]
-const stills = Array.from({ length: 8 }, (_, n) =>
-  wallFrames.filter(([, count]) => n < count).map(([id]) => `wall/${id}-${n}.webp`),
-).flat()
-// Seven rows of seven, so the wall reaches the hero's bottom edge.
-const wall = [...stills, ...stills].slice(0, 49)
-
 function Home({ live }: { live: Live }) {
   return (
     <>
       <section className="hero">
-        <div className="hero-wall" aria-hidden="true">
-          {wall.map((src, i) => <img key={i} src={src} alt="" decoding="async" />)}
-        </div>
         <div className="wrap hero-grid">
           <div className="opening">
-            <h1>Copilot and agent analytics you run in your own tenant.</h1>
-            <p className="lede">
-              Copilot-DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. Each
-              component covers one thing, and {hub.name} brings them together in one platform.
-            </p>
+            <h1>Copilot and agent analytics, in your tenant.</h1>
+            <p className="lede">Open-source apps and reports, one per question, joined up in {hub.name}.</p>
             <div className="cta-row">
               <a className="key key-primary" href="#solutions">Browse the solutions</a>
               <a className="key" href="#which-one">Find the right one</a>
             </div>
           </div>
-          <ul className="facts plotted">
+          <ul className="facts">
             <li><strong>Free and open source.</strong> You pay only for the Fabric, Azure or Power Platform capacity it runs on.</li>
             <li><strong>Your data stays put.</strong> Everything reads from, and stays in, your own tenant.</li>
             <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
@@ -181,9 +152,8 @@ function Home({ live }: { live: Live }) {
       <SectionTabs />
       <SolutionsSection live={live} />
       <WhichOne />
-      <WhatsNew live={live} />
       <GetStarted />
-      <Related />
+      <WhatsNew live={live} />
     </>
   )
 }
@@ -231,42 +201,8 @@ function Stars({ s, live }: { s: Solution; live: Live }) {
 }
 
 function SolutionsSection({ live }: { live: Live }) {
-  const [peek, setPeek] = useState<string | null>(null)
   const [hover, setHover] = useState<string | null>(null)
   const hovered = hover ? byId(hover) : undefined
-
-  // The row crossing the middle of the viewport gets the plotted point.
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.find((e) => e.isIntersecting)
-        if (hit) setPeek((hit.target as HTMLElement).dataset.id ?? null)
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
-    )
-    document.querySelectorAll<HTMLElement>('.sheet[data-id]').forEach((el) => obs.observe(el))
-    return () => obs.disconnect()
-  }, [])
-
-  const sheet = (s: Solution, body: React.ReactNode, media: React.ReactNode) => (
-    <article
-      key={s.id}
-      className={`sheet ${s.component ? '' : 'sheet-hub'} ${peek === s.id ? 'is-peek' : ''}`}
-      data-id={s.id}
-      onMouseEnter={() => setPeek(s.id)}
-      onFocus={() => setPeek(s.id)}
-    >
-      <div className="sheet-name">
-        <Kind s={s} />
-        <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
-        <div className="card-meta">
-          <Stars s={s} live={live} />
-        </div>
-      </div>
-      <div className="sheet-body">{body}</div>
-      <div className="sheet-media">{media}</div>
-    </article>
-  )
 
   return (
     <section id="solutions" className="section">
@@ -277,20 +213,26 @@ function SolutionsSection({ live }: { live: Live }) {
         </div>
 
         <div className="index">
-          <div className="index-rows">
-            {sheet(
-              hub,
-              <>
-                <p className="summary">{hub.summary}</p>
-                <p className="includes">
-                  Includes <a href="#/s/valuelens">ValueLens</a>, <a href="#/s/agent-monitor">Agent Monitor</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>. <a href="#/s/github-copilot-panel">GitHub Copilot Panel</a> isn’t in it yet.
-                </p>
-                <RunsAs list={hub.runsAs} />
-                <div className="card-actions">
-                  <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
-                  <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
-                </div>
-              </>,
+          <article className="sheet sheet-hub" data-id={hub.id}>
+            <div className="sheet-name">
+              <Kind s={hub} />
+              <h3><a href={`#/s/${hub.id}`}>{hub.name}</a></h3>
+              <div className="card-meta">
+                <Stars s={hub} live={live} />
+              </div>
+            </div>
+            <div className="sheet-body">
+              <p className="summary">{hub.summary}</p>
+              <p className="includes">
+                Includes <a href="#/s/valuelens">ValueLens</a>, <a href="#/s/agent-monitor">Agent Monitor</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>. <a href="#/s/github-copilot-panel">GitHub Copilot Panel</a> isn’t in it yet.
+              </p>
+              <RunsAs list={hub.runsAs} />
+              <div className="card-actions">
+                <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
+                <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
+              </div>
+            </div>
+            <div className="sheet-media">
               <div className="sheet-map cut" data-ui="report">
                 <Platform active={hover} onActive={setHover} meta={(s) => <Stars s={s} live={live} />} />
                 <p className="map-caption" aria-live="polite">
@@ -302,30 +244,26 @@ function SolutionsSection({ live }: { live: Live }) {
                     `${hub.name} on top, its ${count} components below. Each is its own repo. Point at one to see the question it answers.`
                   )}
                 </p>
-              </div>,
-            )}
-            <p className="index-group">The components, one thing each</p>
-            {parts.map((s) =>
-              sheet(
-                s,
-                <>
-                  <p className="question">“{s.question}”</p>
-                  <p className="summary">{s.summary}</p>
-                  <RunsAs list={s.runsAs} />
-                  <div className="card-actions">
-                    <a className="text-link" href={`#/s/${s.id}`}>Details</a>
-                    <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
-                    {s.videos[0] && (
-                      <a className="text-link" href={s.videos[0].url} target="_blank" rel="noreferrer">Watch the {s.videos[0].label.toLowerCase()}</a>
-                    )}
-                  </div>
-                </>,
-                <a className="shot sheet-shot" href={`#/s/${s.id}`} tabIndex={-1}>
-                  <img src={s.preview.src} alt={s.preview.alt} loading="lazy" />
-                </a>,
-              ),
-            )}
-          </div>
+              </div>
+            </div>
+          </article>
+          <ul className="tiles">
+            {parts.map((s) => (
+              <li key={s.id} className="tile">
+                <a className="tile-shot" href={`#/s/${s.id}`} tabIndex={-1} aria-hidden="true">
+                  <img src={s.preview.src} alt="" loading="lazy" />
+                </a>
+                <Kind s={s} />
+                <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
+                <p className="tile-question">{s.question}</p>
+                <div className="tile-links">
+                  <a className="text-link" href={`#/s/${s.id}`}>Details</a>
+                  <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
+                  <Stars s={s} live={live} />
+                </div>
+              </li>
+            ))}
+          </ul>
           <p className="index-note">Every screen runs on sample data. Every name shown is invented.</p>
         </div>
       </div>
@@ -390,8 +328,10 @@ function WhatsNew({ live }: { live: Live }) {
           <h2>What’s new</h2>
           <p>Recent changes across the repos.</p>
         </div>
+        <div className="news">
+        <div className="news-log">
         <ol className="log">
-          {log.map((e) => {
+          {log.slice(0, 5).map((e) => {
             const s = byId(e.solution)!
             return (
               <li key={e.url}>
@@ -413,6 +353,22 @@ function WhatsNew({ live }: { live: Live }) {
             ))}
           </p>
         )}
+        </div>
+        <aside className="news-related" aria-labelledby="related">
+          <h3 id="related">Related</h3>
+          <ul className="related">
+            {related.map((r) => (
+              <li key={r.url}>
+                <a href={r.url} target="_blank" rel="noreferrer">
+                  <span className="related-by">{r.by}</span>
+                  <span className="related-title">{r.title}</span>
+                  <span className="related-desc">{r.description}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+        </div>
       </div>
     </section>
   )
@@ -433,74 +389,8 @@ function Checklist({ items }: { items: string[] }) {
   )
 }
 
-// A working fragment: the four steps drive a panel that shows the real thing
-// each step asks for, for the solution picked in step one.
+// Four steps in one line; each solution's own page carries its setup list, videos and installer.
 function GetStarted() {
-  const [step, setStep] = useState(0)
-  const [chosen, setChosen] = useState(hub.id)
-  const s = byId(chosen)!
-  const narrow = useMedia('(max-width: 960px)')
-  const panel = (
-    <div id="walk-panel" className="walk-panel cut" data-ui="setup">
-      {step === 0 && (
-        <fieldset className="walk-pick">
-          <legend>Pick a solution</legend>
-          {ordered.map((o) => (
-            <label key={o.id} className={chosen === o.id ? 'is-picked' : undefined}>
-              <input type="radio" name="start" value={o.id} checked={chosen === o.id} onChange={() => setChosen(o.id)} />
-              <span>
-                <strong>{o.name} <Kind s={o} /></strong>
-                <span>{o.question}</span>
-              </span>
-            </label>
-          ))}
-        </fieldset>
-      )}
-      {step === 1 && (
-        <div className="walk-body">
-          <p className="walk-title">{s.name}</p>
-          <span className="shot walk-shot" aria-hidden="true">
-            <img src={s.preview.src} alt="" loading="lazy" />
-          </span>
-          {s.tryFirst ? (
-            <a className="key key-primary" href={s.tryFirst.url} target="_blank" rel="noreferrer">{s.tryFirst.label}</a>
-          ) : (
-            <a className="key" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
-          )}
-          {s.videos.length > 0 && (
-            <>
-              <p className="walk-label">Videos</p>
-              <ul className="videos">
-                {s.videos.map((v) => (
-                  <li key={v.url}>
-                    <a href={v.url} target="_blank" rel="noreferrer">{v.label}</a>
-                    {v.length && <span className="muted"> ({v.length})</span>}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
-      )}
-      {step === 2 && (
-        <div className="walk-body">
-          <p className="walk-title">{s.name}</p>
-          <p className="walk-label">Before you start</p>
-          <Checklist key={s.id} items={s.beforeYouStart} />
-          <p className="muted">The README has the full list, by who does what.</p>
-        </div>
-      )}
-      {step === 3 && (
-        <div className="walk-body">
-          <p className="walk-title">{s.name}</p>
-          <RunsAs list={s.runsAs} />
-          <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
-            <GitHubIcon /> Open the repo
-          </a>
-        </div>
-      )}
-    </div>
-  )
   return (
     <section id="get-started" className="section section-tint">
       <div className="wrap">
@@ -508,47 +398,15 @@ function GetStarted() {
           <h2>Get started</h2>
           <p>Admin approvals usually take the longest, so ask for them early.</p>
         </div>
-        <div className="walk">
-          <ol className="steps">
-            {steps.map((st, i) => (
-              <li key={st.title} className={step === i ? 'is-on' : undefined}>
-                <span className="step-n" aria-hidden="true">{i + 1}</span>
-                <h3>
-                  <button type="button" aria-pressed={step === i} aria-controls="walk-panel" onClick={() => setStep(i)}>
-                    {st.title}
-                  </button>
-                </h3>
-                <p>{st.text}</p>
-                {narrow && step === i && panel}
-              </li>
-            ))}
-          </ol>
-          {!narrow && panel}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function Related() {
-  return (
-    <section id="related" className="section">
-      <div className="wrap">
-        <div className="section-head">
-          <h2>Related</h2>
-          <p>Other places to look, including Power CAT’s Agent Inventory, which pairs well with Agent Monitor.</p>
-        </div>
-        <ul className="related">
-          {related.map((r) => (
-            <li key={r.url}>
-              <a href={r.url} target="_blank" rel="noreferrer">
-                <span className="related-by">{r.by}</span>
-                <span className="related-title">{r.title}</span>
-                <span className="related-desc">{r.description}</span>
-              </a>
+        <ol className="steps">
+          {steps.map((st, i) => (
+            <li key={st.title}>
+              <span className="step-n" aria-hidden="true">{i + 1}</span>
+              <h3>{i === 0 ? <a href="#which-one">{st.title}</a> : st.title}</h3>
+              <p>{st.text}</p>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
     </section>
   )
