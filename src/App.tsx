@@ -47,7 +47,7 @@ export default function App() {
   const detail = route.startsWith('/s/') ? byId(route.slice(3) === 'analytics-hub' ? hub.id : route.slice(3)) : undefined
 
   useEffect(() => {
-    document.title = detail ? `${detail.name} | AI-DataLab` : 'AI-DataLab: Copilot and agent analytics by Keith McGrane'
+    document.title = detail ? `${detail.name} | Copilot-DataLab` : 'Copilot-DataLab: Copilot and agent analytics by Keith McGrane'
   }, [detail])
 
   // Section links (#solutions) scroll within the home page; if we're on a
@@ -86,7 +86,7 @@ function Header() {
       <div className="wrap header-row">
         <a className="brand" href="#">
           <Logo />
-          <span>AI-DataLab</span>
+          <span>Copilot-DataLab</span>
         </a>
         <nav aria-label="Site">
           <a href="#solutions">Solutions</a>
@@ -111,7 +111,7 @@ function Home({ live }: { live: Live }) {
           <div className="opening">
             <h1>Copilot and agent analytics you run in your own tenant.</h1>
             <p className="lede">
-              AI-DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. Each
+              Copilot-DataLab collects the open-source apps and Power BI reports I build for Microsoft 365 Copilot and agents. Each
               component covers one thing, and {hub.name} brings them together in one platform.
             </p>
             <div className="cta-row">
@@ -602,7 +602,7 @@ function Footer() {
     <footer className="site-footer">
       <div className="wrap footer-row">
         <div>
-          <a className="brand" href="#"><Logo /><span>AI-DataLab</span></a>
+          <a className="brand" href="#"><Logo /><span>Copilot-DataLab</span></a>
           <p>Built by Keith McGrane (<a href="https://github.com/Keithland89">@Keithland89</a>).</p>
         </div>
         <p className="disclaimer">
