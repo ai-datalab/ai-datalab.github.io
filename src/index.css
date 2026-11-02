@@ -34,6 +34,8 @@
   --shadow-key-accent: 0 3px 0 0 var(--color-accent-edge), 0 6px 8px -4px oklch(30% 0.12 260 / 0.45), inset 0 1px 0 oklch(100% 0 0 / 0.22);
   --shadow-key-press: inset 0 1px 2px oklch(21% 0.028 262 / 0.14);
   --shadow-tray: inset 0 1px 2px oklch(21% 0.028 262 / 0.08);
+  --shadow-screen: 0 24px 48px -28px oklch(21% 0.028 262 / 0.35);
+  --shadow-screen-dark: 0 0 0 1px var(--color-graphite-rule), 0 32px 64px -24px oklch(8% 0.02 262 / 0.7);
   --tracking-display: -0.028em;
   /* The plotted point: a solid core inside a wash halo, as the hero and the graphite band draw it (r7 in r20). */
   --plot: radial-gradient(circle closest-side, var(--color-accent) 0 34%, var(--color-halo) 37% 99%, transparent 100%);
@@ -286,14 +288,33 @@ main:focus { outline: none; }
 
 .icon { width: 1em; height: 1em; flex: none; }
 
-/* Hero: the copy on the left, a working report on the right. */
-.hero { padding: var(--space-lg) 0 var(--space-3xl); }
+/* Hero: graphite, over a dimmed wall of every page of every product, with the platform's own screen lit. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: var(--space-2xl) 0 var(--space-3xl);
+  background: var(--color-graphite);
+  color: var(--color-graphite-ink);
+}
 
-.hero h1 { font-size: var(--text-display-m); line-height: 1.02; max-width: 15ch; }
+.hero-wall {
+  position: absolute;
+  inset: -12px -4% auto;
+  z-index: -1;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-sm);
+  opacity: 0.16;
+}
+
+.hero-wall img { width: 100%; aspect-ratio: 8 / 5; object-fit: cover; object-position: top left; border-radius: 2px; }
+
+.hero h1 { font-size: var(--text-display-m); line-height: 1.02; max-width: 15ch; color: var(--color-graphite-ink); }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   grid-template-areas: "copy map" "facts map";
   grid-template-rows: auto auto;
   align-content: center;
@@ -307,14 +328,21 @@ main:focus { outline: none; }
 .opening .cta-row { margin-top: var(--space-xs); }
 
 .lede { font-size: var(--text-lead); line-height: 1.5; color: var(--color-ink-2); max-width: 46ch; }
+.hero .lede { color: var(--color-graphite-ink); }
 
 .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-xl); }
 
-.facts { grid-area: facts; padding-top: var(--space-lg); border-top: 1px solid var(--color-rule); gap: var(--space-md); color: var(--color-ink-2); max-width: 46ch; }
-.facts strong { color: var(--color-ink); font-weight: 600; }
+.facts { grid-area: facts; padding-top: var(--space-lg); border-top: 1px solid var(--color-graphite-rule); gap: var(--space-md); color: var(--color-graphite-muted); max-width: 46ch; }
+.facts strong { color: var(--color-graphite-ink); font-weight: 600; }
+.facts li::before { background: var(--plot-dark); }
+.hero :focus-visible { outline-color: var(--color-accent-2); }
 
-.hero-map {
-  grid-area: map;
+.hero-shot { grid-area: map; align-self: start; display: flex; flex-direction: column; gap: var(--space-sm); margin: 0; }
+.hero-shot figcaption { display: flex; align-items: center; gap: var(--space-sm); font: 600 var(--text-lg)/1.3 var(--font-display); letter-spacing: -0.01em; }
+.hero-shot img { width: 100%; border-radius: 4px; box-shadow: var(--shadow-screen-dark); }
+
+/* The platform map, in the Copilot-DataHub row of the index. */
+.sheet-map {
   padding: var(--space-lg) var(--space-lg) var(--space-sm);
   background: var(--color-key-face);
   border: 1px solid var(--color-rule-2);
@@ -540,7 +568,7 @@ main:focus { outline: none; }
   pointer-events: none;
 }
 
-/* The index: rows on the left, the screen stage on the right. */
+/* The index: one row per solution, its words on one side and its screen on the other. */
 .sheet h3 a, .answer a:not(.key) { text-decoration: none; }
 .sheet h3 a:hover { text-decoration: underline; text-decoration-color: var(--color-accent); }
 
@@ -550,24 +578,22 @@ main:focus { outline: none; }
 
 .card-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); padding-top: var(--space-xs); }
 
-.index {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: var(--space-2xl);
-  align-items: start;
-}
-
 .index-rows { border-bottom: 1px solid var(--color-rule-2); }
 
 .sheet {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-areas: "name media" "body media";
+  grid-template-rows: auto 1fr;
+  gap: var(--space-md) var(--space-2xl);
+  align-items: start;
   padding: var(--space-xl) 0 var(--space-2xl);
   border-top: 1px solid var(--color-rule-2);
 }
 
-.sheet-name { display: flex; flex-direction: column; gap: var(--space-sm); }
+.sheet:nth-of-type(even) { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "media name" "media body"; }
+
+.sheet-name { grid-area: name; display: flex; flex-direction: column; gap: var(--space-sm); }
 .sheet-name .kind { margin-left: var(--space-xl); }
 .sheet-hub h3 { font-size: var(--text-3xl); }
 
@@ -607,50 +633,18 @@ main:focus { outline: none; }
 .sheet-name .card-meta,
 .sheet-body { padding-left: var(--space-xl); }
 
-.sheet-body { display: flex; flex-direction: column; gap: var(--space-sm); }
-
-.sheet-shot { display: none; }
+.sheet-body { grid-area: body; display: flex; flex-direction: column; gap: var(--space-sm); }
 
 .question { font: 500 var(--text-lg)/1.35 var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
 
-.stage { position: sticky; top: 78px; }
+/* Each row carries its own whole screen, alternating sides down the index. */
+.sheet-media { grid-area: media; align-self: center; }
+.sheet-shot::after { content: none; }
+.sheet-shot img { border: 1px solid var(--color-rule-2); box-shadow: var(--shadow-screen); }
+.sheet-shot:hover img { border-color: var(--color-accent); }
 
-.stage-frame {
-  position: relative;
-  display: grid;
-  padding: var(--space-lg);
-  background: var(--color-paper-3);
-  border: 1px solid var(--color-rule-2);
-  box-shadow: var(--shadow-tray);
-}
+.index-note { margin-top: var(--space-md); color: var(--color-muted); font-size: var(--text-sm); }
 
-/* Each screen shown whole; the screens share one cell so the frame keeps the tallest one's height. */
-.stage-shot {
-  grid-area: 1 / 1;
-  align-self: center;
-  opacity: 0;
-  transition: opacity 200ms var(--ease-out);
-}
-
-.stage-shot.is-on { opacity: 1; }
-
-.stage-shot img {
-  height: auto;
-  border: 1px solid var(--color-rule-2);
-}
-
-.stage-caption {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-2xs) var(--space-md);
-  margin-top: var(--space-sm);
-  color: var(--color-muted);
-  font-size: var(--text-sm);
-}
-
-.stage-caption strong { color: var(--color-ink); font: 600 var(--text-sm)/1.6 var(--font-display); }
-.stage-caption .kind { margin-right: var(--space-xs); }
 /* Which one: the graphite band */
 .band { background: var(--color-graphite); color: var(--color-graphite-ink); }
 .band h2 { color: var(--color-graphite-ink); }
@@ -1043,7 +1037,7 @@ main:focus { outline: none; }
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   gap: var(--space-lg) var(--space-2xl);
-  align-items: end;
+  align-items: center;
   margin-top: var(--space-xl);
   padding: var(--space-2xl) var(--space-xl);
   background: var(--color-paper-2);
@@ -1062,17 +1056,28 @@ main:focus { outline: none; }
 .insight-lead h2 a:hover,
 .insights h2 a:hover { text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
 .insight-lead-text { display: flex; flex-direction: column; gap: var(--space-md); }
+.insight-lead-text h2 { margin-bottom: var(--space-xs); }
+
+/* Covers: one column of plotted points per value, drawn from the post. */
+.cover { width: 100%; height: auto; overflow: visible; }
+.cover-dot { fill: var(--color-rule-2); }
+.cover-halo { fill: var(--color-halo); }
+.cover-top { fill: var(--color-accent); }
+.insight-lead .cover { max-width: 30rem; justify-self: end; }
 .insight-lead .insight-meta,
 .article-by .insight-meta { flex-direction: row; flex-wrap: wrap; gap: 0 var(--space-md); }
 
-.insights { list-style: none; margin: var(--space-xl) 0 0; padding: 0; max-width: 64rem; }
+.insights { list-style: none; margin: var(--space-xl) 0 0; padding: 0; }
 
 .insights li {
   display: grid;
-  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) minmax(0, 10rem);
   gap: var(--space-xs) var(--space-2xl);
+  align-items: start;
   padding: var(--space-xl) 0 0;
 }
+
+.insights li .cover { padding-top: var(--space-2xs); }
 
 .insights h2 { max-width: 40ch; font: 600 var(--text-xl)/1.2 var(--font-display); letter-spacing: -0.02em; }
 .insights h2 + p { margin-top: var(--space-xs); max-width: 62ch; color: var(--color-ink-2); }
@@ -1183,7 +1188,7 @@ main:focus { outline: none; }
 .article-more .older { grid-column: 2; text-align: right; }
 
 /* About */
-.about { display: grid; grid-template-columns: minmax(0, 18rem) minmax(0, 46rem); gap: var(--space-2xl); align-items: start; }
+.about { display: grid; grid-template-columns: minmax(0, 24rem) minmax(0, 46rem); gap: var(--space-2xl); align-items: start; }
 .about-side { position: sticky; top: 96px; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
 .about-photo { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: var(--cut-l) 4px; }
 .about-body { padding-top: var(--space-3xl); }
@@ -1217,17 +1222,14 @@ main:focus { outline: none; }
   :root { --gutter: 24px; }
 
   .hero-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "map" "facts"; grid-template-rows: none; }
+  .hero-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
   .picker,
-  .index,
   .walk { grid-template-columns: minmax(0, 1fr); }
 
-  .stage { display: none; }
-
-  /* Without the stage, each row carries its own whole screen. */
-  .sheet-shot { display: block; margin: var(--space-sm) 0 var(--space-xs) var(--space-md); }
-  .sheet-shot::after { content: none; }
-  .sheet-shot img { height: auto; border: 1px solid var(--color-rule-2); }
+  .sheet,
+  .sheet:nth-of-type(even) { grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "media" "body"; grid-template-rows: none; }
+  .sheet-media { margin: var(--space-xs) 0 var(--space-xs) var(--space-xl); }
 
   .answer,
   .walk-panel { position: static; min-height: 0; }
@@ -1240,6 +1242,8 @@ main:focus { outline: none; }
   .log-text { grid-column: 2; }
 
   .insight-lead { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .insight-lead .cover { max-width: 20rem; justify-self: start; }
+  .insights li { grid-template-columns: minmax(0, 9rem) minmax(0, 1fr) minmax(0, 7rem); gap: var(--space-xs) var(--space-lg); }
   .article-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
   .article-aside { position: static; padding: var(--space-md) var(--space-lg); background: var(--color-paper-2); border-radius: 4px; }
   .about { grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); gap: var(--space-2xl); }
@@ -1253,7 +1257,9 @@ main:focus { outline: none; }
 
   .hero { padding: var(--space-xl) 0 var(--space-2xl); }
   .hero-grid { gap: var(--space-xl); }
-  .hero-map { padding: var(--space-md) var(--space-sm) var(--space-2xs); }
+  .hero-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sheet-map { padding: var(--space-md) var(--space-sm) var(--space-2xs); }
+  .sheet-media { margin-left: 0; }
 
   .section { padding: var(--space-2xl) 0; }
   .section-head { grid-template-columns: minmax(0, 1fr); gap: var(--space-sm); }
@@ -1289,6 +1295,7 @@ main:focus { outline: none; }
   .footer-row { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
 
   .insights li { grid-template-columns: minmax(0, 1fr); padding: var(--space-lg) 0 0; }
+  .insights li .cover { display: none; }
   .insight-meta { flex-direction: row; flex-wrap: wrap; gap: 0 var(--space-sm); }
   .insight-lead { padding: var(--space-xl) var(--space-lg); }
 

@@ -135,12 +135,24 @@ function Header({ current }: { current?: string }) {
   )
 }
 
+// Every page of every screen recording, dealt out one product at a time.
+const wallFrames: [string, number][] = [
+  ['valuelens', 7], ['consumption-central', 8], ['github-copilot-panel', 7],
+  ['agent-monitor', 6], ['analytics-hub', 6], ['ai-in-one', 1],
+]
+const stills = Array.from({ length: 8 }, (_, n) =>
+  wallFrames.filter(([, count]) => n < count).map(([id]) => `wall/${id}-${n}.webp`),
+).flat()
+// Seven rows of seven, so the wall reaches the hero's bottom edge.
+const wall = [...stills, ...stills].slice(0, 49)
+
 function Home({ live }: { live: Live }) {
-  const [hover, setHover] = useState<string | null>(null)
-  const hovered = hover ? byId(hover) : undefined
   return (
     <>
       <section className="hero">
+        <div className="hero-wall" aria-hidden="true">
+          {wall.map((src, i) => <img key={i} src={src} alt="" decoding="async" />)}
+        </div>
         <div className="wrap hero-grid">
           <div className="opening">
             <h1>Copilot and agent analytics you run in your own tenant.</h1>
@@ -158,18 +170,12 @@ function Home({ live }: { live: Live }) {
             <li><strong>Your data stays put.</strong> Everything reads from, and stays in, your own tenant.</li>
             <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
           </ul>
-          <div className="hero-map cut" data-ui="report">
-            <Platform active={hover} onActive={setHover} meta={(s) => <Stars s={s} live={live} />} />
-            <p className="map-caption" aria-live="polite">
-              {hovered ? (
-                <>
-                  <strong>{hovered.name}</strong> answers “{hovered.question}”
-                </>
-              ) : (
-                `${hub.name} on top, its ${count} components below. Each is its own repo. Point at one to see the question it answers.`
-              )}
-            </p>
-          </div>
+          <figure className="hero-shot" data-ui="screen">
+            <figcaption>
+              <span className="kind kind-platform">The platform</span> {hub.name}
+            </figcaption>
+            <img src={hub.preview.src} alt={hub.preview.alt} width="1100" height="658" />
+          </figure>
         </div>
       </section>
       <SectionTabs />
@@ -226,11 +232,10 @@ function Stars({ s, live }: { s: Solution; live: Live }) {
 
 function SolutionsSection({ live }: { live: Live }) {
   const [peek, setPeek] = useState<string | null>(null)
-  const peekId = peek ?? hub.id
-  const peeked = byId(peekId)
+  const [hover, setHover] = useState<string | null>(null)
+  const hovered = hover ? byId(hover) : undefined
 
-  // Scrolling the index plays the screens: the row crossing the middle of the
-  // viewport takes the stage. Hover and focus still win while they happen.
+  // The row crossing the middle of the viewport gets the plotted point.
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -243,10 +248,10 @@ function SolutionsSection({ live }: { live: Live }) {
     return () => obs.disconnect()
   }, [])
 
-  const sheet = (s: Solution, body: React.ReactNode) => (
+  const sheet = (s: Solution, body: React.ReactNode, media: React.ReactNode) => (
     <article
       key={s.id}
-      className={`sheet ${s.component ? '' : 'sheet-hub'} ${peekId === s.id ? 'is-peek' : ''}`}
+      className={`sheet ${s.component ? '' : 'sheet-hub'} ${peek === s.id ? 'is-peek' : ''}`}
       data-id={s.id}
       onMouseEnter={() => setPeek(s.id)}
       onFocus={() => setPeek(s.id)}
@@ -258,12 +263,8 @@ function SolutionsSection({ live }: { live: Live }) {
           <Stars s={s} live={live} />
         </div>
       </div>
-      <div className="sheet-body">
-        <span className="shot sheet-shot" aria-hidden="true">
-          <img src={s.preview.src} alt="" loading="lazy" />
-        </span>
-        {body}
-      </div>
+      <div className="sheet-body">{body}</div>
+      <div className="sheet-media">{media}</div>
     </article>
   )
 
@@ -290,6 +291,18 @@ function SolutionsSection({ live }: { live: Live }) {
                   <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
                 </div>
               </>,
+              <div className="sheet-map cut" data-ui="report">
+                <Platform active={hover} onActive={setHover} meta={(s) => <Stars s={s} live={live} />} />
+                <p className="map-caption" aria-live="polite">
+                  {hovered ? (
+                    <>
+                      <strong>{hovered.name}</strong> answers “{hovered.question}”
+                    </>
+                  ) : (
+                    `${hub.name} on top, its ${count} components below. Each is its own repo. Point at one to see the question it answers.`
+                  )}
+                </p>
+              </div>,
             )}
             <p className="index-group">The components, one thing each</p>
             {parts.map((s) =>
@@ -307,22 +320,13 @@ function SolutionsSection({ live }: { live: Live }) {
                     )}
                   </div>
                 </>,
+                <a className="shot sheet-shot" href={`#/s/${s.id}`} tabIndex={-1}>
+                  <img src={s.preview.src} alt={s.preview.alt} loading="lazy" />
+                </a>,
               ),
             )}
           </div>
-          <div className="stage" aria-hidden="true" data-ui="screen">
-            <div className="stage-frame cut">
-              {ordered.map((s) => (
-                <span key={s.id} className={`shot stage-shot ${peekId === s.id ? 'is-on' : ''}`}>
-                  <img src={s.preview.src} alt="" loading="lazy" />
-                </span>
-              ))}
-            </div>
-            <p className="stage-caption">
-              <strong>{peeked && <Kind s={peeked} />} {peeked?.name}</strong>
-              <span>Sample data. Every name shown is invented.</span>
-            </p>
-          </div>
+          <p className="index-note">Every screen runs on sample data. Every name shown is invented.</p>
         </div>
       </div>
     </section>
@@ -669,6 +673,32 @@ function Meta({ i }: { i: Insight }) {
   )
 }
 
+// One column of plotted points per value; the top point of each is the site's mark.
+function Cover({ values }: { values: number[] }) {
+  const rows = 8
+  const w = 120
+  const h = rows * 12
+  const max = Math.max(...values)
+  const gap = w / values.length
+  return (
+    <svg className="cover" viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
+      {values.map((v, c) => {
+        const n = Math.max(1, Math.round((v / max) * rows))
+        const x = gap * (c + 0.5)
+        return (
+          <g key={c}>
+            {Array.from({ length: n - 1 }, (_, r) => (
+              <circle key={r} className="cover-dot" cx={x} cy={h - 6 - r * 12} r={2} />
+            ))}
+            <circle className="cover-halo" cx={x} cy={h - 6 - (n - 1) * 12} r={5.5} />
+            <circle className="cover-top" cx={x} cy={h - 6 - (n - 1) * 12} r={2.6} />
+          </g>
+        )
+      })}
+    </svg>
+  )
+}
+
 function InsightsPage() {
   const [topic, setTopic] = useState<Topic | 'all'>('all')
   const shown = topic === 'all' ? insights : insights.filter((i) => i.topic === topic)
@@ -683,10 +713,7 @@ function InsightsPage() {
         <a className="back" href="#">Home</a>
         <header className="page-head">
           <h1>Insights</h1>
-          <p className="lede">
-            Notes on measuring AI adoption, value and licence decisions, written with{' '}
-            <a href={shailendra.url} target="_blank" rel="noreferrer">Shailendra Hegde</a>.
-          </p>
+          <p className="lede">Notes on measuring AI adoption, value and licence decisions.</p>
         </header>
         <div className="filters" role="group" aria-label="Filter by topic">
           {filters.map((f) => (
@@ -698,14 +725,15 @@ function InsightsPage() {
         <div aria-live="polite">
           {lead && (
             <section className="insight-lead" aria-label="Latest">
-              <h2>
-                <a href={`#/insights/${lead.slug}`}><Title text={lead.title} /></a>
-              </h2>
               <div className="insight-lead-text">
+                <h2>
+                  <a href={`#/insights/${lead.slug}`}><Title text={lead.title} /></a>
+                </h2>
                 <p className="lede">{lead.summary}</p>
                 <Meta i={lead} />
                 <Byline authors={lead.authors} />
               </div>
+              <Cover values={lead.cover} />
             </section>
           )}
           {rest.length > 0 && (
@@ -720,6 +748,7 @@ function InsightsPage() {
                     <p>{i.summary}</p>
                     <Byline authors={i.authors} />
                   </div>
+                  <Cover values={i.cover} />
                 </li>
               ))}
             </ol>

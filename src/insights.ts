@@ -14,6 +14,8 @@ export interface Insight {
   topic: Topic
   date: string
   minutes: number
+  /** The cover: one column of plotted points per value, drawn from the post where it has numbers. */
+  cover: number[]
   authors: (typeof keith)[]
 }
 
@@ -29,6 +31,7 @@ export const insights: Insight[] = [
     topic: 'AI adoption',
     date: '2026-10-15',
     minutes: 6,
+    cover: [1, 1, 2, 2, 3, 5, 7, 9, 10, 11, 11, 12],
     authors: sk,
   },
   {
@@ -39,6 +42,7 @@ export const insights: Insight[] = [
     topic: 'ROI analysis',
     date: '2026-10-15',
     minutes: 5,
+    cover: [2, 2, 4, 4, 6, 6, 8, 8, 10, 10],
     authors: sk,
   },
   {
@@ -49,6 +53,7 @@ export const insights: Insight[] = [
     topic: 'ROI analysis',
     date: '2026-04-08',
     minutes: 8,
+    cover: [43, 20, 14, 12, 8],
     authors: [shailendra],
   },
   {
@@ -59,6 +64,7 @@ export const insights: Insight[] = [
     topic: 'AI adoption',
     date: '2026-02-27',
     minutes: 7,
+    cover: [1, 2, 3, 4, 5],
     authors: ks,
   },
   {
@@ -69,6 +75,7 @@ export const insights: Insight[] = [
     topic: 'AI adoption',
     date: '2026-02-07',
     minutes: 5,
+    cover: [3, 5, 4, 6, 8, 7, 9, 11],
     authors: sk,
   },
   {
@@ -79,6 +86,7 @@ export const insights: Insight[] = [
     topic: 'License allocation',
     date: '2026-02-06',
     minutes: 5,
+    cover: [1, 2, 3, 5, 8, 12, 12, 12],
     authors: ks,
   },
   {
@@ -89,6 +97,7 @@ export const insights: Insight[] = [
     topic: 'Investment decisions',
     date: '2026-01-28',
     minutes: 5,
+    cover: [6, 7, 6, 8, 7, 9, 8, 10, 9, 12],
     authors: sk,
   },
   {
@@ -99,6 +108,7 @@ export const insights: Insight[] = [
     topic: 'License allocation',
     date: '2026-01-22',
     minutes: 5,
+    cover: [12, 12, 8, 8, 8, 4, 4, 4, 4, 2],
     authors: ks,
   },
   {
@@ -108,6 +118,7 @@ export const insights: Insight[] = [
     topic: 'Superusers',
     date: '2026-01-16',
     minutes: 4,
+    cover: [3, 7, 11, 14, 18, 22, 27, 34, 46, 90],
     authors: sk,
   },
   {
@@ -117,6 +128,7 @@ export const insights: Insight[] = [
     topic: 'AI adoption',
     date: '2026-01-14',
     minutes: 5,
+    cover: [3, 4, 3, 6, 5, 7, 6, 9, 8, 11],
     authors: ks,
   },
   {
@@ -126,6 +138,7 @@ export const insights: Insight[] = [
     topic: 'ROI analysis',
     date: '2025-01-10',
     minutes: 3,
+    cover: [8, 12, 12, 16, 24, 48],
     authors: sk,
   },
   {
@@ -135,6 +148,7 @@ export const insights: Insight[] = [
     topic: 'AI adoption',
     date: '2025-01-08',
     minutes: 2,
+    cover: [1, 1, 1, 2, 2, 3, 5, 8, 12],
     authors: ks,
   },
   {
@@ -144,6 +158,7 @@ export const insights: Insight[] = [
     topic: 'AI adoption',
     date: '2025-01-12',
     minutes: 2,
+    cover: [2, 2, 3, 3, 4, 7, 10, 11, 12, 12],
     authors: sk,
   },
 ]
