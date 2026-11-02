@@ -1,5 +1,5 @@
-// Insights first published on AInROI (https://www.ainroi.com), source: github.com/shailendrahegde/ainroisite
-// (public/blogs/manifest.json). Authors follow each post's own byline, in its order.
+// Insights by Keith McGrane and Shailendra Hegde. Authors follow each post's own byline, in its order.
+// Post bodies live in ./posts/<slug>.md and load on demand.
 
 export const shailendra = { name: 'Shailendra Hegde', url: 'https://www.linkedin.com/in/shailendrahegde' }
 export const keith = { name: 'Keith McGrane', url: 'https://www.linkedin.com/in/keith-mcgrane-46184029' }
@@ -148,4 +148,38 @@ export const insights: Insight[] = [
   },
 ]
 
-export const insightUrl = (i: Insight) => `https://www.ainroi.com/?blog=${i.slug}`
+export const insightBySlug = (slug: string) => insights.find((i) => i.slug === slug)
+
+export interface PostBody {
+  html: string
+  contents: { id: string; text: string }[]
+}
+
+const sources = import.meta.glob<string>('./posts/*.md', { query: '?raw', import: 'default' })
+
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/&#?[a-z0-9]+;|<[^>]+>/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
+export async function loadPost(slug: string): Promise<PostBody | undefined> {
+  const load = sources[`./posts/${slug}.md`]
+  if (!load) return undefined
+  const [md, { marked }] = await Promise.all([load(), import('marked')])
+  const contents: PostBody['contents'] = []
+  const html = (marked.parse(md, { async: false }) as string)
+    .replace(/<h2>(.*?)<\/h2>/g, (h, inner: string) => {
+      if (inner === 'TL;DR') return h
+      const id = slugify(inner)
+      contents.push({ id, text: new DOMParser().parseFromString(inner, 'text/html').body.textContent ?? '' })
+      return `<h2 id="${id}">${inner}</h2>`
+    })
+    .replace(/<p>(<img [^>]*alt="([^"]*)"[^>]*>)<\/p>/g, (_, img: string, alt: string) =>
+      `<figure>${img.replace('<img ', '<img loading="lazy" ')}<figcaption>${alt}</figcaption></figure>`,
+    )
+    .replace(/<a href="(https?:[^"]+)"/g, '<a href="$1" target="_blank" rel="noreferrer"')
+    .replace(/<table>[\s\S]*?<\/table>/g, (t) => `<div class="table">${t}</div>`)
+  return { html, contents }
+}

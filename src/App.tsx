@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Platform } from './Platform'
 import { SignalField } from './SignalField'
 import { byId, componentLabels, hub, log, ordered, parts, related, steps, type Solution } from './data'
-import { insights, insightUrl, keith, shailendra, topics, type Insight, type Topic } from './insights'
+import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 
 const sections = [
@@ -48,16 +48,19 @@ export default function App() {
   const detail = route.startsWith('/s/') ? byId(route.slice(3) === 'analytics-hub' ? hub.id : route.slice(3)) : undefined
 
   const page = route === '/insights' || route === '/about' ? route : undefined
+  const post = route.startsWith('/insights/') ? insightBySlug(route.slice(10)) : undefined
 
   useEffect(() => {
     document.title = detail
       ? `${detail.name} | Copilot-DataLab`
-      : page === '/insights'
-        ? 'Insights | Copilot-DataLab'
-        : page === '/about'
-          ? 'About Keith McGrane | Copilot-DataLab'
-          : 'Copilot-DataLab: Copilot and agent analytics by Keith McGrane'
-  }, [detail, page])
+      : post
+        ? `${post.title} | Copilot-DataLab`
+        : page === '/insights'
+          ? 'Insights | Copilot-DataLab'
+          : page === '/about'
+            ? 'About Keith McGrane | Copilot-DataLab'
+            : 'Copilot-DataLab: Copilot and agent analytics by Keith McGrane'
+  }, [detail, page, post])
 
   // Section links (#solutions) scroll within the home page; if we're on a
   // detail page, render home first and then scroll.
@@ -70,10 +73,12 @@ export default function App() {
   return (
     <>
       <a className="skip" href="#main">Skip to content</a>
-      <Header />
+      <Header current={post ? '/insights' : page} />
       <main id="main" tabIndex={-1}>
         {detail ? (
           <SolutionPage s={detail} live={live} />
+        ) : post ? (
+          <ArticlePage key={post.slug} post={post} />
         ) : page === '/insights' ? (
           <InsightsPage />
         ) : page === '/about' ? (
@@ -99,7 +104,8 @@ function Logo() {
   )
 }
 
-function Header() {
+function Header({ current }: { current?: string }) {
+  const here = (r: string) => (current === r ? 'page' : undefined)
   return (
     <header className="site-header">
       <div className="wrap header-row">
@@ -118,8 +124,8 @@ function Header() {
           <a href="#solutions">Solutions</a>
           <a className="nav-section" href="#which-one">Which one?</a>
           <a className="nav-section" href="#get-started">Get started</a>
-          <a href="#/insights">Insights</a>
-          <a href="#/about">About</a>
+          <a href="#/insights" aria-current={here('/insights')}>Insights</a>
+          <a href="#/about" aria-current={here('/about')}>About</a>
           <a className="key key-sm gh" href="https://github.com/ai-datalab" target="_blank" rel="noreferrer">
             <GitHubIcon /> <span>GitHub</span>
           </a>
@@ -627,6 +633,18 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
 
 const day = (iso: string) => formatDay(`${iso}T12:00:00`)
 
+// "Title: the rest" sets the short title large and the rest below it.
+function Title({ text }: { text: string }) {
+  const at = text.indexOf(': ')
+  if (at < 0) return <>{text}</>
+  return (
+    <>
+      {text.slice(0, at)}
+      <span className="title-rest">{text.slice(at + 2)}</span>
+    </>
+  )
+}
+
 function Byline({ authors }: { authors: Insight['authors'] }) {
   return (
     <p className="insight-by">
@@ -641,9 +659,20 @@ function Byline({ authors }: { authors: Insight['authors'] }) {
   )
 }
 
+function Meta({ i }: { i: Insight }) {
+  return (
+    <p className="insight-meta">
+      <span className="insight-topic">{i.topic}</span>
+      <time dateTime={i.date}>{day(i.date)}</time>
+      <span>{i.minutes} min read</span>
+    </p>
+  )
+}
+
 function InsightsPage() {
   const [topic, setTopic] = useState<Topic | 'all'>('all')
   const shown = topic === 'all' ? insights : insights.filter((i) => i.topic === topic)
+  const [lead, ...rest] = shown
   const filters: { id: Topic | 'all'; label: string; count: number }[] = [
     { id: 'all', label: 'All', count: insights.length },
     ...topics.map((t) => ({ id: t, label: t, count: insights.filter((i) => i.topic === t).length })),
@@ -652,15 +681,13 @@ function InsightsPage() {
     <article className="detail">
       <div className="wrap">
         <a className="back" href="#">Home</a>
-        <div className="detail-head">
-          <span className="kind">Writing</span>
+        <header className="page-head">
           <h1>Insights</h1>
           <p className="lede">
             Notes on measuring AI adoption, value and licence decisions, written with{' '}
-            <a href={shailendra.url} target="_blank" rel="noreferrer">Shailendra Hegde</a> and first published on{' '}
-            <a href="https://www.ainroi.com/" target="_blank" rel="noreferrer">AInROI</a>. Each title opens the full post there.
+            <a href={shailendra.url} target="_blank" rel="noreferrer">Shailendra Hegde</a>.
           </p>
-        </div>
+        </header>
         <div className="filters" role="group" aria-label="Filter by topic">
           {filters.map((f) => (
             <button key={f.id} type="button" aria-pressed={topic === f.id} onClick={() => setTopic(f.id)}>
@@ -668,24 +695,105 @@ function InsightsPage() {
             </button>
           ))}
         </div>
-        <ol className="insights" aria-live="polite">
-          {shown.map((i) => (
-            <li key={i.slug}>
-              <p className="insight-meta">
-                <span>{i.topic}</span>
-                <time dateTime={i.date}>{day(i.date)}</time>
-                <span>{i.minutes} min read</span>
-              </p>
-              <div>
-                <h2>
-                  <a href={insightUrl(i)} target="_blank" rel="noreferrer">{i.title}</a>
-                </h2>
-                <p>{i.summary}</p>
-                <Byline authors={i.authors} />
+        <div aria-live="polite">
+          {lead && (
+            <section className="insight-lead" aria-label="Latest">
+              <h2>
+                <a href={`#/insights/${lead.slug}`}><Title text={lead.title} /></a>
+              </h2>
+              <div className="insight-lead-text">
+                <p className="lede">{lead.summary}</p>
+                <Meta i={lead} />
+                <Byline authors={lead.authors} />
               </div>
-            </li>
-          ))}
-        </ol>
+            </section>
+          )}
+          {rest.length > 0 && (
+            <ol className="insights">
+              {rest.map((i) => (
+                <li key={i.slug}>
+                  <Meta i={i} />
+                  <div>
+                    <h2>
+                      <a href={`#/insights/${i.slug}`}>{i.title}</a>
+                    </h2>
+                    <p>{i.summary}</p>
+                    <Byline authors={i.authors} />
+                  </div>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function ArticlePage({ post }: { post: Insight }) {
+  const [body, setBody] = useState<PostBody | null>()
+  useEffect(() => {
+    let current = true
+    loadPost(post.slug).then((b) => current && setBody(b ?? null))
+    return () => {
+      current = false
+    }
+  }, [post.slug])
+  const at = insights.indexOf(post)
+  const newer = insights[at - 1]
+  const older = insights[at + 1]
+  // Hash routing owns the URL fragment, so contents links scroll instead of navigating.
+  const jump = (id: string) => (e: { preventDefault(): void }) => {
+    e.preventDefault()
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
+  return (
+    <article className="detail article">
+      <div className="wrap">
+        <a className="back" href="#/insights">Insights</a>
+        <header className="article-head">
+          <h1><Title text={post.title} /></h1>
+          <p className="lede">{post.summary}</p>
+          <div className="article-by">
+            <Byline authors={post.authors} />
+            <Meta i={post} />
+          </div>
+        </header>
+        <div className="article-grid">
+          <aside className="article-aside">
+            {body && body.contents.length > 2 && (
+              <nav aria-label="On this page">
+                <h2>On this page</h2>
+                <ol>
+                  {body.contents.map((c) => (
+                    <li key={c.id}>
+                      <a href={`#/insights/${post.slug}`} onClick={jump(c.id)}>{c.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+          </aside>
+          {body ? (
+            <div className="prose" dangerouslySetInnerHTML={{ __html: body.html }} />
+          ) : (
+            <p className="prose muted">{body === null ? 'This post isn’t available.' : 'Loading the post…'}</p>
+          )}
+        </div>
+        <nav className="article-more" aria-label="More insights">
+          {newer && (
+            <a href={`#/insights/${newer.slug}`}>
+              <span>Newer</span>
+              <strong>{newer.title}</strong>
+            </a>
+          )}
+          {older && (
+            <a className="older" href={`#/insights/${older.slug}`}>
+              <span>Older</span>
+              <strong>{older.title}</strong>
+            </a>
+          )}
+        </nav>
       </div>
     </article>
   )
@@ -694,36 +802,60 @@ function InsightsPage() {
 function AboutPage() {
   return (
     <article className="detail">
-      <div className="wrap">
-        <a className="back" href="#">Home</a>
-        <div className="about">
+      <div className="wrap about">
+        <div className="about-side">
+          <a className="back" href="#">Home</a>
           <img className="about-photo" src="keith-mcgrane.jpg" alt="Keith McGrane" width="460" height="460" />
-          <div className="detail-head">
-            <h1>Keith McGrane</h1>
-            <p className="about-role">AI &amp; Data Solutions Specialist</p>
-            <section>
-              <h2>Why I do this work</h2>
-              <p className="lede">
-                AI transformation isn’t about the technology. It’s about the people and processes that make it work. I’m
-                driven by helping organisations cut through the complexity and hype to find practical, results-driven
-                approaches to AI deployment that deliver real-world business impact teams can see and stakeholders can trust.
-              </p>
-            </section>
-            <p className="about-more">
-              That’s why I build the open <a href="#solutions">Copilot analytics on this site</a>, and why I write{' '}
-              <a href="#/insights">insights</a> on measuring adoption and value.
+        </div>
+        <div className="about-body">
+          <h1>Keith McGrane</h1>
+          <p className="about-role">AI &amp; Data Solutions Specialist</p>
+          <p className="about-statement">
+            AI transformation isn’t about the technology. It’s about the people and processes that make it work.
+          </p>
+          <section>
+            <h2>Why I do this work</h2>
+            <p>
+              I’m driven by helping organisations cut through the complexity and hype to find practical, results-driven
+              approaches to AI deployment that deliver real-world business impact teams can see and stakeholders can trust.
             </p>
-            <div className="cta-row">
-              <a className="key key-primary" href={keith.url} target="_blank" rel="noreferrer">LinkedIn</a>
-              <a className="key" href="https://github.com/Keithland89" target="_blank" rel="noreferrer">
-                <GitHubIcon /> Keithland89
-              </a>
-              <a className="key" href="https://www.ainroi.com/" target="_blank" rel="noreferrer">AInROI</a>
-            </div>
-            <p className="muted">
-              Views here are my own. They don’t represent Microsoft Corporation or any other organisation.
+          </section>
+          <section>
+            <h2>What I build</h2>
+            <p>Open templates and an app for measuring Copilot and agents. Each part answers one question.</p>
+            <ul className="about-list">
+              {[...parts, hub].map((s) => (
+                <li key={s.id}>
+                  <a href={`#/s/${s.id}`}>{s.name}</a>
+                  <span>{s.question}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <h2>What I write</h2>
+            <p>
+              <a href="#/insights">Insights</a> on measuring adoption and value, written with{' '}
+              <a href={shailendra.url} target="_blank" rel="noreferrer">Shailendra Hegde</a>. The latest:
             </p>
+            <ul className="about-list about-posts">
+              {insights.slice(0, 3).map((i) => (
+                <li key={i.slug}>
+                  <span>{day(i.date)}</span>
+                  <a href={`#/insights/${i.slug}`}>{i.title}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <div className="cta-row">
+            <a className="key key-primary" href={keith.url} target="_blank" rel="noreferrer">LinkedIn</a>
+            <a className="key" href="https://github.com/Keithland89" target="_blank" rel="noreferrer">
+              <GitHubIcon /> Keithland89
+            </a>
           </div>
+          <p className="muted about-note">
+            Views here are my own. They don’t represent Microsoft Corporation or any other organisation.
+          </p>
         </div>
       </div>
     </article>
