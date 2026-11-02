@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Platform } from './Platform'
 import { SignalField } from './SignalField'
 import { byId, componentLabels, hub, log, ordered, parts, related, steps, type Solution } from './data'
+import { insights, insightUrl, keith, shailendra, topics, type Insight, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 
 const sections = [
@@ -46,9 +47,17 @@ export default function App() {
   // Old links to the hub's previous name still land on it.
   const detail = route.startsWith('/s/') ? byId(route.slice(3) === 'analytics-hub' ? hub.id : route.slice(3)) : undefined
 
+  const page = route === '/insights' || route === '/about' ? route : undefined
+
   useEffect(() => {
-    document.title = detail ? `${detail.name} | Copilot-DataLab` : 'Copilot-DataLab: Copilot and agent analytics by Keith McGrane'
-  }, [detail])
+    document.title = detail
+      ? `${detail.name} | Copilot-DataLab`
+      : page === '/insights'
+        ? 'Insights | Copilot-DataLab'
+        : page === '/about'
+          ? 'About Keith McGrane | Copilot-DataLab'
+          : 'Copilot-DataLab: Copilot and agent analytics by Keith McGrane'
+  }, [detail, page])
 
   // Section links (#solutions) scroll within the home page; if we're on a
   // detail page, render home first and then scroll.
@@ -62,7 +71,17 @@ export default function App() {
     <>
       <a className="skip" href="#main">Skip to content</a>
       <Header />
-      <main id="main" tabIndex={-1}>{detail ? <SolutionPage s={detail} live={live} /> : <Home live={live} />}</main>
+      <main id="main" tabIndex={-1}>
+        {detail ? (
+          <SolutionPage s={detail} live={live} />
+        ) : page === '/insights' ? (
+          <InsightsPage />
+        ) : page === '/about' ? (
+          <AboutPage />
+        ) : (
+          <Home live={live} />
+        )}
+      </main>
       <Footer />
     </>
   )
@@ -90,8 +109,10 @@ function Header() {
         </a>
         <nav aria-label="Site">
           <a href="#solutions">Solutions</a>
-          <a href="#which-one">Which one?</a>
-          <a href="#get-started">Get started</a>
+          <a className="nav-section" href="#which-one">Which one?</a>
+          <a className="nav-section" href="#get-started">Get started</a>
+          <a href="#/insights">Insights</a>
+          <a href="#/about">About</a>
           <a className="key key-sm gh" href="https://github.com/ai-datalab" target="_blank" rel="noreferrer">
             <GitHubIcon /> <span>GitHub</span>
           </a>
@@ -597,6 +618,111 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
   )
 }
 
+const day = (iso: string) => formatDay(`${iso}T12:00:00`)
+
+function Byline({ authors }: { authors: Insight['authors'] }) {
+  return (
+    <p className="insight-by">
+      By{' '}
+      {authors.map((a, i) => (
+        <span key={a.name}>
+          {i > 0 && ' and '}
+          <a href={a.url} target="_blank" rel="noreferrer">{a.name}</a>
+        </span>
+      ))}
+    </p>
+  )
+}
+
+function InsightsPage() {
+  const [topic, setTopic] = useState<Topic | 'all'>('all')
+  const shown = topic === 'all' ? insights : insights.filter((i) => i.topic === topic)
+  const filters: { id: Topic | 'all'; label: string; count: number }[] = [
+    { id: 'all', label: 'All', count: insights.length },
+    ...topics.map((t) => ({ id: t, label: t, count: insights.filter((i) => i.topic === t).length })),
+  ]
+  return (
+    <article className="detail">
+      <div className="wrap">
+        <a className="back" href="#">Home</a>
+        <div className="detail-head">
+          <span className="kind">Writing</span>
+          <h1>Insights</h1>
+          <p className="lede">
+            Notes on measuring AI adoption, value and licence decisions, written with{' '}
+            <a href={shailendra.url} target="_blank" rel="noreferrer">Shailendra Hegde</a> and first published on{' '}
+            <a href="https://www.ainroi.com/" target="_blank" rel="noreferrer">AInROI</a>. Each title opens the full post there.
+          </p>
+        </div>
+        <div className="filters" role="group" aria-label="Filter by topic">
+          {filters.map((f) => (
+            <button key={f.id} type="button" aria-pressed={topic === f.id} onClick={() => setTopic(f.id)}>
+              {f.label} <span className="filter-count">{f.count}</span>
+            </button>
+          ))}
+        </div>
+        <ol className="insights" aria-live="polite">
+          {shown.map((i) => (
+            <li key={i.slug}>
+              <p className="insight-meta">
+                <span>{i.topic}</span>
+                <time dateTime={i.date}>{day(i.date)}</time>
+                <span>{i.minutes} min read</span>
+              </p>
+              <div>
+                <h2>
+                  <a href={insightUrl(i)} target="_blank" rel="noreferrer">{i.title}</a>
+                </h2>
+                <p>{i.summary}</p>
+                <Byline authors={i.authors} />
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </article>
+  )
+}
+
+function AboutPage() {
+  return (
+    <article className="detail">
+      <div className="wrap">
+        <a className="back" href="#">Home</a>
+        <div className="about">
+          <img className="about-photo" src="keith-mcgrane.jpg" alt="Keith McGrane" width="460" height="460" />
+          <div className="detail-head">
+            <h1>Keith McGrane</h1>
+            <p className="about-role">AI &amp; Data Solutions Specialist</p>
+            <section>
+              <h2>Why I do this work</h2>
+              <p className="lede">
+                AI transformation isn’t about the technology. It’s about the people and processes that make it work. I’m
+                driven by helping organisations cut through the complexity and hype to find practical, results-driven
+                approaches to AI deployment that deliver real-world business impact teams can see and stakeholders can trust.
+              </p>
+            </section>
+            <p className="about-more">
+              That’s why I build the open <a href="#solutions">Copilot analytics on this site</a>, and why I write{' '}
+              <a href="#/insights">insights</a> on measuring adoption and value.
+            </p>
+            <div className="cta-row">
+              <a className="key key-primary" href={keith.url} target="_blank" rel="noreferrer">LinkedIn</a>
+              <a className="key" href="https://github.com/Keithland89" target="_blank" rel="noreferrer">
+                <GitHubIcon /> Keithland89
+              </a>
+              <a className="key" href="https://www.ainroi.com/" target="_blank" rel="noreferrer">AInROI</a>
+            </div>
+            <p className="muted">
+              Views here are my own. They don’t represent Microsoft Corporation or any other organisation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 function Footer() {
   return (
     <footer className="site-footer">
@@ -604,6 +730,11 @@ function Footer() {
         <div>
           <a className="brand" href="#"><Logo /><span>Copilot-DataLab</span></a>
           <p>Built by Keith McGrane (<a href="https://github.com/Keithland89">@Keithland89</a>).</p>
+          <p className="footer-links">
+            <a href="#solutions">Solutions</a>
+            <a href="#/insights">Insights</a>
+            <a href="#/about">About</a>
+          </p>
         </div>
         <p className="disclaimer">
           These are community templates, provided as-is. They are not official Microsoft Copilot reports, and they aren’t

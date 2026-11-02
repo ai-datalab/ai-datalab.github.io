@@ -7,6 +7,9 @@ ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (ag
 The site uses the names Copilot-DataLab and Copilot-DataHub. The repos keep their own names: this one is AI-DataLab, and
 Copilot-DataHub is [microsoft/AnalyticsHub-Dashboard](https://github.com/microsoft/AnalyticsHub-Dashboard).
 
+It also has an Insights page (posts on measuring AI adoption and value, written with Shailendra Hegde and first published
+on [AInROI](https://www.ainroi.com/)) and an About page.
+
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
 ## Run it
@@ -26,6 +29,9 @@ All the content is in `src/data.ts`:
 - `related`: external links.
 
 Star counts and "last pushed" dates load live from the public GitHub API. If that call fails, the snapshot values in `data.ts` are shown.
+
+The Insights list is in `src/insights.ts`. Its source is `public/blogs/manifest.json` in
+[shailendrahegde/ainroisite](https://github.com/shailendrahegde/ainroisite). Each post's authors follow that post's own byline, and its title links to the full post on AInROI.
 
 ## Deploy
 

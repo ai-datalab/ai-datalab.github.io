@@ -259,6 +259,7 @@ main:focus { outline: none; }
   color: var(--color-ink-2);
   font: 500 var(--text-sm)/1 var(--font-display);
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .site-header nav a:not(.key):hover { color: var(--color-ink); text-decoration: underline; text-decoration-color: var(--color-accent); }
@@ -978,6 +979,60 @@ main:focus { outline: none; }
 .pairs .not-in-hub { align-self: flex-start; margin-inline-start: 0; font-size: var(--text-xs); }
 .part-label .not-in-hub { display: block; width: fit-content; margin: var(--space-3xs) 0 0; }
 
+/* Insights and About */
+.detail-head .lede a,
+.about-more a,
+.insight-by a { color: var(--color-accent); text-underline-offset: 0.2em; }
+
+.filters { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-2xl); }
+
+.filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border: 1px solid var(--color-rule-2);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink-2);
+  font: 500 var(--text-sm)/1 var(--font-display);
+  cursor: pointer;
+  transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+}
+
+.filters button:hover { border-color: var(--color-accent); color: var(--color-ink); }
+.filters button[aria-pressed='true'] { border-color: var(--color-accent); background: var(--color-accent-wash); color: var(--color-accent-deep); }
+.filter-count { color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.filters button[aria-pressed='true'] .filter-count { color: inherit; }
+
+.insights { list-style: none; margin: var(--space-xl) 0 0; padding: 0; max-width: 64rem; border-top: 1px solid var(--color-rule-2); }
+
+.insights li {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: var(--space-xs) var(--space-2xl);
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.insight-meta { display: flex; flex-direction: column; gap: var(--space-3xs); color: var(--color-muted); font: 500 var(--text-sm)/1.4 var(--font-display); }
+.insight-meta span:first-child { color: var(--color-accent-deep); }
+.insights h2 { max-width: 40ch; font: 600 var(--text-xl)/1.2 var(--font-display); letter-spacing: -0.02em; }
+.insights h2 a { text-decoration: none; }
+.insights h2 a:hover { text-decoration: underline; text-decoration-color: var(--color-accent); }
+.insights h2 + p { margin-top: var(--space-xs); max-width: 62ch; color: var(--color-ink-2); }
+.insight-by { margin-top: var(--space-xs); color: var(--color-muted); font-size: var(--text-sm); }
+
+.about { display: grid; grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); gap: var(--space-2xl); align-items: start; margin-top: var(--space-lg); }
+.about .detail-head { margin-top: 0; }
+.about-photo { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border: 1px solid var(--color-rule-2); box-shadow: var(--shadow-card); }
+.about-role { color: var(--color-accent-deep); font: 500 var(--text-lg)/1.3 var(--font-display); }
+.about h2 { margin-bottom: var(--space-sm); font-size: var(--text-xl); letter-spacing: -0.02em; }
+.about-more { max-width: 56ch; color: var(--color-ink-2); }
+
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--space-md); }
+
 /* Footer */
 .site-footer { border-top: 1px solid var(--color-rule-2); padding: var(--space-2xl) 0 var(--space-3xl); }
 
@@ -1008,6 +1063,8 @@ main:focus { outline: none; }
   .walk-panel { position: static; min-height: 0; }
 
   .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .site-header nav a.nav-section { display: none; }
 
   .log li { grid-template-columns: 8.5rem minmax(0, 1fr); }
   .log-text { grid-column: 2; }
@@ -1054,6 +1111,12 @@ main:focus { outline: none; }
 
   .detail-grid,
   .footer-row { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
+
+  .insights li { grid-template-columns: minmax(0, 1fr); }
+  .insight-meta { flex-direction: row; flex-wrap: wrap; gap: 0 var(--space-sm); }
+
+  .about { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
+  .about-photo { width: 10rem; }
 
   .disclaimer { justify-self: start; }
 }
