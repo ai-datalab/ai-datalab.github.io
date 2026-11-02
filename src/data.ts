@@ -189,7 +189,7 @@ export const solutions: Solution[] = [
     id: 'agent-monitor',
     component: 'agents',
     name: 'Agent Monitor',
-    repo: 'Keithland89/Agent-Monitor',
+    repo: 'ai-datalab/Agent-Monitor',
     summary:
       'Tenant-wide agent inventory and risk for Agent Builder, Copilot Studio, agent flows and Azure AI Foundry agents, built on APIs a normal admin can use. Usage and cost live in Copilot-DataHub.',
     question: 'Which agents exist across the tenant, who owns them, and which need attention?',
@@ -252,7 +252,7 @@ export const log: LogEntry[] = [
   { date: '2026-11-01', solution: 'valuelens', text: 'The installer branch is merged, and the app picks up a round of design fixes.', url: 'https://github.com/microsoft/ValueLens-for-Microsoft-Copilot/pull/216' },
   { date: '2026-11-01', solution: 'consumption-central', text: 'The Fabric App gets the same design fixes as ValueLens.', url: 'https://github.com/microsoft/ConsumptionCentral-for-Microsoft-Copilot/pull/79' },
   { date: '2026-10-27', solution: 'ai-datahub', text: 'Links that keep your place, a phone layout, and plainer errors.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/pull/217' },
-  { date: '2026-10-27', solution: 'agent-monitor', text: 'A pinned filter dock, denser tables and tighter page layouts.', url: 'https://github.com/Keithland89/Agent-Monitor/pull/12' },
+  { date: '2026-10-27', solution: 'agent-monitor', text: 'A pinned filter dock, denser tables and tighter page layouts.', url: 'https://github.com/ai-datalab/Agent-Monitor/pull/12' },
   { date: '2026-10-26', solution: 'ai-datahub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/releases/tag/installer-v0.6.8' },
   { date: '2026-10-25', solution: 'ai-in-one', text: 'The app now copes with missing users, Agent 365 and empty interactions files.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/pull/81' },
   { date: '2026-10-14', solution: 'github-copilot-panel', text: 'A two-minute intro video walks through the report, page by page.', url: 'https://github.com/microsoft/GitHubCopilotPanel/pull/8' },
