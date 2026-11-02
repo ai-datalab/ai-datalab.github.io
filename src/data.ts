@@ -191,7 +191,7 @@ export const solutions: Solution[] = [
     name: 'Agent Monitor',
     repo: 'ai-datalab/Agent-Monitor',
     summary:
-      'Tenant-wide agent inventory and risk for Agent Builder, Copilot Studio, agent flows and Azure AI Foundry agents, built on APIs a normal admin can use. Usage and cost live in Copilot-DataHub.',
+      'The agent inventory and risk reporting Microsoft Agent 365 gives you, without an Agent 365 licence. It covers Agent Builder, Copilot Studio, agent flows and Azure AI Foundry, using roles your admins already hold. Pair it with Copilot-DataHub for agent usage and cost.',
     question: 'Which agents exist across the tenant, who owns them, and which need attention?',
     runsAs: ['The app', 'Power BI', 'Local CSV'],
     measures: [
@@ -201,6 +201,7 @@ export const solutions: Solution[] = [
       'Shadow AI and lifecycle review, with anonymised sample data to explore',
     ],
     beforeYouStart: [
+      'No Agent 365 licence, and no Agent 365 export',
       'Power Platform Administrator, Global Reader or AI Administrator, for the inventory',
       'Reader on each Azure subscription in scope, for Azure AI Foundry',
       'Everything is read-only: nothing configures or controls an agent',
