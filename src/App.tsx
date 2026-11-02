@@ -92,8 +92,8 @@ function Header() {
           <a href="#solutions">Solutions</a>
           <a href="#which-one">Which one?</a>
           <a href="#get-started">Get started</a>
-          <a className="key key-sm gh" href="https://github.com/Keithland89" target="_blank" rel="noreferrer">
-            <GitHubIcon /> <span>Keithland89</span>
+          <a className="key key-sm gh" href="https://github.com/ai-datalab" target="_blank" rel="noreferrer">
+            <GitHubIcon /> <span>GitHub</span>
           </a>
         </nav>
       </div>
