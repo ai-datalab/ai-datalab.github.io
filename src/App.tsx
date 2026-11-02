@@ -33,7 +33,7 @@ export default function App() {
   const route = useRoute()
   const live = useLiveRepoStats()
   // Old links to the hub's previous name still land on it.
-  const detail = route.startsWith('/s/') ? byId(['analytics-hub', 'ai-datahub'].includes(route.slice(3)) ? hub.id : route.slice(3)) : undefined
+  const detail = route.startsWith('/s/') ? byId(['analytics-hub', 'analytics-hub-app'].includes(route.slice(3)) ? hub.id : route.slice(3)) : undefined
 
   const page = route === '/insights' || route === '/about' ? route : undefined
   const post = route.startsWith('/insights/') ? insightBySlug(route.slice(10)) : undefined

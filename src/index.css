@@ -348,7 +348,7 @@ main:focus { outline: none; }
 .hero-shot img { width: 100%; border-radius: 4px; box-shadow: var(--shadow-screen-dark); }
 .hero-shot :focus-visible { outline-color: var(--color-accent-2); }
 
-/* The platform map, in the Analytics Hub App row of the index. */
+/* The platform map, in the Copilot-DataHub row of the index. */
 .sheet-map {
   padding: var(--space-lg) var(--space-lg) var(--space-sm);
   background: var(--color-key-face);
@@ -356,7 +356,7 @@ main:focus { outline: none; }
   box-shadow: var(--shadow-card);
 }
 
-/* The platform: Analytics Hub App on top, each component hanging from one rail below it. */
+/* The platform: Copilot-DataHub on top, each component hanging from one rail below it. */
 .platform { margin: 0; }
 .platform a { color: inherit; text-decoration: none; }
 

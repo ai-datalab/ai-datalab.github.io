@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { componentLabels, components, hub as platform, parts } from './data'
 
 // The platform again, drawn as a character field on the theme's 8 by 16 cell.
-// Analytics Hub App is the band across the top; each component is a plotted point in
+// Copilot-DataHub is the band across the top; each component is a plotted point in
 // its own column below. The one the picker has chosen grows its halo.
 const RAMP = ' .:-=+*#%@'
 const CELL_W = 8
