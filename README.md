@@ -104,10 +104,13 @@ The safety fields record a completed human/source review, not an automated proof
 Run `npm run test:demos`, `npm run lint` and `npm run build`. Builds fail on invalid
 provenance, missing bundles or missing entry points. Staging copies bundles into
 `dist/demo/` and publishes `/demo/provenance.json`. A demo-only Content Security
-Policy is inserted before resources in every HTML entry point, blocking service
-connections, external assets, forms, frames, workers and plugins. The main site's
+Policy is inserted before resources in every HTML entry point, blocking cross-origin
+connections, external assets, forms, frames, workers and plugins. Same-origin requests
+are allowed so demos can fetch their bundled static fixtures. The main site's
 behaviour is unchanged. CSP is defence in depth, not a substitute for source review.
-Fixtures must be bundled into JavaScript or HTML, not loaded with fetch.
+Fixtures may be embedded or fetched from the demo's own static files. Source review
+must still confirm that no live service calls occur; same-origin CSP is not a
+restriction to a particular fixture directory or HTTP method.
 
 Before publication, use `npm run preview` and exercise each demo's navigation and
 filters, direct entry, refresh and narrow layouts. Check developer tools for sign-in,

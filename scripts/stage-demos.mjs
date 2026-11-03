@@ -24,7 +24,7 @@ const routes = {
   'agent-evaluator-report': ['agent-evaluator', 'report'],
 }
 
-const policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'none'; form-action 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'self'"
+const policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; form-action 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'self'"
 
 export function validateManifest(manifest) {
   if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.demos)) {

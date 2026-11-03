@@ -29,12 +29,13 @@ test('requires supported unique routes, matching kinds, provenance and safety re
   ]) assert.throws(() => validateManifest(invalid))
 })
 
-test('isolation precedes scripts and blocks connections and forms', () => {
+test('isolation precedes scripts and allows only same-origin fixture connections', () => {
   const html = protectHtml('<html><HEAD><script src="./app.js"></script></HEAD></html>', 'index.html')
   assert.ok(html.indexOf('Content-Security-Policy') < html.indexOf('<script'))
-  for (const rule of ["connect-src 'none'", "form-action 'none'", "frame-src 'none'"]) {
+  for (const rule of ["connect-src 'self'", "form-action 'none'", "frame-src 'none'"]) {
     assert.ok(html.includes(rule))
   }
+  assert.equal(html.match(/connect-src ([^;]+)/)?.[1], "'self'")
   assert.throws(() => protectHtml('<script></script>', 'index.html'))
 })
 
