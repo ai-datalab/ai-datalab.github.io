@@ -24,6 +24,16 @@ the published manifest. Each solution has separately labelled app/report buttons
 there and on its solution card. Unpublished bundles never create a live link;
 adding a verified manifest entry also adds it to the directory.
 
+The DataHub app bundle is pinned to `microsoft/DataHub` at
+`49e056bc373ac18a4fa1dd6faca279c55e4832dc`. Its imported `SHA256SUMS.txt`
+records the 84 frozen payload files; the manifest itself has SHA-256
+`bc46f96aa29da13dd1dad808199e22c24bb5fb90f282eb032c08334c88f1b29f`.
+Keep its MIT licence, dependency notices and original bytes. Site staging only
+adds the standard HTML isolation policy. The bundle retains legacy Analytics Hub
+branding; its cross-vendor view uses a separately labelled synthetic comparison
+period and local vendor/product filters, not the app-wide filters. Ask returns
+labelled canned demo responses, not a live AI answer.
+
 ## Run it
 
 ```bash

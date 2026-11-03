@@ -1,0 +1,1 @@
+function e(){return window.matchMedia(`(prefers-reduced-motion: reduce)`).matches}function t(t){let n=document.getElementById(t);n&&(n.scrollIntoView({behavior:e()?`auto`:`smooth`,block:`start`}),n.focus({preventScroll:!0}))}export{t as n,e as t};
