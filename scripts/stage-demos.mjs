@@ -37,7 +37,9 @@ export function validateManifest(manifest) {
       throw new Error('Demo slug must be supported, unique and match its solution and kind')
     }
     seen.add(demo.slug)
-    if (demo.source?.repository !== sources[demo.solution] ||
+    const repositories = [sources[demo.solution]]
+    if (demo.solution === 'ai-in-one') repositories.push('Keithland89/AI-in-One-Dashboard')
+    if (!repositories.includes(demo.source?.repository) ||
         !/^[a-f0-9]{40}$/i.test(demo.source?.commit ?? '') ||
         typeof demo.source?.directory !== 'string' || !demo.source.directory ||
         demo.source.directory.includes('\\') || demo.source.directory.startsWith('/') ||

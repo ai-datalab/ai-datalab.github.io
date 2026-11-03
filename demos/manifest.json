@@ -2,6 +2,45 @@
   "schemaVersion": 1,
   "demos": [
     {
+      "slug": "ai-in-one",
+      "solution": "ai-in-one",
+      "kind": "app",
+      "source": {
+        "repository": "Keithland89/AI-in-One-Dashboard",
+        "commit": "7db3c4901540c5621ba322c792da10fa69af0cc0",
+        "directory": "demos/ai-in-one"
+      },
+      "build": {
+        "command": "npm ci && npm run package (from demos/ai-in-one)",
+        "runtime": "Node.js 26.13.0; npm 11.20.0; Python 3.12.10"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    },
+    {
+      "slug": "agent-monitor",
+      "solution": "agent-monitor",
+      "kind": "app",
+      "source": {
+        "repository": "ai-datalab/Agent-Monitor",
+        "commit": "a3ef3f07a851cfc21f46b4440356d2cfa78b6e91",
+        "bundleCommit": "ed0bf39d2f351876182a61d8239256d1640d22a3",
+        "directory": "app"
+      },
+      "build": {
+        "command": "npm --prefix app ci && npm --prefix app run build:demo",
+        "runtime": "Node.js 26.13.0; npm 11.20.0"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    },
+    {
       "slug": "consumption-central",
       "solution": "consumption-central",
       "kind": "app",
