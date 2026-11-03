@@ -116,12 +116,14 @@ Report ports also need fidelity acceptance before a manifest entry is enabled:
 verify representative source-supported charts and metrics and that filters
 recalculate their values. Page counts, visual inventories and measure search alone
 are not acceptance. Record material differences from Power BI explicitly.
-The imported Consumption Central report bundle is not enabled: its generic
-placeholder panels and illustrative metrics still need source-supported fidelity work.
-Its upstream source is
-`microsoft/ConsumptionCentral-for-Microsoft-Copilot@871a4610722a8612fbea83e972bf51cc4a4e7c6a`,
-directory `demo/consumption-central-report-src`, rebuilt with
-`python demo/consumption-central-report-src/scripts/build.py` on Python 3.12+.
+Consumption Central's report uses explicit source visual bindings, shared app
+calculation modules and invented typed records. It is a source-backed approximation,
+not a Power BI renderer or DAX interpreter: only active matrix levels are shown;
+native drill, bookmarks, cross-highlighting and service/export menus are absent.
+SVG/HTML typography and controls differ. Refresh-time rates stay fixed in fixture
+settings; forecasts and task equivalents remain estimates. Studio's dated tenant
+data and undated user/agent snapshots deliberately do not share one period total.
+Its exact source revision and build command are recorded in the manifest.
 
 GitHub Copilot Panel's enabled report demo ports the shipped template's
 assumption-based Value page and labels those figures accordingly. Its demo-only

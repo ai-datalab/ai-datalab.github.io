@@ -7,7 +7,7 @@
       "kind": "app",
       "source": {
         "repository": "microsoft/ConsumptionCentral-for-Microsoft-Copilot",
-        "commit": "871a4610722a8612fbea83e972bf51cc4a4e7c6a",
+        "commit": "a719a725915876aa80575b499e4f38001aa5b9a4",
         "directory": "app"
       },
       "build": {
@@ -21,22 +21,41 @@
       }
     },
     {
-        "slug": "github-copilot-panel",
-        "solution": "github-copilot-panel",
-        "kind": "report",
-        "source": {
-          "repository": "microsoft/GitHubCopilotPanel",
-          "commit": "255af74e1401d86c21d9ebbec0d0f69d4ef6c850",
-          "directory": "demo/src"
-        },
-        "build": {
-          "command": "node demo/build.mjs",
-          "runtime": "Node.js 18+; built with Node.js 26.13.0"
-        },
-        "safety": {
-          "inventedFixtures": true,
-          "noLiveServices": true,
-          "noAdminActions": true
+      "slug": "github-copilot-panel",
+      "solution": "github-copilot-panel",
+      "kind": "report",
+      "source": {
+        "repository": "microsoft/GitHubCopilotPanel",
+        "commit": "255af74e1401d86c21d9ebbec0d0f69d4ef6c850",
+        "directory": "demo/src"
+      },
+      "build": {
+        "command": "node demo/build.mjs",
+        "runtime": "Node.js 18+; built with Node.js 26.13.0"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    },
+    {
+      "slug": "consumption-central-report",
+      "solution": "consumption-central",
+      "kind": "report",
+      "source": {
+        "repository": "microsoft/ConsumptionCentral-for-Microsoft-Copilot",
+        "commit": "a719a725915876aa80575b499e4f38001aa5b9a4",
+        "directory": "demo/consumption-central-report-src"
+      },
+      "build": {
+        "command": "npm --prefix app ci && npm --prefix app run build:report-demo",
+        "runtime": "Node.js 24.x; Python 3.12+"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
       }
     }
   ]
