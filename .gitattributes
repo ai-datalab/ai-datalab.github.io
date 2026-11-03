@@ -1,1 +1,2 @@
 demos/builds/** -text whitespace=cr-at-eol
+demos/builds/copilot-datahub/** -whitespace
