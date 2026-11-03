@@ -25,9 +25,9 @@ there and on its solution card. Unpublished bundles never create a live link;
 adding a verified manifest entry also adds it to the directory.
 
 The DataHub app bundle is pinned to `microsoft/DataHub` at
-`d2d02eda7e530dc68bb5830f6a7946b6a8965fa3`. Its imported `SHA256SUMS.txt`
+`3893ec71b1b644103c38121a92860b23545d59db`. Its imported `SHA256SUMS.txt`
 records the 84 frozen payload files; the manifest itself has SHA-256
-`312e677d520d3061526b90966c02c2980292074d9588eaad7786d7a6e5bc9185`.
+`c9111b6a7d712828ab5d7296afc153bfcddb3f05ff5dc0c82cd0dd8be691a422`.
 Keep its MIT licence, dependency notices and original bytes. Site staging only
 adds the standard HTML isolation policy. The demo uses DataHub branding;
 its cross-vendor view uses a separately labelled synthetic comparison
