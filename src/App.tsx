@@ -7,6 +7,7 @@ import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 import { solutionDemos } from './demos'
 
 const sections = [
+  { id: 'demos', label: 'Browser demos' },
   { id: 'solutions', label: 'Solutions' },
   { id: 'which-one', label: 'Which one do I need?' },
   { id: 'get-started', label: 'Get started' },
@@ -111,6 +112,7 @@ function Header({ current }: { current?: string }) {
           </p>
         </div>
         <nav aria-label="Site">
+          <a href="#demos">Browser demos</a>
           <a href="#solutions">Solutions</a>
           <a className="nav-section" href="#which-one">Which one?</a>
           <a className="nav-section" href="#get-started">Get started</a>
@@ -134,9 +136,11 @@ function Home({ live }: { live: Live }) {
             <h1>Copilot and agent analytics, in your tenant.</h1>
             <p className="lede">Open-source apps and reports, one per question, joined up in {hub.name}.</p>
             <div className="cta-row">
-              <a className="key key-primary" href="#solutions">Browse the solutions</a>
+              <a className="key key-primary" href="#demos">Try the browser demos</a>
+              <a className="key" href="#solutions">Browse the solutions</a>
               <a className="key" href="#which-one">Find the right one</a>
             </div>
+            <p className="muted">Invented sample data. No sign-in or installation.</p>
           </div>
           <ul className="facts">
             <li><strong>Free and open source.</strong> You pay only for the Fabric, Azure or Power Platform capacity it runs on.</li>
@@ -152,6 +156,7 @@ function Home({ live }: { live: Live }) {
         </div>
       </section>
       <SectionTabs />
+      <BrowserDemos />
       <SolutionsSection live={live} />
       <WhichOne />
       <GetStarted />
@@ -207,6 +212,33 @@ function DemoLinks({ id, className }: { id: string; className: string }) {
   return solutionDemos(id).map((demo) => (
     <a key={demo.url} className={className} href={demo.url}>{demo.label}</a>
   ))
+}
+
+function BrowserDemos() {
+  const available = [...ordered, { id: 'agent-evaluator', name: 'Agent Evaluator' }]
+    .filter((s) => solutionDemos(s.id).length > 0)
+  return (
+    <section id="demos" className="section" aria-labelledby="demos-title">
+      <div className="wrap">
+        <div className="section-head">
+          <h2 id="demos-title">Try the browser demos</h2>
+          <p>Explore clickable dashboards and filters with invented sample data. No sign-in, installation or connection to your tenant. App demos and static browser report ports are labelled separately.</p>
+        </div>
+        <ul className="demo-directory">
+          {available.map((s) => (
+            <li key={s.id}>
+              <h3>{s.name}</h3>
+              <div className="demo-actions">
+                {solutionDemos(s.id).map((demo) => (
+                  <a key={demo.url} className="key" href={demo.url} aria-label={`${s.name}: ${demo.label}`}>{demo.label}</a>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
 }
 
 function SolutionsSection({ live }: { live: Live }) {
@@ -266,9 +298,11 @@ function SolutionsSection({ live }: { live: Live }) {
                 <Kind s={s} />
                 <h3><a href={`#/s/${s.id}`}>{s.name}</a></h3>
                 <p className="tile-question">{s.question}</p>
+                <div className="demo-actions">
+                  <DemoLinks id={s.id} className="key key-sm" />
+                </div>
                 <div className="tile-links">
                   <a className="text-link" href={`#/s/${s.id}`}>Details</a>
-                  <DemoLinks id={s.id} className="text-link" />
                   <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
                   <Stars s={s} live={live} />
                 </div>

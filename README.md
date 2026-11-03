@@ -19,6 +19,11 @@ solution IDs and imported demo provenance retain their original names.
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
+The header and hero link to `#demos`, a browser-demo directory generated from
+the published manifest. Each solution has separately labelled app/report buttons
+there and on its solution card. Unpublished bundles never create a live link;
+adding a verified manifest entry also adds it to the directory.
+
 ## Run it
 
 ```bash
