@@ -26,12 +26,31 @@
       "kind": "app",
       "source": {
         "repository": "microsoft/ValueLens-for-Microsoft-Copilot",
-        "commit": "b8ca5aec87c4e35c6a24b37d57f8ae6273d7b088",
+        "commit": "ee1682ddc00ddee7c33dc1cb58e4b3603f668e96",
         "directory": "app"
       },
       "build": {
         "command": "npm --prefix app ci && npm --prefix app run build:demo",
         "runtime": "Node.js 24.11+; built with Node.js 26.13.0"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    },
+    {
+      "slug": "valuelens-report",
+      "solution": "valuelens",
+      "kind": "report",
+      "source": {
+        "repository": "microsoft/ValueLens-for-Microsoft-Copilot",
+        "commit": "ee1682ddc00ddee7c33dc1cb58e4b3603f668e96",
+        "directory": "demos/valuelens-report"
+      },
+      "build": {
+        "command": "npm --prefix app ci && python demos/valuelens-report/build.py && node app/scripts/build-report-engine.mjs && python demos/valuelens-report/validate.py",
+        "runtime": "Node.js 24.11+; Python 3.9+; validated Node.js 26.13.0 and Python 3.12.0"
       },
       "safety": {
         "inventedFixtures": true,

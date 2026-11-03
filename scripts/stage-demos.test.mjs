@@ -36,6 +36,10 @@ test('isolation precedes scripts and allows only same-origin fixture connections
     assert.ok(html.includes(rule))
   }
   assert.equal(html.match(/connect-src ([^;]+)/)?.[1], "'self'")
+  assert.ok(html.includes('rel="icon" href="data:image/svg+xml,'))
+  const existingIcon = protectHtml('<html><head><link rel="icon" href="./favicon.svg"></head></html>', 'index.html')
+  assert.equal((existingIcon.match(/rel="icon"/g) ?? []).length, 1)
+  assert.ok(existingIcon.includes('href="./favicon.svg"'))
   assert.throws(() => protectHtml('<script></script>', 'index.html'))
 })
 
