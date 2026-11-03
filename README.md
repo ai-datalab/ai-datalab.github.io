@@ -112,6 +112,17 @@ Fixtures may be embedded or fetched from the demo's own static files. Source rev
 must still confirm that no live service calls occur; same-origin CSP is not a
 restriction to a particular fixture directory or HTTP method.
 
+Report ports also need fidelity acceptance before a manifest entry is enabled:
+verify representative source-supported charts and metrics and that filters
+recalculate their values. Page counts, visual inventories and measure search alone
+are not acceptance. Record material differences from Power BI explicitly.
+The imported Consumption Central report bundle is not enabled: its generic
+placeholder panels and illustrative metrics still need source-supported fidelity work.
+Its upstream source is
+`microsoft/ConsumptionCentral-for-Microsoft-Copilot@871a4610722a8612fbea83e972bf51cc4a4e7c6a`,
+directory `demo/consumption-central-report-src`, rebuilt with
+`python demo/consumption-central-report-src/scripts/build.py` on Python 3.12+.
+
 Before publication, use `npm run preview` and exercise each demo's navigation and
 filters, direct entry, refresh and narrow layouts. Check developer tools for sign-in,
 external requests and CSP errors. After an approved Pages deployment, repeat in a
