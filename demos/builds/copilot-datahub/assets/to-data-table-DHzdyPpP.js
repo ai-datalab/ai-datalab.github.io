@@ -1,0 +1,1 @@
+function e(e,t){return{columns:e.columns.map(e=>t[e.name]??{name:e.name}),rows:e.rows}}export{e as t};

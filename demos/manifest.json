@@ -2,6 +2,27 @@
   "schemaVersion": 1,
   "demos": [
     {
+      "slug": "copilot-datahub",
+      "solution": "ai-datahub",
+      "kind": "app",
+      "source": {
+        "repository": "microsoft/DataHub",
+        "commit": "49e056bc373ac18a4fa1dd6faca279c55e4832dc",
+        "directory": "app"
+      },
+      "build": {
+        "command": "npm ci && npm run build:demo (from app)",
+        "runtime": "Node.js 26.13.0",
+        "checksumManifest": "SHA256SUMS.txt",
+        "checksumManifestSha256": "bc46f96aa29da13dd1dad808199e22c24bb5fb90f282eb032c08334c88f1b29f"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    },
+    {
       "slug": "ai-in-one",
       "solution": "ai-in-one",
       "kind": "app",

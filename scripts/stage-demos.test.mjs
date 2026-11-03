@@ -18,6 +18,10 @@ test('requires supported unique routes, matching kinds, provenance and safety re
   assert.doesNotThrow(() => validateManifest(manifest([demo])))
   assert.doesNotThrow(() => validateManifest(manifest([{ ...demo, source: { ...demo.source, repository: 'Keithland89/AI-in-One-Dashboard' } }])))
   assert.doesNotThrow(() => validateManifest(manifest([{ ...demo, slug: 'ai-in-one-report', kind: 'report' }])))
+  assert.doesNotThrow(() => validateManifest(manifest([{
+    ...demo, slug: 'copilot-datahub', solution: 'ai-datahub',
+    source: { ...demo.source, repository: 'microsoft/DataHub' },
+  }])))
   for (const invalid of [
     { schemaVersion: 2, demos: [] },
     manifest([{ ...demo, slug: '../outside' }]), manifest([demo, demo]),
@@ -25,6 +29,7 @@ test('requires supported unique routes, matching kinds, provenance and safety re
     manifest([{ ...demo, source: { ...demo.source, commit: 'main' } }]),
     manifest([{ ...demo, source: { ...demo.source, directory: '../outside' } }]),
     manifest([{ ...demo, source: { ...demo.source, repository: 'example/wrong' } }]),
+    manifest([{ ...demo, source: { ...demo.source, repository: 'microsoft/DataHub' } }]),
     manifest([{ ...demo, slug: 'valuelens', solution: 'valuelens', source: { ...demo.source, repository: 'Keithland89/AI-in-One-Dashboard' } }]),
     manifest([{ ...demo, build: {} }]),
     manifest([{ ...demo, safety: { ...demo.safety, noLiveServices: false } }]),
