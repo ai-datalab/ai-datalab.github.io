@@ -1,0 +1,306 @@
+{
+  "repository": "https://github.com/microsoft/AI-in-One-Dashboard",
+  "demoSourceRepository": "https://github.com/Keithland89/AI-in-One-Dashboard",
+  "baseRevision": "e0a77c2c4cb1f3723c656acfe825fa640c7d31ab",
+  "baseAppDirectory": "Archive/app",
+  "reportTemplate": "templates/AI-in-One-v2.0.0-Local-CSV-Template.pbit",
+  "reportTemplateSha256": "508dc1f87ff4469b21887720dfab0a0234b398ed8a6df08be61c5c313c823820",
+  "sourceDirectory": "demos/ai-in-one",
+  "buildHead": "7db3c4901540c5621ba322c792da10fa69af0cc0",
+  "demoSourceCommit": "7db3c4901540c5621ba322c792da10fa69af0cc0",
+  "sourceStatus": "Committed source; see demoSourceCommit.",
+  "sourceTreeSha256": "c5906ce580b5417f9cdbc91caa904eb379145c5fb2fcb52f5df937befe6916f6",
+  "sourceManifest": [
+    {
+      "path": ".gitignore",
+      "sha256": "21221b5c4ce8e99e5a01aac41b6a503979d2bc1ffd6c10fe80af65dad59057b9"
+    },
+    {
+      "path": "browser-tests/demo.e2e.mjs",
+      "sha256": "adec272408bb2e6157e9e00b7e80dace25a8894601a3d56c0497292a86ea8de4"
+    },
+    {
+      "path": "browser-tests/report.e2e.mjs",
+      "sha256": "582483d0bdd59244dc6e4da222e025bfe028a47c6a870853694858d848928d0e"
+    },
+    {
+      "path": "DESIGN.md",
+      "sha256": "c3c40406284a8266f4aab1d39c3c6ddcf8925105d9dc7f55a332bbc737e6c195"
+    },
+    {
+      "path": "eslint.config.js",
+      "sha256": "f19395caf80173ffbd41ab74f8eef4fc26c042f84a937de4a6286ec5c13ad401"
+    },
+    {
+      "path": "index.html",
+      "sha256": "43869fbdc11631a233f6ac3196adac93f25b17ed161efb8af62a76dd30b8c1c9"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "8bdf70082312c8033230090fc01d8dcf042d4e06b2085e9ef5c4342b5f1613d3"
+    },
+    {
+      "path": "package.json",
+      "sha256": "d9edb38c885849a406edb96f5093017fa25a481edc637ed012cd78d3989c5743"
+    },
+    {
+      "path": "playwright.config.mjs",
+      "sha256": "2ccb679074a1e57dc2f1d28188331ce84a07d31f075429673be7f811842011f0"
+    },
+    {
+      "path": "PRODUCT.md",
+      "sha256": "a5fb395de6451a9eefb0c1db3bc8b43bd55e95be9571bc3ec325a51a4bfa8b5a"
+    },
+    {
+      "path": "public/favicon.svg",
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "public/sample/agents.csv",
+      "sha256": "30a019808157a5cccfd1749bad73711b278351203486bd482c0b3589c86d1a38"
+    },
+    {
+      "path": "public/sample/interactions.csv",
+      "sha256": "925e4a902da93ac0e1ac6d99d35dda30d777884d457745d3cce0b39d213a85b0"
+    },
+    {
+      "path": "public/sample/users.csv",
+      "sha256": "77b1e46f9c3f5583a26b49793eda64a31db5f9610f364b06acbbf81626fded56"
+    },
+    {
+      "path": "README.md",
+      "sha256": "f8ff01c37ab6b9860cb31905ec780c2d4dde755c25a5f36e82b7c944a6c838ba"
+    },
+    {
+      "path": "report.html",
+      "sha256": "0aa184fd4830f536422c185ed245a84bb5b03ff48ef3659b1f6812ad85f0f9bf"
+    },
+    {
+      "path": "scripts/check-bundles.mjs",
+      "sha256": "c8f441c70f6282f034a6bd8440a9ae2be27125045679bfd39399fecd79ecd66a"
+    },
+    {
+      "path": "scripts/extract-report.py",
+      "sha256": "5346415387b6399bdb57d20e17c074ff52bf1b89ddee67881890cb4fa1eba047"
+    },
+    {
+      "path": "scripts/generate-sample.mjs",
+      "sha256": "a223e0a6c373c6aba0dc8e679c7b9023998d44210b96e3a6855a7d920f51e5be"
+    },
+    {
+      "path": "scripts/package-bundles.mjs",
+      "sha256": "0cb977579e8a33b50040d54417ae09eae35104636553cd324f522b43ea71efed"
+    },
+    {
+      "path": "scripts/serve-bundles.mjs",
+      "sha256": "3221232e285310e56778057d1ebdf1f991779edd9810ff79dc218afdecfe851e"
+    },
+    {
+      "path": "scripts/test-packaged.mjs",
+      "sha256": "9655b7d85fd0c4a21380bce7e21b048d751484b8b08783fe2f344f183612892a"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "2b4c31689c7ae9055f465f34c18a3079a030f1c767f35d9d5ebeae902249de00"
+    },
+    {
+      "path": "src/data/DataProvider.tsx",
+      "sha256": "7aac2618a7b7fbd49c2c3d6e2734ae44d62fa3768c51b60ad8b75be78b58c04a"
+    },
+    {
+      "path": "src/data/glossary.json",
+      "sha256": "52767051b2716c968126ab475f30081f67f08db7859529812ee7fc6cdb88a62b"
+    },
+    {
+      "path": "src/data/glossary.ts",
+      "sha256": "ae73d3bfa9b46e4fc40770b8e5fb052fb9e3696ab04279fa5d1c20a93f5f3b8f"
+    },
+    {
+      "path": "src/data/load.ts",
+      "sha256": "f4abc903cd1dadcf902ff6b4cf9319f173dccecc03757b3774483b9c46e98e10"
+    },
+    {
+      "path": "src/data/missing-data.test.ts",
+      "sha256": "f1c5de6312ec12970c344d17f58c8690601292ae958a1adf1ee92ddd06a73262"
+    },
+    {
+      "path": "src/data/store.ts",
+      "sha256": "665c5b338890d57bb1b898bdc019dcf002b48d6e8bff658f3fe94b73f8bb8c1f"
+    },
+    {
+      "path": "src/data/synthetic.test.ts",
+      "sha256": "2fa020841b7853912eb0b7c5a7d7825162a07edc1f504cdbca7e1b43a003524a"
+    },
+    {
+      "path": "src/data/types.ts",
+      "sha256": "82c65e3e02f334d103be59267bd00d9c1cd94d7c2351132802e3ca3d9a5b986b"
+    },
+    {
+      "path": "src/embedded-sample.d.ts",
+      "sha256": "fbce67785b50f6ff270077163023efa08b404bd5bba1602727e056d7da1d20d6"
+    },
+    {
+      "path": "src/index.css",
+      "sha256": "65f98a5470cb29cf5268aeceea5aa82b89dfd16aecd439f03952a7e7912a3d28"
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "e2ffe796e2d7eda3e0d78e6d099648d2d5da83089d70285a5ce0914ae4cbd32c"
+    },
+    {
+      "path": "src/metrics/agents.ts",
+      "sha256": "8846b1bedf8c310e255adc17deed1ff13bf9c631b584f93edc8d67630bfc22cc"
+    },
+    {
+      "path": "src/metrics/core.ts",
+      "sha256": "d180eb7aff0e69ef91ca106abced3c6bdb1386dede8aeecdedd54f8921d1eeaf"
+    },
+    {
+      "path": "src/metrics/habits.ts",
+      "sha256": "51da2ff0cafdcc494fb549c3010e2e8d2b55033c3acdf8b6ee79e9af38b820cb"
+    },
+    {
+      "path": "src/metrics/licence.ts",
+      "sha256": "648447371d3364fee597e3a045628bcdcd70b1344c78454912ee9d4dc1be9dda"
+    },
+    {
+      "path": "src/metrics/pivot.ts",
+      "sha256": "f1ee35454ea8beed59af39db8e28f1cbeb6e3a4aa1945b5a8ee1e69dd173d948"
+    },
+    {
+      "path": "src/metrics/ranks.ts",
+      "sha256": "9729654a4269c0e4533064a8a5852d2bec8fb832279690fca28272ef1f384868"
+    },
+    {
+      "path": "src/metrics/scope.ts",
+      "sha256": "c222bfa75b265ae8a5bcf0d410d242fe63804292282b252051ab01bfecb566c3"
+    },
+    {
+      "path": "src/pages/Agents.tsx",
+      "sha256": "2f901723e650a660e5e4f600d0a8c2c7041292f83346fbcf92bdfc539ae6f251"
+    },
+    {
+      "path": "src/pages/cols.tsx",
+      "sha256": "63f50574de43f199cc3a77cee21f735c01ae29a16440078c5862322fec3e6349"
+    },
+    {
+      "path": "src/pages/Guide.tsx",
+      "sha256": "8efbf63c5904a66b52e1be128827e89434e704f2493f5476086ac51de9eaad2c"
+    },
+    {
+      "path": "src/pages/HabitSummary.tsx",
+      "sha256": "3e5e8e567e36b88cab09ab2f44caf784edca0342a6604dec42902eec1197364a"
+    },
+    {
+      "path": "src/pages/Licence.tsx",
+      "sha256": "aa0c353da1b6bb4612ceb513d4a07960f6c8b8b2b6ada7c960506a8adf9116f9"
+    },
+    {
+      "path": "src/pages/Overview.tsx",
+      "sha256": "27027bff71f65d47306200ebd10282b99aa05a6a7462e3895f3fc5a468ef1a0e"
+    },
+    {
+      "path": "src/pages/Population.tsx",
+      "sha256": "bd38a50db697fa3ae492bf4e576da725c1409210b8e7ae920d4d4012ee68375c"
+    },
+    {
+      "path": "src/pages/TrendPair.tsx",
+      "sha256": "3b38b92ef65478e1464fa94d565d7dbb490f96c45bf96363b20ca7be6abc3099"
+    },
+    {
+      "path": "src/report/layout.json",
+      "sha256": "a1969a84b7cb88a55d9ba94989a4b1dae4e01d56182b9f0af7569040a751f14b"
+    },
+    {
+      "path": "src/report/main.tsx",
+      "sha256": "564bbc7005d48b162627689a363df19c3219182f905c82dfc9d33fb1067dd4db"
+    },
+    {
+      "path": "src/report/metrics.test.ts",
+      "sha256": "a7c5d4beb7668e667c0a880ce641e2670953141601a29b6819b62c0eacb3ffe1"
+    },
+    {
+      "path": "src/report/metrics.ts",
+      "sha256": "8b76de53c601392780c5468157c436818b1ea2a040856c3846d22a8a49fc4b5d"
+    },
+    {
+      "path": "src/report/report.css",
+      "sha256": "566f410ac6067b4d0e3e2e2db549ec655c628d3ab066a562ff338ff10d656d81"
+    },
+    {
+      "path": "src/report/ReportDemo.tsx",
+      "sha256": "e4b6abbcc958834ead97dba014a91747b1736398bf5c0188569481cf61ab5e8e"
+    },
+    {
+      "path": "src/report/types.ts",
+      "sha256": "4b015739e83dcaae64e0386c1e8c96b5ff2fbfb70c7340150bd464924e72805d"
+    },
+    {
+      "path": "src/routes.ts",
+      "sha256": "639671a69579c2c7cbd6dcf3382a77d9260adc1ab38255f4eace90acbcb1787e"
+    },
+    {
+      "path": "src/ui/AgentDrawer.tsx",
+      "sha256": "3a446d0efafde6a2c5d40defdb98eb2d51ff48a3a770accaa6d245733912080f"
+    },
+    {
+      "path": "src/ui/charts.tsx",
+      "sha256": "63643f9699fdddbf19fde5400d8c482ad43fd7bfd9ebcb435c7629333e674473"
+    },
+    {
+      "path": "src/ui/DataSourceDialog.tsx",
+      "sha256": "d48592fcc1035f02f6260f18b576153f6f37b93f664b471820f6e7a7706f2269"
+    },
+    {
+      "path": "src/ui/DataTable.tsx",
+      "sha256": "1f58fa9ad3a6403e0b0d3a16ae56029ee973ac81d47c6c9a21a0e064819aadcb"
+    },
+    {
+      "path": "src/ui/format.ts",
+      "sha256": "cce5f56d6cceecdcf10004d64c8a397725c3c9a470d97488b5bd747a85868072"
+    },
+    {
+      "path": "src/ui/primitives.tsx",
+      "sha256": "e863b862d81efdd6ba6c8c60773a234a6c97f990e505880ed80620c58f600321"
+    },
+    {
+      "path": "src/ui/Sheet.tsx",
+      "sha256": "c707e791cd67506613f57d4bdf8ee9f87d7835071b6b10a35ee2c5cabd4f8dc8"
+    },
+    {
+      "path": "src/ui/theme.ts",
+      "sha256": "617faa826bc5e3d991df648aa755006a51b3513fc29022a4ed3e00f35b3ec606"
+    },
+    {
+      "path": "src/ui/useWidth.ts",
+      "sha256": "5537b72a12d8dfe4f08fb7127086be239a7de3cf181f05abb41f7d0ed9fd6893"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "sha256": "890b3e0a9db3902dd0eaf43b3063dd94ce675ed72304593a2d1d6326cc7635d9"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "ad28d132ee48d6e23917cf5827cace785d0fc01a44ca68b0dda51cc8c3fd3f52"
+    },
+    {
+      "path": "tsconfig.node.json",
+      "sha256": "e0f1936992f77a707102795e8ea311ae74cb54de87b221bb32b44055af66ff7e"
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "55c6bc67a43fbc8701b691cc3961fe33aee1cc27b9ba4865f119223513c58cf2"
+    }
+  ],
+  "buildCommand": "npm ci && npm run package",
+  "buildWorkingDirectory": "demos/ai-in-one",
+  "runtime": {
+    "node": "v26.13.0",
+    "npm": "11.20.0",
+    "python": "Python 3.12.10"
+  },
+  "path": "/demo/ai-in-one/",
+  "license": "MIT; Microsoft Corporation. Runtime dependency notices are included.",
+  "safety": "Rule-generated invented data only. Local static assets only. No authentication, upload, backend or administrator operation.",
+  "limitations": "Existing app UI in sample-only mode. Tenant connectors, data upload and deployment are unavailable."
+}

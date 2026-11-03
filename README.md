@@ -144,6 +144,19 @@ The source bundle's `bundle-manifest.json` is the import allowlist; untracked fi
 must not be copied. It hashes the original imported bytes; site staging adds CSP
 only to the published HTML.
 
+AI in One's app is imported from its frozen release file manifest, with every
+file hash verified. Its provenance points to the approved source fork
+`Keithland89/AI-in-One-Dashboard`; the identical pinned commit is also available
+in the Microsoft upstream. Only the app route is enabled, not the report port.
+The app loads invented CSV fixtures from its own bundle.
+
+Agent Monitor's five bundle files are imported from the pinned `bundleCommit`
+in the site manifest. Its `PROVENANCE.md` records the separately pinned app source
+and the copyright holder's permission to host and redistribute this demo and
+required source-derived assets at `/demo/agent-monitor/`. This is not a general
+open-source licence for its repository. Preserve its full third-party notices.
+Live source, telemetry, upload and administration controls are unavailable.
+
 Before publication, use `npm run preview` and exercise each demo's navigation and
 filters, direct entry, refresh and narrow layouts. Check developer tools for sign-in,
 external requests and CSP errors. After an approved Pages deployment, repeat in a

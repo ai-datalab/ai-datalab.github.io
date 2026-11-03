@@ -16,6 +16,7 @@ const manifest = (demos = []) => ({ schemaVersion: 1, demos })
 test('requires supported unique routes, matching kinds, provenance and safety review', () => {
   assert.doesNotThrow(() => validateManifest(manifest()))
   assert.doesNotThrow(() => validateManifest(manifest([demo])))
+  assert.doesNotThrow(() => validateManifest(manifest([{ ...demo, source: { ...demo.source, repository: 'Keithland89/AI-in-One-Dashboard' } }])))
   assert.doesNotThrow(() => validateManifest(manifest([{ ...demo, slug: 'ai-in-one-report', kind: 'report' }])))
   for (const invalid of [
     { schemaVersion: 2, demos: [] },
@@ -24,6 +25,7 @@ test('requires supported unique routes, matching kinds, provenance and safety re
     manifest([{ ...demo, source: { ...demo.source, commit: 'main' } }]),
     manifest([{ ...demo, source: { ...demo.source, directory: '../outside' } }]),
     manifest([{ ...demo, source: { ...demo.source, repository: 'example/wrong' } }]),
+    manifest([{ ...demo, slug: 'valuelens', solution: 'valuelens', source: { ...demo.source, repository: 'Keithland89/AI-in-One-Dashboard' } }]),
     manifest([{ ...demo, build: {} }]),
     manifest([{ ...demo, safety: { ...demo.safety, noLiveServices: false } }]),
   ]) assert.throws(() => validateManifest(invalid))
