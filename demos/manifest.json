@@ -7,14 +7,14 @@
       "kind": "app",
       "source": {
         "repository": "microsoft/DataHub",
-        "commit": "49e056bc373ac18a4fa1dd6faca279c55e4832dc",
+        "commit": "d2d02eda7e530dc68bb5830f6a7946b6a8965fa3",
         "directory": "app"
       },
       "build": {
         "command": "npm ci && npm run build:demo (from app)",
         "runtime": "Node.js 26.13.0",
         "checksumManifest": "SHA256SUMS.txt",
-        "checksumManifestSha256": "bc46f96aa29da13dd1dad808199e22c24bb5fb90f282eb032c08334c88f1b29f"
+        "checksumManifestSha256": "312e677d520d3061526b90966c02c2980292074d9588eaad7786d7a6e5bc9185"
       },
       "safety": {
         "inventedFixtures": true,
