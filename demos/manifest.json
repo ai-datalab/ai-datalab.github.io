@@ -45,7 +45,7 @@
       "kind": "report",
       "source": {
         "repository": "microsoft/ValueLens-for-Microsoft-Copilot",
-        "commit": "ee1682ddc00ddee7c33dc1cb58e4b3603f668e96",
+        "commit": "58afd6fd6ded5a222b2e865a3a6d2713118cd5aa",
         "directory": "demos/valuelens-report"
       },
       "build": {
