@@ -1,14 +1,21 @@
 # Copilot-DataLab
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
-Copilot-DataHub, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
+DataHub, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
 ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (agents) and GitHub Copilot Panel (GitHub Copilot).
 
-The site uses the names Copilot-DataLab and Copilot-DataHub. The repos keep their own names: this one is AI-DataLab, and
-Copilot-DataHub is [microsoft/AnalyticsHub-Dashboard](https://github.com/microsoft/AnalyticsHub-Dashboard).
+The site uses the names Copilot-DataLab and DataHub. The repos keep their own names: this one is AI-DataLab, and
+DataHub is [microsoft/AnalyticsHub-Dashboard](https://github.com/microsoft/AnalyticsHub-Dashboard).
 
 It also has an Insights section (posts on measuring AI adoption and value, written with Shailendra Hegde, each readable
 in full on the site) and an About page.
+
+The `#installer` section describes only the DataHub installer, using the
+[installer reference](https://github.com/microsoft/AnalyticsHub-Dashboard/blob/main/installer/README.md)
+and [prerequisites](https://github.com/microsoft/AnalyticsHub-Dashboard/blob/main/docs/PREREQUISITES.md).
+Keep its Fabric/Azure scope and cost/permission caveats explicit; it is not an
+all-app installer. Product copy says DataHub, while repository URLs, legacy
+solution IDs and imported demo provenance retain their original names.
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
@@ -96,7 +103,7 @@ Example entry inside the manifest's `demos` array (replace placeholder provenanc
 
 For report ports, use the matching `-report` slug and `kind: "report"` with the same
 solution ID. Agent Evaluator uses solution ID `agent-evaluator` and repository
-`microsoft/AgentEvaluator-for-Copilot-Studio`; Copilot-DataHub uses solution ID
+`microsoft/AgentEvaluator-for-Copilot-Studio`; DataHub uses solution ID
 `ai-datahub`. Supported source repositories and route combinations are validated
 in `scripts/stage-demos.mjs`.
 

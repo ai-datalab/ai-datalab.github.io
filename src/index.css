@@ -799,6 +799,7 @@ main:focus { outline: none; }
 .steps h3 { font-weight: 600; letter-spacing: -0.02em; }
 .steps h3 a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-accent); text-underline-offset: 0.18em; }
 .steps p { color: var(--color-ink-2); }
+.installer-note { margin-top: var(--space-xl); max-width: 72ch; }
 
 /* What's new, with related reading beside it */
 .news { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: start; }

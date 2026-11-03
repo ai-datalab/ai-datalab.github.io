@@ -1,4 +1,4 @@
-// Each component covers one thing. Copilot-DataHub is the platform that brings them together.
+// Each component covers one thing. DataHub is the platform that brings them together.
 export type Component = 'adoption' | 'value' | 'cost' | 'agents' | 'github'
 
 export const componentLabels: Record<Component, string> = {
@@ -25,7 +25,7 @@ export interface Solution {
   question: string
   /** The one thing this component covers. The platform has none. */
   component?: Component
-  /** A component that is not inside the Copilot-DataHub app yet. */
+  /** A component that is not inside the DataHub app yet. */
   notInHub?: boolean
   runsAs: string[]
   measures: string[]
@@ -41,7 +41,7 @@ export interface Solution {
 export const solutions: Solution[] = [
   {
     id: 'ai-datahub',
-    name: 'Copilot-DataHub',
+    name: 'DataHub',
     repo: 'microsoft/AnalyticsHub-Dashboard',
     summary:
       'The platform that brings it together: one installer sets up an app on Microsoft Fabric or Azure with Copilot and agent adoption, value, consumption and governance in one place.',
@@ -61,7 +61,7 @@ export const solutions: Solution[] = [
       'A Windows 10 or 11 PC. No admin rights needed',
     ],
     videos: [{ label: 'The app, page by page', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard#videos', length: '2 min' }],
-    preview: { src: 'previews/analytics-hub.gif', alt: 'The Copilot-DataHub app, cycling through its pages on sample data' },
+    preview: { src: 'previews/analytics-hub.gif', alt: 'The DataHub app, cycling through its pages on sample data' },
     includes: ['valuelens', 'agent-monitor', 'consumption-central'],
     stars: 10,
   },
@@ -191,7 +191,7 @@ export const solutions: Solution[] = [
     name: 'Agent Monitor',
     repo: 'ai-datalab/Agent-Monitor',
     summary:
-      'The agent inventory and risk reporting Microsoft Agent 365 gives you, without an Agent 365 licence. It covers Agent Builder, Copilot Studio, agent flows and Azure AI Foundry, using roles your admins already hold. Pair it with Copilot-DataHub for agent usage and cost.',
+      'The agent inventory and risk reporting Microsoft Agent 365 gives you, without an Agent 365 licence. It covers Agent Builder, Copilot Studio, agent flows and Azure AI Foundry, using roles your admins already hold. Pair it with DataHub for agent usage and cost.',
     question: 'Which agents exist across the tenant, who owns them, and which need attention?',
     runsAs: ['The app', 'Power BI', 'Local CSV'],
     measures: [
@@ -261,7 +261,7 @@ export const log: LogEntry[] = [
 ]
 
 export const steps = [
-  { title: 'Pick a solution', text: 'Start from the question you need answered. If you want all of it, start with Copilot-DataHub.' },
+  { title: 'Pick a solution', text: 'Start from the question you need answered. If you want all of it, start with DataHub.' },
   { title: 'Try it on sample data', text: 'Watch the demo, or open the app on sample data. There is nothing to install.' },
   { title: 'Line up your admins', text: 'Each repo has a "Before you start" list that says who grants what. Send it round early.' },
   { title: 'Install and share', text: 'Run the installer or open the Power BI template, then share the app with the people who need it.' },

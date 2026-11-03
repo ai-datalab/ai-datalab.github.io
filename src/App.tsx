@@ -10,6 +10,7 @@ const sections = [
   { id: 'solutions', label: 'Solutions' },
   { id: 'which-one', label: 'Which one do I need?' },
   { id: 'get-started', label: 'Get started' },
+  { id: 'installer', label: 'DataHub installer' },
   { id: 'whats-new', label: 'What’s new' },
 ] as const
 
@@ -154,6 +155,7 @@ function Home({ live }: { live: Live }) {
       <SolutionsSection live={live} />
       <WhichOne />
       <GetStarted />
+      <InstallerSection />
       <WhatsNew live={live} />
     </>
   )
@@ -428,6 +430,48 @@ function GetStarted() {
   )
 }
 
+function InstallerSection() {
+  const repo = `https://github.com/${hub.repo}`
+  return (
+    <section id="installer" className="section" aria-labelledby="installer-title">
+      <div className="wrap">
+        <div className="section-head">
+          <h2 id="installer-title">Install DataHub in your tenant</h2>
+          <p>One guided setup for DataHub on Microsoft Fabric or Azure. It is not a universal installer for every standalone dashboard.</p>
+        </div>
+        <ol className="steps">
+          <li>
+            <span className="step-n" aria-hidden="true">1</span>
+            <h3>Choose Fabric or Azure</h3>
+            <p>Run the Windows installer and choose where DataHub will live. Your data stays in your tenant.</p>
+          </li>
+          <li>
+            <span className="step-n" aria-hidden="true">2</span>
+            <h3>Check prerequisites</h3>
+            <p>Line up capacity, Power BI licensing and the admin approvals needed for your chosen target and modules.</p>
+          </li>
+          <li>
+            <span className="step-n" aria-hidden="true">3</span>
+            <h3>Review before deploying</h3>
+            <p>Sign in, choose the supported modules and review the deployment plan, access grants and costs before approving.</p>
+          </li>
+          <li>
+            <span className="step-n" aria-hidden="true">4</span>
+            <h3>Load, check and maintain</h3>
+            <p>The installer loads the first data and checks the setup. Use its documented refresh, repair and update paths afterwards.</p>
+          </li>
+        </ol>
+        <p className="muted installer-note">The installer is free; Fabric or Azure resources and required licences can incur charges. Standalone apps and reports retain their own setup instructions.</p>
+        <div className="cta-row">
+          <a className="key key-primary" href={`${repo}/releases/latest`} target="_blank" rel="noreferrer">Get the DataHub installer</a>
+          <a className="key" href={`${repo}/blob/main/installer/README.md`} target="_blank" rel="noreferrer">Read the installer guide</a>
+          <a className="key" href={`${repo}/blob/main/docs/PREREQUISITES.md`} target="_blank" rel="noreferrer">Check prerequisites</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function SolutionPage({ s, live }: { s: Solution; live: Live }) {
   const pairs = s.component
     ? [...(s.includes ?? []), ...(s.related ?? [])].map((id) => byId(id)).filter((p): p is Solution => Boolean(p))
@@ -446,6 +490,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           </div>
           <div className="cta-row">
             <DemoLinks id={s.id} className="key" />
+            {s.id === hub.id && <a className="key" href="#installer">DataHub installer</a>}
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
             </a>
