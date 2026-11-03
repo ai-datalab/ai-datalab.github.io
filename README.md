@@ -132,6 +132,18 @@ These are browser calculations on invented fixtures, not a Power BI service or
 an assertion of exhaustive DAX-engine parity. Representative source measures and
 independent fixture recomputation support the headline metrics.
 
+ValueLens's report uses 148 explicit source-measure bindings with independent
+numerical/category references across its 16 pages. Native charts approximate
+Power BI rendering; matrices are expanded leaf tables without native drill or
+subtotal controls, and fit badges use accessible text. Dates are month-grain.
+Hourly value and effort scenarios are interactive; penalty, monthly licence price
+and grading remain at source defaults (1, 30 and Balanced). Narrow screens retain
+the horizontally scrollable original canvas rather than a mobile report layout.
+Feedback themes use invented text. This is not a general DAX engine.
+The source bundle's `bundle-manifest.json` is the import allowlist; untracked files
+must not be copied. It hashes the original imported bytes; site staging adds CSP
+only to the published HTML.
+
 Before publication, use `npm run preview` and exercise each demo's navigation and
 filters, direct entry, refresh and narrow layouts. Check developer tools for sign-in,
 external requests and CSP errors. After an approved Pages deployment, repeat in a

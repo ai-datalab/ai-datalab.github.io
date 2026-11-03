@@ -67,8 +67,11 @@ async function bundleFiles(directory, relative = '') {
 
 export function protectHtml(html, name) {
   if (!/<head(?:\s[^>]*)?>/i.test(html)) throw new Error(`Demo HTML needs a head element: ${name}`)
+  const icon = /<link\b[^>]*\brel\s*=\s*["'][^"']*\bicon\b/i.test(html)
+    ? ''
+    : '\n<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1 1%22/%3E">'
   return html.replace(/<head(?:\s[^>]*)?>/i, (head) =>
-    `${head}\n<meta http-equiv="Content-Security-Policy" content="${policy}">`)
+    `${head}\n<meta http-equiv="Content-Security-Policy" content="${policy}">${icon}`)
 }
 
 export async function stageDemos(root) {
