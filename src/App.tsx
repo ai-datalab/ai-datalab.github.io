@@ -134,7 +134,7 @@ function Home({ live }: { live: Live }) {
         <div className="wrap hero-grid">
           <div className="opening">
             <h1>Copilot and agent analytics, in your tenant.</h1>
-            <p className="lede">Open-source apps and reports, one per question, joined up in {hub.name}.</p>
+            <p className="lede">Open-source apps and reports, one per question, joined up in {hub.name}. The tools are flexible, adaptable starting points. Many can be tailored to your organisation’s needs; customisation and deployment options vary by product.</p>
             <div className="cta-row">
               <a className="key key-primary" href="#demos">Try the browser demos</a>
               <a className="key" href="#solutions">Browse the solutions</a>
