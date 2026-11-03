@@ -4,6 +4,7 @@ import { SignalField } from './SignalField'
 import { byId, componentLabels, hub, log, ordered, parts, related, steps, type Solution } from './data'
 import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
+import { solutionDemos } from './demos'
 
 const sections = [
   { id: 'solutions', label: 'Solutions' },
@@ -200,6 +201,12 @@ function Stars({ s, live }: { s: Solution; live: Live }) {
   )
 }
 
+function DemoLinks({ id, className }: { id: string; className: string }) {
+  return solutionDemos(id).map((demo) => (
+    <a key={demo.url} className={className} href={demo.url}>{demo.label}</a>
+  ))
+}
+
 function SolutionsSection({ live }: { live: Live }) {
   const [hover, setHover] = useState<string | null>(null)
   const hovered = hover ? byId(hover) : undefined
@@ -229,6 +236,7 @@ function SolutionsSection({ live }: { live: Live }) {
               <RunsAs list={hub.runsAs} />
               <div className="card-actions">
                 <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
+                <DemoLinks id={hub.id} className="key" />
                 <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
               </div>
             </div>
@@ -258,6 +266,7 @@ function SolutionsSection({ live }: { live: Live }) {
                 <p className="tile-question">{s.question}</p>
                 <div className="tile-links">
                   <a className="text-link" href={`#/s/${s.id}`}>Details</a>
+                  <DemoLinks id={s.id} className="text-link" />
                   <a className="text-link" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">Repo</a>
                   <Stars s={s} live={live} />
                 </div>
@@ -265,6 +274,13 @@ function SolutionsSection({ live }: { live: Live }) {
             ))}
           </ul>
           <p className="index-note">Every screen runs on sample data. Every name shown is invented.</p>
+          {solutionDemos('agent-evaluator').length > 0 && (
+            <p className="index-note">
+              Agent Evaluator for Copilot Studio: <DemoLinks id="agent-evaluator" className="text-link" />{' '}
+              (static browser report, invented data, no sign-in).{' '}
+              <a href="https://github.com/microsoft/AgentEvaluator-for-Copilot-Studio" target="_blank" rel="noreferrer">Source repository</a>
+            </p>
+          )}
         </div>
       </div>
     </section>
@@ -429,6 +445,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
             {live[s.id]?.pushedAt && <span className="muted">Updated {relative(live[s.id]?.pushedAt)}</span>}
           </div>
           <div className="cta-row">
+            <DemoLinks id={s.id} className="key" />
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
             </a>

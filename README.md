@@ -39,3 +39,79 @@ The Insights posts are in two places:
 
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages.
 In the repo, go to **Settings > Pages** and set **Source** to **GitHub Actions**.
+
+## Browser demos
+
+The existing free Pages deployment also serves self-contained browser builds at
+`/demo/<slug>/`. No additional hosting or backend is needed. Links on solution cards
+and detail pages appear only for entries in `demos/manifest.json`. App and report
+demos have separate, explicitly labelled links. The manifest starts empty so no
+missing demos are advertised. Agent Evaluator gets a separate report link in the
+solutions section only when its demo is available.
+
+Supported paths: `ai-in-one`, `valuelens`, `consumption-central`, `agent-monitor`,
+`github-copilot-panel`, `copilot-datahub` (after its release), `ai-in-one-report`,
+`valuelens-report`, `consumption-central-report` and `agent-evaluator-report`.
+GitHub Copilot Panel is a report demo, not an app demo.
+
+### Integrating a source build
+
+1. Supply a self-contained static bundle from a committed source revision. Put it
+   in `demos/builds/<slug>/` with `index.html` and every asset, font and fixture.
+   Keep its licence and required third-party notices. Use relative asset paths or
+   `/demo/<slug>/` paths, never root `/assets/` paths or external CDNs.
+   Use hash or in-memory navigation: Pages has no SPA rewrite fallback.
+2. Review fixtures and source. All data must be invented, not anonymised production
+   exports. Remove authentication, telemetry, APIs, backend calls and real admin
+   actions. Simulated actions must be clearly labelled and change only demo state.
+   Include a visible synthetic-data/no-sign-in notice and a back link to `/#solutions`.
+   Do not include credentials, tenant data, private source maps or environment files.
+3. Add a manifest entry together with the bundle, recording the exact repository,
+   full source commit, relative source directory, actual build command and runtime.
+   Rebuild from that revision and its lockfile; never copy an uncommitted live build.
+
+Example entry inside the manifest's `demos` array (replace placeholder provenance):
+
+```json
+{
+  "slug": "ai-in-one",
+  "solution": "ai-in-one",
+  "kind": "app",
+  "source": {
+    "repository": "microsoft/AI-in-One-Dashboard",
+    "commit": "<full 40-character source commit>",
+    "directory": "app/demo"
+  },
+  "build": {
+    "command": "npm ci && npm run build:demo",
+    "runtime": "Node.js 22"
+  },
+  "safety": {
+    "inventedFixtures": true,
+    "noLiveServices": true,
+    "noAdminActions": true
+  }
+}
+```
+
+For report ports, use the matching `-report` slug and `kind: "report"` with the same
+solution ID. Agent Evaluator uses solution ID `agent-evaluator` and repository
+`microsoft/AgentEvaluator-for-Copilot-Studio`; Copilot-DataHub uses solution ID
+`ai-datahub`. Supported source repositories and route combinations are validated
+in `scripts/stage-demos.mjs`.
+
+The safety fields record a completed human/source review, not an automated proof.
+Run `npm run test:demos`, `npm run lint` and `npm run build`. Builds fail on invalid
+provenance, missing bundles or missing entry points. Staging copies bundles into
+`dist/demo/` and publishes `/demo/provenance.json`. A demo-only Content Security
+Policy is inserted before resources in every HTML entry point, blocking service
+connections, external assets, forms, frames, workers and plugins. The main site's
+behaviour is unchanged. CSP is defence in depth, not a substitute for source review.
+Fixtures must be bundled into JavaScript or HTML, not loaded with fetch.
+
+Before publication, use `npm run preview` and exercise each demo's navigation and
+filters, direct entry, refresh and narrow layouts. Check developer tools for sign-in,
+external requests and CSP errors. After an approved Pages deployment, repeat in a
+signed-out browser at the public URLs and follow every corresponding solution link.
+Do not mark demos delivered until those live checks pass. This integration does not
+deploy anything until its changes reach `main` through the usual approved process.
