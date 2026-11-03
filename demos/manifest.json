@@ -1,4 +1,43 @@
 {
   "schemaVersion": 1,
-  "demos": []
+  "demos": [
+    {
+      "slug": "consumption-central",
+      "solution": "consumption-central",
+      "kind": "app",
+      "source": {
+        "repository": "microsoft/ConsumptionCentral-for-Microsoft-Copilot",
+        "commit": "871a4610722a8612fbea83e972bf51cc4a4e7c6a",
+        "directory": "app"
+      },
+      "build": {
+        "command": "npm --prefix app ci && npm --prefix app run build:demo",
+        "runtime": "Node.js 24.x; Python 3.12+"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    },
+    {
+      "slug": "consumption-central-report",
+      "solution": "consumption-central",
+      "kind": "report",
+      "source": {
+        "repository": "microsoft/ConsumptionCentral-for-Microsoft-Copilot",
+        "commit": "871a4610722a8612fbea83e972bf51cc4a4e7c6a",
+        "directory": "demo/consumption-central-report-src"
+      },
+      "build": {
+        "command": "python demo/consumption-central-report-src/scripts/build.py",
+        "runtime": "Python 3.12+"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    }
+  ]
 }
