@@ -123,6 +123,13 @@ Its upstream source is
 directory `demo/consumption-central-report-src`, rebuilt with
 `python demo/consumption-central-report-src/scripts/build.py` on Python 3.12+.
 
+GitHub Copilot Panel's enabled report demo ports the shipped template's
+assumption-based Value page and labels those figures accordingly. Its demo-only
+Assumptions panel changes those values locally. Group By Language is omitted.
+These are browser calculations on invented fixtures, not a Power BI service or
+an assertion of exhaustive DAX-engine parity. Representative source measures and
+independent fixture recomputation support the headline metrics.
+
 Before publication, use `npm run preview` and exercise each demo's navigation and
 filters, direct entry, refresh and narrow layouts. Check developer tools for sign-in,
 external requests and CSP errors. After an approved Pages deployment, repeat in a
