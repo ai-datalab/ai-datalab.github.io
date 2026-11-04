@@ -1,1 +1,0 @@
-import{i as e}from"./rolldown-runtime-Dd_uD5pT.js";import{t}from"./react-CQOZoUwg.js";var n=e(t(),1),r=(0,n.createContext)(null);function i(){let e=(0,n.useContext)(r),[t,i]=(0,n.useState)(50),[a,o]=(0,n.useState)(`Typical`);return e??{rate:t,scenario:a,setRate:i,setScenario:o}}export{i as n,r as t};

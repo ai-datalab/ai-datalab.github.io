@@ -1,20 +1,20 @@
 # Copilot-DataLab
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
-DataHub, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
+Analytics Hub dashboard, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
 ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (agents) and GitHub Copilot Panel (GitHub Copilot).
 
-The site uses the names Copilot-DataLab and DataHub. The repos keep their own names: this one is AI-DataLab, and
-DataHub is [microsoft/AnalyticsHub-Dashboard](https://github.com/microsoft/AnalyticsHub-Dashboard).
+The site uses the names Copilot-DataLab and Analytics Hub dashboard. The repos keep their own names: this one is AI-DataLab, and
+Analytics Hub dashboard is [microsoft/AnalyticsHub-Dashboard](https://github.com/microsoft/AnalyticsHub-Dashboard).
 
 It also has an Insights section (posts on measuring AI adoption and value, written with Shailendra Hegde, each readable
 in full on the site) and an About page.
 
-The `#installer` section describes only the DataHub installer, using the
+The `#installer` section describes only the Analytics Hub dashboard installer, using the
 [installer reference](https://github.com/microsoft/AnalyticsHub-Dashboard/blob/main/installer/README.md)
 and [prerequisites](https://github.com/microsoft/AnalyticsHub-Dashboard/blob/main/docs/PREREQUISITES.md).
 Keep its Fabric/Azure scope and cost/permission caveats explicit; it is not an
-all-app installer. Product copy says DataHub, while repository URLs, legacy
+all-app installer. Product copy says Analytics Hub dashboard, while repository URLs, legacy
 solution IDs and imported demo provenance retain their original names.
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
@@ -24,13 +24,20 @@ the published manifest. Each solution has separately labelled app/report buttons
 there and on its solution card. Unpublished bundles never create a live link;
 adding a verified manifest entry also adds it to the directory.
 
-The DataHub app bundle is pinned to `microsoft/DataHub` at
-`3893ec71b1b644103c38121a92860b23545d59db`. Its imported `SHA256SUMS.txt`
-records the 84 frozen payload files; the manifest itself has SHA-256
-`c9111b6a7d712828ab5d7296afc153bfcddb3f05ff5dc0c82cd0dd8be691a422`.
+The Analytics Hub dashboard app bundle is pinned to `microsoft/DataHub` at
+`04018133e6ba8c2b4bb7845d39bac2ae1115d613`. Its imported `SHA256SUMS.txt`
+records the 83 frozen payload files; the manifest itself has SHA-256
+`b40fbe0c1c6aa1e01a9d949e0d6221157f87edaa70dc10015f42febe574377bf`.
 Keep its MIT licence, dependency notices and original bytes. Site staging only
-adds the standard HTML isolation policy. The demo uses DataHub branding;
-its cross-vendor view uses a separately labelled synthetic comparison
+adds the standard HTML isolation policy. The demo uses Analytics Hub dashboard
+branding; the existing `/demo/copilot-datahub/` URL stays unchanged.
+`SOURCE_PROVENANCE.json` pins the synthetic sample tree and 36 build inputs.
+Original sample dates and separate export grains are preserved: 13,337 tasks,
+170 inventory people and 2,476.65 typical expert-equivalent hours; all dated
+tenant exports total 162,222.8531 credits. Filters narrow dated totals, while
+user/agent exports remain separate snapshots. Missing Microsoft 365 telemetry,
+evaluation, Defender and Resource Graph data are labelled rather than invented.
+The demo's cross-vendor view uses a separately labelled synthetic comparison
 period and local vendor/product filters, not the app-wide filters. Ask returns
 labelled canned demo responses, not a live AI answer.
 
@@ -118,7 +125,7 @@ Example entry inside the manifest's `demos` array (replace placeholder provenanc
 
 For report ports, use the matching `-report` slug and `kind: "report"` with the same
 solution ID. Agent Evaluator uses solution ID `agent-evaluator` and repository
-`microsoft/AgentEvaluator-for-Copilot-Studio`; DataHub uses solution ID
+`microsoft/AgentEvaluator-for-Copilot-Studio`; Analytics Hub dashboard uses solution ID
 `ai-datahub`. Supported source repositories and route combinations are validated
 in `scripts/stage-demos.mjs`.
 

@@ -7,14 +7,14 @@
       "kind": "app",
       "source": {
         "repository": "microsoft/DataHub",
-        "commit": "3893ec71b1b644103c38121a92860b23545d59db",
+        "commit": "04018133e6ba8c2b4bb7845d39bac2ae1115d613",
         "directory": "app"
       },
       "build": {
-        "command": "npm ci && npm run build:demo (from app)",
-        "runtime": "Node.js 26.13.0",
+        "command": "npm ci && python -m pip install -e ..\\core && npm run build:demo (from app)",
+        "runtime": "Node.js 26.13.0; Python 3.12.10; DuckDB 1.5.5",
         "checksumManifest": "SHA256SUMS.txt",
-        "checksumManifestSha256": "c9111b6a7d712828ab5d7296afc153bfcddb3f05ff5dc0c82cd0dd8be691a422"
+        "checksumManifestSha256": "b40fbe0c1c6aa1e01a9d949e0d6221157f87edaa70dc10015f42febe574377bf"
       },
       "safety": {
         "inventedFixtures": true,
