@@ -5,6 +5,7 @@ import { byId, componentLabels, dataSourceCategories, dataSourceReference, dataS
 import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 import { solutionDemos } from './demos'
+import { externalSetup, setupHref, setups } from './setup'
 
 const sections = [
   { id: 'demos', label: 'Browser demos' },
@@ -39,20 +40,23 @@ export default function App() {
   // Old links to the hub's previous name still land on it.
   const detail = route.startsWith('/s/') ? byId(['analytics-hub', 'analytics-hub-app'].includes(route.slice(3)) ? hub.id : route.slice(3)) : undefined
 
+  const setupFor = route.startsWith('/setup/') && setups[route.slice(7)] ? byId(route.slice(7)) : undefined
   const page = route === '/insights' || route === '/about' ? route : undefined
   const post = route.startsWith('/insights/') ? insightBySlug(route.slice(10)) : undefined
 
   useEffect(() => {
     document.title = detail
       ? `${detail.name}${detail.tagline ? ` ${detail.tagline}` : ''} | Copilot-DataLab`
-      : post
+      : setupFor
+        ? `Set up ${setupFor.name} | Copilot-DataLab`
+        : post
         ? `${post.title} | Copilot-DataLab`
         : page === '/insights'
           ? 'Insights | Copilot-DataLab'
           : page === '/about'
             ? 'About Keith McGrane | Copilot-DataLab'
             : 'Copilot-DataLab: Copilot and agent analytics by Keith McGrane'
-  }, [detail, page, post])
+  }, [detail, setupFor, page, post])
 
   // Section links (#solutions) scroll within the home page; if we're on a
   // detail page, render home first and then scroll.
@@ -69,6 +73,8 @@ export default function App() {
       <main id="main" tabIndex={-1}>
         {detail ? (
           <SolutionPage s={detail} live={live} />
+        ) : setupFor ? (
+          <SetupPage s={setupFor} />
         ) : post ? (
           <ArticlePage key={post.slug} post={post} />
         ) : page === '/insights' ? (
@@ -216,6 +222,17 @@ function DemoLinks({ id, className }: { id: string; className: string }) {
   ))
 }
 
+function SetupLink({ s, className }: { s: { id: string; name: string }; className: string }) {
+  const href = setupHref(s.id)
+  if (!href) return null
+  const external = Boolean(externalSetup[s.id])
+  return (
+    <a className={className} href={href} aria-label={`Set up ${s.name}${external ? ' (opens its setup site)' : ''}`} {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}>
+      Set up
+    </a>
+  )
+}
+
 function BrowserDemos() {
   const available = [...ordered, { id: 'agent-evaluator', name: 'Agent Evaluator' }]
     .filter((s) => solutionDemos(s.id).length > 0)
@@ -235,6 +252,7 @@ function BrowserDemos() {
                 {solutionDemos(s.id).map((demo) => (
                   <a key={demo.url} className="key" href={demo.url} aria-label={`${s.name}: ${demo.label}`}>{demo.label}</a>
                 ))}
+                <SetupLink s={s} className="key" />
               </div>
             </li>
           ))}
@@ -275,6 +293,7 @@ function SolutionsSection({ live }: { live: Live }) {
               <div className="card-actions">
                 <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
                 <DemoLinks id={hub.id} className="key" />
+                <SetupLink s={hub} className="key" />
                 <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
               </div>
             </div>
@@ -304,6 +323,7 @@ function SolutionsSection({ live }: { live: Live }) {
                 <p className="tile-question">{s.question}</p>
                 <div className="demo-actions">
                   <DemoLinks id={s.id} className="key key-sm" />
+                  <SetupLink s={s} className="key key-sm" />
                 </div>
                 <div className="tile-links">
                   <a className="text-link" href={`#/s/${s.id}`}>Details</a>
@@ -509,11 +529,11 @@ function InstallerSection() {
         <div className="installer-video-guide">
           <h3>Installer walkthroughs</h3>
           <p>
-            Each walkthrough is on its solution's page:{' '}
-            {ordered.filter((s) => s.installerVideo).map((s, i, list) => (
+            Each walkthrough is on its solution's setup page:{' '}
+            {ordered.filter((s) => s.installerVideo && setups[s.id]).map((s, i, list) => (
               <span key={s.id}>
                 {i > 0 && (i === list.length - 1 ? ' and ' : ', ')}
-                <a href={`#/s/${s.id}`}>{s.name}</a>
+                <a href={`#/setup/${s.id}`}>{s.name}</a>
               </span>
             ))}
             .
@@ -529,15 +549,19 @@ function VideoPlayer({ video, poster }: { video: HostedVideo; poster: string }) 
   const [failed, setFailed] = useState(false)
   return (
     <figure className="video-player">
-      <video controls playsInline preload="none" poster={poster} aria-label={video.label} aria-describedby={captionId} onError={() => setFailed(true)}>
+      <video controls playsInline preload="none" crossOrigin={video.captions ? 'anonymous' : undefined} poster={video.poster ?? poster} aria-label={video.label} aria-describedby={captionId} onError={() => setFailed(true)}>
         <source src={video.url} type="video/mp4" onError={() => setFailed(true)} />
+        {video.captions && <track kind="captions" src={video.captions} srcLang="en-GB" label="English captions" default />}
         Your browser does not support embedded video. Use the video link below.
       </video>
       <figcaption id={captionId}>
         <p><strong>{video.label}</strong>{video.length && ` (${video.length})`}</p>
         <p>{video.disclosure}</p>
         {failed && <p role="status">The video could not load here. Try opening the video directly.</p>}
-        <a href={video.url} target="_blank" rel="noreferrer">Open the video</a>
+        <span className="video-links">
+          <a href={video.url} target="_blank" rel="noreferrer">Open the video</a>
+          {video.transcript && <a href={video.transcript} target="_blank" rel="noreferrer">Read the transcript</a>}
+        </span>
       </figcaption>
     </figure>
   )
@@ -593,7 +617,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           </div>
           <div className="cta-row">
             <DemoLinks id={s.id} className="key" />
-            {s.id === hub.id && <a className="key" href="#installer">DataHub App installer</a>}
+            <SetupLink s={s} className="key" />
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
             </a>
@@ -602,6 +626,11 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
             )}
           </div>
         </div>
+        {s.overviewVideo && (
+          <section className="detail-walkthrough detail-overview" aria-label={`${s.name} overview video`}>
+            <VideoPlayer key={s.overviewVideo.url} video={s.overviewVideo} poster={s.preview.src} />
+          </section>
+        )}
         <figure className="detail-media">
           <span className="shot">
             <img src={s.preview.src} alt={s.preview.alt} />
@@ -636,12 +665,6 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
             )}
           </section>
         </div>
-        {s.installerVideo && (
-          <section className="detail-walkthrough" aria-label={`${s.name} installer video`}>
-            <h2>Installer walkthrough</h2>
-            <VideoPlayer key={s.installerVideo.url} video={s.installerVideo} poster={s.preview.src} />
-          </section>
-        )}
         {pairs.length > 0 && (
           <section className={`pairs ${s.component ? '' : 'pairs-parts'}`}>
             <h2>{s.component ? 'Pairs with' : 'The components'}</h2>
@@ -665,6 +688,58 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
 }
 
 const day = (iso: string) => formatDay(`${iso}T12:00:00`)
+
+// One template for every solution: walkthrough, three steps, then the repo's own guides.
+function SetupPage({ s }: { s: Solution }) {
+  const setup = setups[s.id]
+  const guidePage = decodeURIComponent(setup.guide.replace(/^https:\/\/github\.com\/[^/]+\/[^/]+(\/blob\/main\/)?/, '').replace(/#.*/, '')) || 'README'
+  return (
+    <article className="detail setup">
+      <div className="wrap">
+        <a className="back" href={`#/s/${s.id}`}>{s.name}</a>
+        <div className="detail-head">
+          <Kind s={s} />
+          <h1>Set up {s.name}</h1>
+          {s.tagline && <p>{s.tagline}</p>}
+        </div>
+        {s.installerVideo && (
+          <section className="detail-walkthrough" aria-label={`${s.name} installer video`}>
+            <VideoPlayer key={s.installerVideo.url} video={s.installerVideo} poster={s.preview.src} />
+          </section>
+        )}
+        <ol className="steps setup-steps">
+          {setup.steps.map((st, i) => (
+            <li key={st.title}>
+              <span className="step-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h2>{st.title}</h2>
+              <p>{st.text}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="cta-row">
+          <a className="key key-primary" href={setup.guide} target="_blank" rel="noreferrer">Full setup guide</a>
+          <DemoLinks id={s.id} className="key" />
+          <a className="key" href={setup.downloads.url} target="_blank" rel="noreferrer">{setup.downloads.label}</a>
+        </div>
+        <div className="detail-grid setup-grid">
+          <section>
+            <h2>Before you start</h2>
+            <Checklist key={s.id} items={s.beforeYouStart} />
+          </section>
+          <section>
+            <h2>More from the repo</h2>
+            <ul className="videos">
+              {setup.links.map((l) => (
+                <li key={l.url}><a href={l.url} target="_blank" rel="noreferrer">{l.label}</a></li>
+              ))}
+            </ul>
+          </section>
+        </div>
+        <p className="muted setup-source">Steps summarised from <a href={setup.guide} target="_blank" rel="noreferrer">{guidePage}</a> on main.</p>
+      </div>
+    </article>
+  )
+}
 
 // "Title: the rest" sets the short title large and the rest below it.
 function Title({ text }: { text: string }) {
