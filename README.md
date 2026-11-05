@@ -17,6 +17,21 @@ Keep its Fabric/Azure scope and cost/permission caveats explicit; it is not an
 all-app installer. Keep the product name DataHub App and introduce it with the
 tagline "for Microsoft Copilot, Agents and Autopilots". Legacy solution IDs stay unchanged.
 
+The `#installer-apis` section below the installer guide lists the APIs used during
+setup, optional source-access checks and collection after deployment. Its content
+is in `installerApiGroups` and `installerCollectionApis` in `src/data.ts`, with
+official documentation links and a pinned implementation reference in
+`installerApiSource`. Check the current installer clients, call sites and deployed
+collectors before updating it; refresh the reference when the inventory changes.
+Do not treat every API as required for every install, a flow's runtime calls as
+direct installer calls, or maker-portal endpoints as documented public REST APIs.
+
+Installer walkthroughs use the canonical narrated v3 MP4s in each product repository,
+not copied video binaries. The `installerVideo` entries in `src/data.ts` feed the
+DataHub installer guide's four embedded players and the relevant detail pages.
+Keep native player controls, no autoplay, deferred media loading and the visible
+AI-narration/simulated-service disclosure. Verify public media URLs before changing them.
+
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
 The header and hero link to `#demos`, a browser-demo directory generated from
@@ -58,6 +73,7 @@ All the content is in `src/data.ts`:
 - `solutions`: each solution's summary, the question it answers, what it shows, prerequisites, videos, preview image and the one component it covers (the platform has none).
 - `log`: the "What's new" entries.
 - `related`: external links.
+- `installerApiGroups`, `installerCollectionApis`, `installerApiSource`: the installer API directory and its source baseline.
 
 Star counts and "last pushed" dates load live from the public GitHub API. If that call fails, the snapshot values in `data.ts` are shown.
 
