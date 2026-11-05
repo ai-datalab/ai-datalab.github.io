@@ -1,7 +1,7 @@
 import { useEffect, useId, useState } from 'react'
 import { Platform } from './Platform'
 import { SignalField } from './SignalField'
-import { byId, componentLabels, hub, installerApiGroups, installerApiSource, installerCollectionApis, log, ordered, parts, related, steps, type ApiReference, type HostedVideo, type Solution } from './data'
+import { byId, componentLabels, dataSourceCategories, dataSourceReference, dataSources, hub, log, ordered, parts, related, steps, type HostedVideo, type Solution } from './data'
 import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 import { solutionDemos } from './demos'
@@ -12,7 +12,7 @@ const sections = [
   { id: 'which-one', label: 'Which one do I need?' },
   { id: 'get-started', label: 'Get started' },
   { id: 'installer', label: 'DataHub App installer' },
-  { id: 'installer-apis', label: 'Installer APIs' },
+  { id: 'installer-apis', label: 'Data sources' },
   { id: 'whats-new', label: 'What’s new' },
 ] as const
 
@@ -162,7 +162,7 @@ function Home({ live }: { live: Live }) {
       <WhichOne />
       <GetStarted />
       <InstallerSection />
-      <InstallerApisSection />
+      <DataSourcesSection />
       <WhatsNew live={live} />
     </>
   )
@@ -504,7 +504,7 @@ function InstallerSection() {
           <a className="key key-primary" href={`${repo}/releases/latest`} target="_blank" rel="noreferrer">Get the DataHub App installer</a>
           <a className="key" href={`${repo}/blob/main/installer/README.md`} target="_blank" rel="noreferrer">Read the installer guide</a>
           <a className="key" href={`${repo}/blob/main/docs/PREREQUISITES.md`} target="_blank" rel="noreferrer">Check prerequisites</a>
-          <a className="key" href="#installer-apis">See the APIs it uses</a>
+          <a className="key" href="#installer-apis">Explore data sources</a>
         </div>
         <div className="installer-video-guide">
           <h3>Watch the installer walkthroughs</h3>
@@ -537,60 +537,32 @@ function VideoPlayer({ video, poster }: { video: HostedVideo; poster: string }) 
   )
 }
 
-function ApiLinks({ links }: { links: ApiReference['links'] }) {
+function DataSourcesSection() {
   return (
-    <ul className="api-links">
-      {links.map((link) => (
-        <li key={link.url}><a href={link.url} target="_blank" rel="noreferrer">{link.label}</a></li>
-      ))}
-    </ul>
-  )
-}
-
-function InstallerApisSection() {
-  return (
-    <section id="installer-apis" className="section section-tint" aria-labelledby="installer-apis-title">
+    <section id="installer-apis" className="section section-tint" aria-labelledby="data-sources-title">
       <div className="wrap">
         <div className="section-head">
-          <h2 id="installer-apis-title">APIs behind the installer</h2>
-          <p>The DataHub App installer uses these APIs to check access, set up your chosen platform and verify the first load. The calls depend on your target and optional sources.</p>
+          <h2 id="data-sources-title">Data sources for DataHub App</h2>
+          <p>Public APIs can bring this data into DataHub App. Sources depend on your setup, licences and permissions.</p>
         </div>
-        <p className="api-intro">Not every install calls every API. Sign-in is separate from data collection, and the installer only sets up the paths you choose.</p>
-        {installerApiGroups.map((group) => (
-          <div className="api-group" key={group.id} role="group" aria-labelledby={group.id}>
-            <h3 id={group.id}>{group.title}</h3>
-            <p className="api-group-intro">{group.intro}</p>
-            <ul className="api-directory">
-              {group.apis.map((api) => (
-                <li className="api-row" key={api.name}>
-                  <div className="api-name">
-                    <h4>{api.name}</h4>
-                    <p className="api-when">{api.when}</p>
-                  </div>
-                  <p className="api-description">{api.description}</p>
-                  <ApiLinks links={api.links} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-        <div className="api-group api-collection" role="group" aria-labelledby="api-collection-title">
-          <h3 id="api-collection-title">After deployment</h3>
-          <p className="api-group-intro">These calls belong to deployed notebooks, jobs, flows or the app, not automatically to the installer itself. They run only for the sources you enable.</p>
-          <ul className="api-collection-list">
-            {installerCollectionApis.map((api) => (
-              <li key={api.name}>
-                <h4>{api.name}</h4>
-                <p className="api-description">{api.description}</p>
-                <ApiLinks links={api.links} />
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="api-footnote">
-          <p>Based on the <a href={`${installerApiSource}/installer/src`} target="_blank" rel="noreferrer">reviewed installer source</a> and its deployed collectors. Service endpoints, supported sources and permissions can change.</p>
-          <a href={`${installerApiSource}/docs/PERMISSIONS.md`} target="_blank" rel="noreferrer">Read the permissions and licensing guide</a>
-        </div>
+        <ul className="data-source-grid">
+          {dataSources.map((source) => (
+            <li className={`data-source-card data-source-card--${source.category}`} key={source.name}>
+              <div className="data-source-content">
+                <p className="data-source-category">{dataSourceCategories[source.category]}</p>
+                <h3>{source.name}</h3>
+                <p className="data-source-description">{source.description}</p>
+                {source.availability && <p className="data-source-availability">{source.availability}</p>}
+              </div>
+              <ul className="data-source-links">
+                {source.links.map((link) => (
+                  <li key={link.url}><a href={link.url} target="_blank" rel="noreferrer">{link.label}</a></li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+        <p className="data-source-footnote">File exports and dataflow sources are not listed here. <a href={`${dataSourceReference}/docs/PERMISSIONS.md`} target="_blank" rel="noreferrer">See source requirements and permissions</a>.</p>
       </div>
     </section>
   )

@@ -17,14 +17,12 @@ Keep its Fabric/Azure scope and cost/permission caveats explicit; it is not an
 all-app installer. Keep the product name DataHub App and introduce it with the
 tagline "for Microsoft Copilot, Agents and Autopilots". Legacy solution IDs stay unchanged.
 
-The `#installer-apis` section below the installer guide lists the APIs used during
-setup, optional source-access checks and collection after deployment. Its content
-is in `installerApiGroups` and `installerCollectionApis` in `src/data.ts`, with
-official documentation links and a pinned implementation reference in
-`installerApiSource`. Check the current installer clients, call sites and deployed
-collectors before updating it; refresh the reference when the inventory changes.
-Do not treat every API as required for every install, a flow's runtime calls as
-direct installer calls, or maker-portal endpoints as documented public REST APIs.
+The `#installer-apis` section below the installer guide summarises data that
+DataHub App can ingest through public APIs. Its cards are in `dataSources` in
+`src/data.ts`, with official documentation links and a pinned implementation
+reference in `dataSourceReference`. Check the deployed collectors before updating
+the list; distinguish optional and Fabric-only paths, and do not list setup-only
+APIs or undocumented routes as data sources.
 
 Installer walkthroughs use the canonical narrated v3 MP4s in each product repository,
 not copied video binaries. The `installerVideo` entries in `src/data.ts` feed the
@@ -63,6 +61,7 @@ labelled canned demo responses, not a live AI answer.
 ```bash
 npm ci
 npm run dev      # local dev server
+npm run test:content # data-source catalogue checks
 npm run build    # production build in dist/
 ```
 
@@ -73,7 +72,7 @@ All the content is in `src/data.ts`:
 - `solutions`: each solution's summary, the question it answers, what it shows, prerequisites, videos, preview image and the one component it covers (the platform has none).
 - `log`: the "What's new" entries.
 - `related`: external links.
-- `installerApiGroups`, `installerCollectionApis`, `installerApiSource`: the installer API directory and its source baseline.
+- `dataSources`, `dataSourceReference`: the public data API cards and their source baseline.
 
 Star counts and "last pushed" dates load live from the public GitHub API. If that call fails, the snapshot values in `data.ts` are shown.
 
