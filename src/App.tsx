@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { Platform } from './Platform'
 import { SignalField } from './SignalField'
-import { byId, componentLabels, hub, log, ordered, parts, related, steps, type Solution } from './data'
+import { byId, componentLabels, hub, installerApiGroups, installerApiSource, installerCollectionApis, log, ordered, parts, related, steps, type ApiReference, type HostedVideo, type Solution } from './data'
 import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 import { solutionDemos } from './demos'
@@ -12,6 +12,7 @@ const sections = [
   { id: 'which-one', label: 'Which one do I need?' },
   { id: 'get-started', label: 'Get started' },
   { id: 'installer', label: 'DataHub App installer' },
+  { id: 'installer-apis', label: 'Installer APIs' },
   { id: 'whats-new', label: 'What’s new' },
 ] as const
 
@@ -161,6 +162,7 @@ function Home({ live }: { live: Live }) {
       <WhichOne />
       <GetStarted />
       <InstallerSection />
+      <InstallerApisSection />
       <WhatsNew live={live} />
     </>
   )
@@ -502,6 +504,92 @@ function InstallerSection() {
           <a className="key key-primary" href={`${repo}/releases/latest`} target="_blank" rel="noreferrer">Get the DataHub App installer</a>
           <a className="key" href={`${repo}/blob/main/installer/README.md`} target="_blank" rel="noreferrer">Read the installer guide</a>
           <a className="key" href={`${repo}/blob/main/docs/PREREQUISITES.md`} target="_blank" rel="noreferrer">Check prerequisites</a>
+          <a className="key" href="#installer-apis">See the APIs it uses</a>
+        </div>
+        <div className="installer-video-guide">
+          <h3>Watch the installer walkthroughs</h3>
+          <p>Start with DataHub App, or watch a standalone product's own setup path. These videos use AI-generated narration and simulated services.</p>
+        </div>
+        <div className="installer-videos">
+          {ordered.map((s) => s.installerVideo && <VideoPlayer key={s.installerVideo.url} video={s.installerVideo} poster={s.preview.src} />)}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function VideoPlayer({ video, poster }: { video: HostedVideo; poster: string }) {
+  const captionId = useId()
+  const [failed, setFailed] = useState(false)
+  return (
+    <figure className="video-player">
+      <video controls playsInline preload="none" poster={poster} aria-label={video.label} aria-describedby={captionId} onError={() => setFailed(true)}>
+        <source src={video.url} type="video/mp4" onError={() => setFailed(true)} />
+        Your browser does not support embedded video. Use the video link below.
+      </video>
+      <figcaption id={captionId}>
+        <p><strong>{video.label}</strong>{video.length && ` (${video.length})`}</p>
+        <p>{video.disclosure}</p>
+        {failed && <p role="status">The video could not load here. Try opening the video directly.</p>}
+        <a href={video.url} target="_blank" rel="noreferrer">Open the video</a>
+      </figcaption>
+    </figure>
+  )
+}
+
+function ApiLinks({ links }: { links: ApiReference['links'] }) {
+  return (
+    <ul className="api-links">
+      {links.map((link) => (
+        <li key={link.url}><a href={link.url} target="_blank" rel="noreferrer">{link.label}</a></li>
+      ))}
+    </ul>
+  )
+}
+
+function InstallerApisSection() {
+  return (
+    <section id="installer-apis" className="section section-tint" aria-labelledby="installer-apis-title">
+      <div className="wrap">
+        <div className="section-head">
+          <h2 id="installer-apis-title">APIs behind the installer</h2>
+          <p>The DataHub App installer uses these APIs to check access, set up your chosen platform and verify the first load. The calls depend on your target and optional sources.</p>
+        </div>
+        <p className="api-intro">Not every install calls every API. Sign-in is separate from data collection, and the installer only sets up the paths you choose.</p>
+        {installerApiGroups.map((group) => (
+          <div className="api-group" key={group.id} role="group" aria-labelledby={group.id}>
+            <h3 id={group.id}>{group.title}</h3>
+            <p className="api-group-intro">{group.intro}</p>
+            <ul className="api-directory">
+              {group.apis.map((api) => (
+                <li className="api-row" key={api.name}>
+                  <div className="api-name">
+                    <h4>{api.name}</h4>
+                    <p className="api-when">{api.when}</p>
+                  </div>
+                  <p className="api-description">{api.description}</p>
+                  <ApiLinks links={api.links} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div className="api-group api-collection" role="group" aria-labelledby="api-collection-title">
+          <h3 id="api-collection-title">After deployment</h3>
+          <p className="api-group-intro">These calls belong to deployed notebooks, jobs, flows or the app, not automatically to the installer itself. They run only for the sources you enable.</p>
+          <ul className="api-collection-list">
+            {installerCollectionApis.map((api) => (
+              <li key={api.name}>
+                <h4>{api.name}</h4>
+                <p className="api-description">{api.description}</p>
+                <ApiLinks links={api.links} />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="api-footnote">
+          <p>Based on the <a href={`${installerApiSource}/installer/src`} target="_blank" rel="noreferrer">reviewed installer source</a> and its deployed collectors. Service endpoints, supported sources and permissions can change.</p>
+          <a href={`${installerApiSource}/docs/PERMISSIONS.md`} target="_blank" rel="noreferrer">Read the permissions and licensing guide</a>
         </div>
       </div>
     </section>
@@ -570,6 +658,12 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
             )}
           </section>
         </div>
+        {s.installerVideo && (
+          <section className="detail-walkthrough" aria-label={`${s.name} installer video`}>
+            <h2>Installer walkthrough</h2>
+            <VideoPlayer key={s.installerVideo.url} video={s.installerVideo} poster={s.preview.src} />
+          </section>
+        )}
         {pairs.length > 0 && (
           <section className={`pairs ${s.component ? '' : 'pairs-parts'}`}>
             <h2>{s.component ? 'Pairs with' : 'The components'}</h2>
