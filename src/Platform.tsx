@@ -21,7 +21,7 @@ export function Platform({ active, onActive, meta }: Props) {
       <a href={`#/s/${hub.id}`} className={`platform-hub reveal ${active === hub.id ? 'is-active' : ''}`} style={{ ['--d' as string]: '0.15s' }} {...on(hub.id)}>
         <span className="platform-kicker">The platform</span>
         <strong>{hub.name}</strong>
-        <span className="platform-note">Brings the components together in one app</span>
+        <span className="platform-note">{hub.tagline}</span>
         <span className="platform-meta">{meta(hub)}</span>
       </a>
       <ol className="platform-parts">
