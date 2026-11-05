@@ -296,183 +296,119 @@ export const steps = [
   { title: 'Install and share', text: 'Run the installer or open the Power BI template, then share the app with the people who need it.' },
 ]
 
-export interface ApiReference {
+export type DataSourceCategory = 'usage' | 'agents' | 'security' | 'cost'
+
+interface DataSource {
   name: string
+  category: DataSourceCategory
   description: string
   links: { label: string; url: string }[]
+  availability?: string
 }
 
-interface InstallerApi extends ApiReference {
-  when: string
+export const dataSourceCategories: Record<DataSourceCategory, string> = {
+  usage: 'Usage & identity',
+  agents: 'Agents',
+  security: 'Audit & security',
+  cost: 'Consumption & cost',
 }
 
-export const installerApiSource = 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/tree/2eaf37cc2f5f4d0e5a79ca1d8c8b617212811573'
+export const dataSourceReference = 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/tree/2eaf37cc2f5f4d0e5a79ca1d8c8b617212811573'
 
-export const installerApiGroups: { id: string; title: string; intro: string; apis: InstallerApi[] }[] = [
+export const dataSources: DataSource[] = [
   {
-    id: 'api-setup',
-    title: 'Setup and management',
-    intro: 'Sign-in, deployment and maintenance. Both targets does not mean every call is needed: the installer follows your selected features and access choices.',
-    apis: [
-      {
-        name: 'Microsoft identity platform',
-        when: 'Both targets',
-        description: 'Signs you in and gets tokens for the selected services. This is authentication, not a source of Copilot activity data.',
-        links: [{ label: 'Sign-in protocol', url: 'https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow' }],
-      },
-      {
-        name: 'Microsoft Graph: directory and access',
-        when: 'Both targets',
-        description: 'Checks identity, roles and licences, then configures app registrations, service principals, secrets, consent and viewer groups as needed.',
-        links: [{ label: 'Graph overview', url: 'https://learn.microsoft.com/en-us/graph/overview' }],
-      },
-      {
-        name: 'Microsoft Fabric REST APIs',
-        when: 'Fabric; model/report setup on Azure too',
-        description: 'Selects capacity and workspaces, deploys items and connections, sets access and schedules, and starts and checks jobs. The Fabric App is published through its bundled deployment tooling.',
-        links: [{ label: 'Fabric REST reference', url: 'https://learn.microsoft.com/en-us/rest/api/fabric/articles/' }],
-      },
-      {
-        name: 'Power BI REST APIs',
-        when: 'Both targets, for reports and models',
-        description: 'Configures workspaces, model access, data sources and gateways; schedules and checks refreshes, and runs query-based checks.',
-        links: [{ label: 'Power BI REST reference', url: 'https://learn.microsoft.com/en-us/rest/api/power-bi/' }],
-      },
-      {
-        name: 'Azure Resource Manager',
-        when: 'Azure; vault/access setup on Fabric',
-        description: 'Checks subscriptions, regions and permissions; validates deployments and provisions resources, networking and roles. It also starts Azure jobs, including the database migration job. SQL provisioning is not a direct SQL query API.',
-        links: [{ label: 'Resource Manager reference', url: 'https://learn.microsoft.com/en-us/rest/api/resources/' }],
-      },
-      {
-        name: 'Azure Key Vault',
-        when: 'When the selected path needs a vault',
-        description: 'Stores and reads deployment secrets. Vault configuration and some secret operations use Resource Manager; secret data-plane calls use Key Vault. Flows signed in as a person do not require a vault just for that identity.',
-        links: [{ label: 'Key Vault reference', url: 'https://learn.microsoft.com/en-us/rest/api/keyvault/' }],
-      },
-      {
-        name: 'OneLake and ADLS Gen2 file APIs',
-        when: 'Fabric; status-file reads on Azure',
-        description: 'Creates Fabric folders, uploads exports and reads small status or access files. Azure storage files are also read for progress checks. The installer command for uploading exports is Fabric-only.',
-        links: [
-          { label: 'OneLake API access', url: 'https://learn.microsoft.com/en-us/fabric/onelake/onelake-access-api' },
-          { label: 'ADLS Gen2 reference', url: 'https://learn.microsoft.com/en-us/rest/api/storageservices/data-lake-storage-gen2' },
-        ],
-      },
-      {
-        name: 'Dataverse discovery and Web API',
-        when: 'Optional flows and Agent Evaluator',
-        description: 'Finds environments, creates solution flows and configures application users, roles and transcript access checks. Dataverse is not the core storage destination for DataHub App.',
-        links: [
-          { label: 'Environment discovery', url: 'https://learn.microsoft.com/en-us/power-apps/developer/data-platform/discovery-service' },
-          { label: 'Dataverse Web API', url: 'https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview' },
-        ],
-      },
-      {
-        name: 'Power Platform licensing API',
-        when: 'Optional consumption setup',
-        description: 'Finds billing policies and the subscriptions billed for Copilot pay-as-you-go, so the installer can configure cost-reading access. The installed flow, not this billing-policy lookup, retrieves Studio credits.',
-        links: [{ label: 'Billing policy reference', url: 'https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/billing-policy' }],
-      },
-      {
-        name: 'Power Automate and Power Apps connections',
-        when: 'Optional flow setup',
-        description: 'Finds environments, connects and starts flows, helps you sign in to connectors, and checks runs. These are maker-portal service endpoints; the links explain the management capabilities, not a public REST contract for every route.',
-        links: [
-          { label: 'Flow management guide', url: 'https://learn.microsoft.com/en-us/connectors/flowmanagement/' },
-          { label: 'Power Apps connections', url: 'https://learn.microsoft.com/en-us/connectors/powerappsforappmakers/' },
-          { label: 'Installer endpoint source', url: `${installerApiSource}/installer/src/clients` },
-        ],
-      },
-      {
-        name: 'Teams app catalogue through Graph',
-        when: 'Optional Azure publishing',
-        description: 'Publishes or updates the Teams package in your organisation. This needs a separate catalogue sign-in and permission; it does not pin the app for users.',
-        links: [{ label: 'Publish a Teams app', url: 'https://learn.microsoft.com/en-us/graph/api/teamsapp-publish?view=graph-rest-1.0' }],
-      },
-      {
-        name: 'GitHub Releases REST API',
-        when: 'Installer update checks',
-        description: 'Checks published installer release metadata. This is separate from collecting GitHub Copilot usage or billing data.',
-        links: [{ label: 'Latest release API', url: 'https://docs.github.com/en/rest/releases/releases#get-the-latest-release' }],
-      },
-    ],
-  },
-  {
-    id: 'api-source-checks',
-    title: 'Source checks, then collection',
-    intro: 'The installer can make a small source-access check. The deployed notebooks, jobs or flows do the full collection, including a first load started by the installer.',
-    apis: [
-      {
-        name: 'Office 365 Management Activity API',
-        when: 'Fabric audit-source checks',
-        description: 'Checks access, the Audit.General subscription and, when requested, the available content list. New Fabric installs use this audit source by default. A content list alone does not prove it contains Copilot interactions.',
-        links: [{ label: 'Activity API reference', url: 'https://learn.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-reference' }],
-      },
-      {
-        name: 'Microsoft Graph advanced hunting',
-        when: 'Optional Sentinel / Auto audit checks',
-        description: 'Probes CopilotActivity through Graph security advanced hunting when that audit option is selected. Scheduled Sentinel and optional Defender collection run in the deployed workloads.',
-        links: [{ label: 'Run a hunting query', url: 'https://learn.microsoft.com/en-us/graph/api/security-security-runhuntingquery?view=graph-rest-1.0' }],
-      },
-      {
-        name: 'Microsoft Graph Purview audit queries',
-        when: 'Graph-source checks and history paths',
-        description: 'Uses the Graph beta audit-query route for an app-only access check where applicable. Azure, existing Graph-source installs and optional older-history loads use audit search in deployed jobs. It is not the default source for new Fabric installs.',
-        links: [{ label: 'Audit query API (beta)', url: 'https://learn.microsoft.com/en-us/graph/api/security-auditcoreroot-post-auditlogqueries?view=graph-rest-beta' }],
-      },
-      {
-        name: 'Azure Resource Graph',
-        when: 'Optional agent / Foundry inventory',
-        description: 'Runs a small prerequisite query and configures access. Deployed workloads collect the full agent and Foundry inventory; the results depend on the identity, roles and resource types available.',
-        links: [{ label: 'Resource Graph query API', url: 'https://learn.microsoft.com/en-us/rest/api/azureresourcegraph/resourcegraph/resources/resources' }],
-      },
-    ],
-  },
-]
-
-export const installerCollectionApis: ApiReference[] = [
-  {
-    name: 'Graph reports and Agent 365',
-    description: 'Deployed collectors read organisation, licensing and usage data. Agent 365 catalogue API collection is Fabric-only in this implementation; Azure reads registry exports.',
+    name: 'Microsoft 365 usage',
+    category: 'usage',
+    description: 'Copilot-enabled users and Microsoft 365 app activity.',
     links: [
-      { label: 'Usage report API', url: 'https://learn.microsoft.com/en-us/graph/api/reportroot-getoffice365activeuserdetail?view=graph-rest-1.0' },
-      { label: 'Graph overview', url: 'https://learn.microsoft.com/en-us/graph/overview' },
+      { label: 'Copilot usage API', url: 'https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/reports/copilotreportroot-getmicrosoft365copilotusageuserdetail' },
+      { label: 'Microsoft 365 reports API', url: 'https://learn.microsoft.com/en-us/graph/api/reportroot-getoffice365activeuserdetail?view=graph-rest-1.0' },
     ],
   },
   {
-    name: 'Defender',
-    description: 'Optional collectors use Graph advanced hunting and Cloud Discovery for shadow AI and agent risk. Available data depends on permissions and licences.',
-    links: [{ label: 'Advanced hunting API', url: 'https://learn.microsoft.com/en-us/graph/api/security-security-runhuntingquery?view=graph-rest-1.0' }],
+    name: 'People & organisation',
+    category: 'usage',
+    description: 'Users, departments, manager hierarchy and Copilot licence flags.',
+    links: [{ label: 'Microsoft Graph users API', url: 'https://learn.microsoft.com/en-us/graph/api/user-list?view=graph-rest-1.0' }],
   },
   {
-    name: 'Azure cost, usage and model inference',
-    description: 'Optional collectors read Cost Management, Azure Monitor and Retail Prices. Configuring an Ask model through Resource Manager is separate from the deployed app making inference calls.',
+    name: 'Agent 365 catalogue',
+    category: 'agents',
+    description: 'Agent catalogue, creators and data-access capabilities.',
+    availability: 'Fabric API; Azure uses an export.',
+    links: [{ label: 'Graph Copilot packages API', url: 'https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/package/copilotpackages-list' }],
+  },
+  {
+    name: 'Agent & Foundry inventory',
+    category: 'agents',
+    description: 'Copilot Studio agents and environments, plus Foundry accounts and projects.',
     links: [
-      { label: 'Cost Management APIs', url: 'https://learn.microsoft.com/en-us/rest/api/cost-management/' },
-      { label: 'Monitor metrics', url: 'https://learn.microsoft.com/en-us/rest/api/monitor/metrics' },
-      { label: 'Retail Prices API', url: 'https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices' },
+      { label: 'Power Platform inventory API', url: 'https://learn.microsoft.com/en-us/rest/api/power-platform/resourcequery/resource-query/query-resources' },
+      { label: 'Azure Resource Graph API', url: 'https://learn.microsoft.com/en-us/rest/api/azureresourcegraph/resourcegraph/resources/resources' },
     ],
   },
   {
-    name: 'Power Platform credits and inventory',
-    description: 'Installed flows call the licensing and inventory endpoints. Per-user credit routes are undocumented and best effort. Cowork-credit exports and product-feedback email/export paths are file ingestion, not direct collection APIs.',
+    name: 'Copilot Studio conversations',
+    category: 'agents',
+    description: 'Conversation transcripts for the optional Agent Evaluator.',
+    links: [{ label: 'Dataverse Web API', url: 'https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query/overview' }],
+  },
+  {
+    name: 'Copilot interactions',
+    category: 'security',
+    description: 'Copilot interaction audit records from Microsoft 365.',
     links: [
-      { label: 'Licensing API reference', url: 'https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/billing-policy' },
-      { label: 'Flow implementation', url: `${installerApiSource}/installer/src/transform/flows.js` },
+      { label: 'Office 365 Management Activity API', url: 'https://learn.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-reference' },
+      { label: 'Graph audit search API (beta)', url: 'https://learn.microsoft.com/en-us/graph/api/security-auditcoreroot-post-auditlogqueries?view=graph-rest-beta' },
     ],
   },
   {
-    name: 'Dataverse transcripts',
-    description: 'Agent Evaluator collectors read transcripts after the installer has configured the selected environment access.',
-    links: [{ label: 'Transcript table reference', url: 'https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/conversationtranscript' }],
+    name: 'Sentinel & Defender',
+    category: 'security',
+    description: 'Copilot audit activity and device or agent risk signals.',
+    links: [
+      { label: 'Graph advanced hunting API', url: 'https://learn.microsoft.com/en-us/graph/api/security-security-runhuntingquery?view=graph-rest-1.0' },
+      { label: 'Azure Monitor Logs API', url: 'https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/overview' },
+    ],
   },
   {
-    name: 'GitHub Copilot data',
-    description: 'An optional Fabric notebook reads Copilot seats and billing usage. It is separate from installer updates and does not mean GitHub Copilot Panel is included in DataHub App.',
+    name: 'Discovered cloud apps',
+    category: 'security',
+    description: 'Discovered AI cloud apps and associated risk indicators.',
+    links: [{ label: 'Graph Cloud Discovery API (beta)', url: 'https://learn.microsoft.com/en-us/defender-cloud-apps/discovered-apps-api-graph' }],
+  },
+  {
+    name: 'Copilot Studio credits',
+    category: 'cost',
+    description: 'Credit entitlements, allocations and consumption by agent or environment.',
     links: [
-      { label: 'Copilot seat APIs', url: 'https://docs.github.com/en/rest/copilot/copilot-user-management' },
-      { label: 'Billing usage APIs', url: 'https://docs.github.com/en/rest/billing/usage' },
+      { label: 'Power Platform licensing API', url: 'https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/entitlement/get-entitlement' },
+      { label: 'Resource consumption API (deprecated)', url: 'https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/entitlement-insight/get-tenant-resources-across-environments' },
+    ],
+  },
+  {
+    name: 'Azure AI costs',
+    category: 'cost',
+    description: 'Azure AI and Copilot pay-as-you-go spend by service and resource.',
+    links: [{ label: 'Azure Cost Management API', url: 'https://learn.microsoft.com/en-us/rest/api/cost-management/query/usage' }],
+  },
+  {
+    name: 'Azure AI usage & pricing',
+    category: 'cost',
+    description: 'Model token and request metrics, plus published prices for cost estimates.',
+    links: [
+      { label: 'Azure Monitor metrics API', url: 'https://learn.microsoft.com/en-us/rest/api/monitor/metrics/list' },
+      { label: 'Azure Retail Prices API', url: 'https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices' },
+    ],
+  },
+  {
+    name: 'GitHub Copilot',
+    category: 'cost',
+    description: 'Copilot seats and AI credit consumption.',
+    availability: 'Optional Fabric notebook.',
+    links: [
+      { label: 'Copilot seats API (preview)', url: 'https://docs.github.com/en/enterprise-cloud@latest/rest/copilot/copilot-user-management#list-all-copilot-seat-assignments-for-an-enterprise' },
+      { label: 'AI credit billing API', url: 'https://docs.github.com/en/enterprise-cloud@latest/rest/billing/usage#get-billing-ai-credit-usage-report-for-an-enterprise' },
     ],
   },
 ]
