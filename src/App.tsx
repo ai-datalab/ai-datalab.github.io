@@ -43,7 +43,7 @@ export default function App() {
 
   useEffect(() => {
     document.title = detail
-      ? `${detail.name} | Copilot-DataLab`
+      ? `${detail.name}${detail.tagline ? ` ${detail.tagline}` : ''} | Copilot-DataLab`
       : post
         ? `${post.title} | Copilot-DataLab`
         : page === '/insights'
@@ -134,7 +134,7 @@ function Home({ live }: { live: Live }) {
         <div className="wrap hero-grid">
           <div className="opening">
             <h1>Copilot and agent analytics, in your tenant.</h1>
-            <p className="lede">Open-source apps and reports, one per question, joined up in {hub.name}. The tools are flexible, adaptable starting points. Many can be tailored to your organisation’s needs; customisation and deployment options vary by product.</p>
+            <p className="lede">Open-source apps and reports, one per question, joined up in {hub.name} {hub.tagline}. The tools are flexible, adaptable starting points. Many can be tailored to your organisation’s needs; customisation and deployment options vary by product.</p>
             <div className="cta-row">
               <a className="key key-primary" href="#demos">Try the browser demos</a>
               <a className="key" href="#solutions">Browse the solutions</a>
@@ -149,7 +149,7 @@ function Home({ live }: { live: Live }) {
           </ul>
           <figure className="hero-shot" data-ui="screen">
             <figcaption>
-              <span className="kind kind-platform">The platform</span> {hub.name}
+              <span className="kind kind-platform">The platform</span> {hub.name} {hub.tagline}
             </figcaption>
             <img src={hub.preview.src} alt={hub.preview.alt} width="1100" height="658" />
           </figure>
@@ -228,6 +228,7 @@ function BrowserDemos() {
           {available.map((s) => (
             <li key={s.id}>
               <h3>{s.name}</h3>
+              {s.id === hub.id && <p>{hub.tagline}</p>}
               <div className="demo-actions">
                 {solutionDemos(s.id).map((demo) => (
                   <a key={demo.url} className="key" href={demo.url} aria-label={`${s.name}: ${demo.label}`}>{demo.label}</a>
@@ -263,6 +264,7 @@ function SolutionsSection({ live }: { live: Live }) {
               </div>
             </div>
             <div className="sheet-body">
+              <p>{hub.tagline}</p>
               <p className="summary">{hub.summary}</p>
               <p className="includes">
                 Includes <a href="#/s/valuelens">ValueLens</a>, <a href="#/s/agent-monitor">Agent Monitor</a> and, as an add-on, <a href="#/s/consumption-central">Consumption Central</a>. <a href="#/s/github-copilot-panel">GitHub Copilot Panel</a> isn’t in it yet.
@@ -471,7 +473,7 @@ function InstallerSection() {
       <div className="wrap">
         <div className="section-head">
           <h2 id="installer-title">Install DataHub App in your tenant</h2>
-          <p>One guided setup for DataHub App on Microsoft Fabric or Azure. It is not a universal installer for every standalone dashboard.</p>
+          <p>One guided setup for DataHub App {hub.tagline}, on Microsoft Fabric or Azure. It is not a universal installer for every standalone dashboard.</p>
         </div>
         <ol className="steps">
           <li>
@@ -517,6 +519,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
         <div className="detail-head">
           <Kind s={s} />
           <h1>{s.name}</h1>
+          {s.tagline && <p>{s.tagline}</p>}
           <p className="lede">{s.summary}</p>
           <div className="card-meta">
             <Stars s={s} live={live} />

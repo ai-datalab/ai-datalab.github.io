@@ -8,7 +8,7 @@ const sources = {
   'consumption-central': 'microsoft/ConsumptionCentral-for-Microsoft-Copilot',
   'agent-monitor': 'ai-datalab/Agent-Monitor',
   'github-copilot-panel': 'microsoft/GitHubCopilotPanel',
-  'ai-datahub': 'microsoft/DataHub',
+  'ai-datahub': 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots',
   'agent-evaluator': 'microsoft/AgentEvaluator-for-Copilot-Studio',
 }
 const routes = {

@@ -20,6 +20,7 @@ export interface Video {
 export interface Solution {
   id: string
   name: string
+  tagline?: string
   repo: string
   summary: string
   question: string
@@ -42,7 +43,8 @@ export const solutions: Solution[] = [
   {
     id: 'ai-datahub',
     name: 'DataHub App',
-    repo: 'microsoft/AnalyticsHub-Dashboard',
+    tagline: 'for Microsoft Copilot, Agents and Autopilots',
+    repo: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots',
     summary:
       'The platform that brings it together: one installer sets up an app on Microsoft Fabric or Azure with Copilot and agent adoption, value, consumption and governance in one place.',
     question: 'I want it all in one app, refreshed every day.',
@@ -60,7 +62,7 @@ export const solutions: Solution[] = [
       'Rights to register an app in Entra, or an admin who can',
       'A Windows 10 or 11 PC. No admin rights needed',
     ],
-    videos: [{ label: 'The app, page by page', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard#videos', length: '2 min' }],
+    videos: [{ label: 'The app, page by page', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots#videos', length: '2 min' }],
     preview: { src: 'previews/analytics-hub.gif', alt: 'DataHub App, cycling through its pages on sample data' },
     includes: ['valuelens', 'agent-monitor', 'consumption-central'],
     stars: 10,
@@ -252,9 +254,9 @@ export interface LogEntry {
 export const log: LogEntry[] = [
   { date: '2026-11-01', solution: 'valuelens', text: 'The installer branch is merged, and the app picks up a round of design fixes.', url: 'https://github.com/microsoft/ValueLens-for-Microsoft-Copilot/pull/216' },
   { date: '2026-11-01', solution: 'consumption-central', text: 'The Fabric App gets the same design fixes as ValueLens.', url: 'https://github.com/microsoft/ConsumptionCentral-for-Microsoft-Copilot/pull/79' },
-  { date: '2026-10-27', solution: 'ai-datahub', text: 'Links that keep your place, a phone layout, and plainer errors.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/pull/217' },
+  { date: '2026-10-27', solution: 'ai-datahub', text: 'Links that keep your place, a phone layout, and plainer errors.', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/pull/217' },
   { date: '2026-10-27', solution: 'agent-monitor', text: 'A pinned filter dock, denser tables and tighter page layouts.', url: 'https://github.com/ai-datalab/Agent-Monitor/pull/12' },
-  { date: '2026-10-26', solution: 'ai-datahub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/AnalyticsHub-Dashboard/releases/tag/installer-v0.6.8' },
+  { date: '2026-10-26', solution: 'ai-datahub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/releases/tag/installer-v0.6.8' },
   { date: '2026-10-25', solution: 'ai-in-one', text: 'The app now copes with missing users, Agent 365 and empty interactions files.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/pull/81' },
   { date: '2026-10-14', solution: 'github-copilot-panel', text: 'A two-minute intro video walks through the report, page by page.', url: 'https://github.com/microsoft/GitHubCopilotPanel/pull/8' },
   { date: '2026-10-06', solution: 'ai-in-one', text: 'AI in One 2.0 released.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/releases/tag/AIO-v2.0.0' },

@@ -1,21 +1,21 @@
 # Copilot-DataLab
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
-DataHub App, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
+DataHub App for Microsoft Copilot, Agents and Autopilots, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
 ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (agents) and GitHub Copilot Panel (GitHub Copilot).
 
 The site uses the names Copilot-DataLab and DataHub App. The repos keep their own names: this one is AI-DataLab, and
-DataHub App is [microsoft/AnalyticsHub-Dashboard](https://github.com/microsoft/AnalyticsHub-Dashboard).
+DataHub App is [microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots).
 
 It also has an Insights section (posts on measuring AI adoption and value, written with Shailendra Hegde, each readable
 in full on the site) and an About page.
 
 The `#installer` section describes only the DataHub App installer, using the
-[installer reference](https://github.com/microsoft/AnalyticsHub-Dashboard/blob/main/installer/README.md)
-and [prerequisites](https://github.com/microsoft/AnalyticsHub-Dashboard/blob/main/docs/PREREQUISITES.md).
+[installer reference](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/blob/main/installer/README.md)
+and [prerequisites](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/blob/main/docs/PREREQUISITES.md).
 Keep its Fabric/Azure scope and cost/permission caveats explicit; it is not an
-all-app installer. Product copy says DataHub App, while repository URLs, legacy
-solution IDs and imported demo provenance retain their original names.
+all-app installer. Keep the product name DataHub App and introduce it with the
+tagline "for Microsoft Copilot, Agents and Autopilots". Legacy solution IDs stay unchanged.
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
@@ -24,11 +24,13 @@ the published manifest. Each solution has separately labelled app/report buttons
 there and on its solution card. Unpublished bundles never create a live link;
 adding a verified manifest entry also adds it to the directory.
 
-The DataHub App bundle is pinned to `microsoft/DataHub` at
+The DataHub App bundle is pinned to `microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots` at
 `938ca8dc057dda115125f4d606569116e353c442`. Its imported `SHA256SUMS.txt`
-records the 83 frozen payload files; the manifest itself has SHA-256
-`06c9710030c9cb5cb9d1f5052082e385e00900e7e40921002c21b59827941cd7`.
-Keep its MIT licence, dependency notices and original bytes. Site staging only
+records the 83 payload files; the manifest itself has SHA-256
+`a089d181e7662b009efd3bbe460e3e293db6b5dbfc5e0ad1a18c7afa3f7a3203`.
+Only the two HTML titles/descriptions and the provenance repository URL have been
+updated for the product tagline and repository rename, with checksums refreshed.
+Keep its MIT licence, dependency notices and remaining original bytes. Site staging only
 adds the standard HTML isolation policy. The demo uses DataHub App branding;
 the existing `/demo/copilot-datahub/` URL stays unchanged.
 `SOURCE_PROVENANCE.json` pins the synthetic sample tree and 36 build inputs.
