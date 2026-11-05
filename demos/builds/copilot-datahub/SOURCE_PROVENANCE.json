@@ -1,6 +1,6 @@
 {
-  "repository": "https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots",
-  "sourceRevision": "938ca8dc057dda115125f4d606569116e353c442",
+  "repository": "https://github.com/microsoft/DataHub",
+  "sourceRevision": "f903120cfcf6e54f880172b668da794e310b088b",
   "sourceDirty": false,
   "sampleTree": "8280b20447058886574903d87976da40edc809bb",
   "node": "v26.13.0",
@@ -34,7 +34,7 @@
     "samples/product_feedback_sample.csv": "6a462308fd28e86152419d4b30722d5add6646ae297fe33be8e51d111856db98",
     "fabric/ValueLens - Fabric.pbit": "0cd220ce1fd47c228276d21d6e66412345869665e1d5783c25e78cb56b02ec84",
     "fabric/Add Credit Consumption/seed_sample_data.py": "64e7139e32fe38216d17fb1cd6073ff8201e54342d5dbc9de0bc9935656f6e42",
-    "app/scripts/build-demo-data.py": "6b7ce7335510b0f225eb706745ccc428cae7d608debfbb2c3d2d68464d8a6305",
+    "app/scripts/build-demo-data.py": "b423cf626761e46f56302a9dc657b39d222c2af830df95be62b154c8262871d7",
     "core/valuelens_core/__init__.py": "797225ba2a80f4e7d2335ae4054be3c6b4b8fa05885ee0b0840387dd33aa01f0",
     "core/valuelens_core/__main__.py": "be06de029b36516b26d5845ecf66ec4b66b50d7977c3ae62ddb75aa77d01bf46",
     "core/valuelens_core/access.py": "674598f277e8a6d48ad7a5bc7378bb6177d6b44ff04ce997b1a2495c9979dc2e",
@@ -49,5 +49,80 @@
     "core/valuelens_core/org.py": "05ee758ed6c98fefe82b85a01145dd10b882fcf869211bc647b2ad3dfd12ebd8",
     "core/valuelens_core/processor.py": "12b9411a7ada213bd3fb7bd59811c43d13c3d35ce6fd6b990ec23ff9fd3f38ab",
     "core/valuelens_core/workday.py": "8f4a1926341e994b5f07da26a0d8cae913856d7c94413b8e333c9ab86095b3fb"
+  },
+  "variant": "analytics-only",
+  "generatedSyntheticSources": {
+    "description": "Deterministic generated synthetic scenarios; no tenant data, private configuration or network reads.",
+    "people": 170,
+    "firstDate": "2026-06-01",
+    "lastDate": "2026-08-31",
+    "sources": {
+      "m365": {
+        "source": "app/scripts/demo_sources/m365.py",
+        "sourceSha256": "6b915a8f4564594359d5407de208ee4792017967842319aada321a13984bae8a",
+        "payloadSha256": "574ee73ae41ecd0f27419caa81f1e15092c381954a0d709a62ad196b3c1f8f26",
+        "seed": "m365-demo-v1",
+        "generationRules": {
+          "description": "Fictional deterministic M365 reports; published sample identities only; no tenant telemetry.",
+          "classification": "Public synthetic demo data",
+          "generator": "m365-demo-v1",
+          "seed": "m365-demo-v1",
+          "firstDate": "2026-06-01",
+          "lastDate": "2026-08-31",
+          "people": 170,
+          "rules": [
+            "SHA-256 keyed person/day draws; Monday week starts; original June-August 2026 dates.",
+            "Weekday attendance 78-97%; weekend attendance 18%; zero-activity report rows retained.",
+            "Stable person suite breadth 0-6, desktop preference and collaborative job-family profile.",
+            "Apps and platform flags imply Office activity; workload counts sum six activity flags.",
+            "Volumes depend on active workloads, person/day variation and gradual monthly intensity."
+          ]
+        },
+        "records": {
+          "activity": 15640
+        }
+      },
+      "evaluator": {
+        "source": "app/scripts/demo_sources/evaluator.py",
+        "sourceSha256": "3ee94a170ce51ac36030d9dcc6aa5d02089d01f1e36045446413c311fe59a6bd",
+        "payloadSha256": "b4285dde7238f440217c40e19fe42c8195ab3dfa930759af1d25b44ec0c76124",
+        "seed": "analytics-evaluator-synthetic-v1",
+        "generationRules": {
+          "synthetic": true,
+          "seed": "analytics-evaluator-synthetic-v1",
+          "description": "Invented offline Evaluator sessions, turns, errors, citations and feedback; not tenant transcripts.",
+          "start": "2026-06-01",
+          "end": "2026-08-31",
+          "volumeBasis": "Inventory identities and daily synthetic observed-activity counts only."
+        },
+        "records": {
+          "people": 170,
+          "catalog": 19,
+          "sessions": 2905,
+          "turns": 7109,
+          "errors": 533,
+          "citations": 2637
+        }
+      },
+      "governance": {
+        "source": "app/scripts/demo_sources/governance.py",
+        "sourceSha256": "75227cfc0a8bf4c59615f79105c2eca768559a753abc4244cc2f41670714fb2a",
+        "payloadSha256": "94da262ecc08b7965d53d87906d5a47f9ad5dd74518646aa36d49d72a61c0202",
+        "seed": "analytics-governance-v1",
+        "generationRules": {},
+        "records": {
+          "config": 104,
+          "foundry": 12,
+          "watchlist": 4,
+          "events": 2490,
+          "billing": 276
+        }
+      }
+    },
+    "demoBudgetAssumptions": {
+      "budgetCowork": 1000,
+      "budgetStudio": 2000,
+      "budgetAzure": 15000
+    }
   }
 }
