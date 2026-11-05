@@ -819,6 +819,18 @@ main:focus { outline: none; }
 .detail-walkthrough { margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-rule-2); }
 .detail-walkthrough h2 { font-size: var(--text-xl); margin-bottom: var(--space-lg); }
 .detail-walkthrough .video-player { max-width: 900px; }
+.detail-overview { border-top: 0; padding-top: 0; margin-top: var(--space-xl); }
+.video-links { display: flex; flex-wrap: wrap; gap: 0 var(--space-lg); }
+
+/* Setup pages: walkthrough, three numbered steps, then the guides */
+.setup .detail-walkthrough { margin-top: var(--space-xl); }
+.setup-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: var(--space-2xl); }
+.setup-steps .step-n { font-size: var(--text-md); }
+.setup-steps h2 { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.02em; }
+.setup > .wrap > .cta-row { margin-top: var(--space-xl); }
+.setup-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.setup-source { margin-top: var(--space-xl); font-size: var(--text-sm); }
+.setup-source a { color: var(--color-accent-deep); }
 
 .data-source-grid {
   display: grid;
@@ -1202,6 +1214,7 @@ main:focus { outline: none; }
   .sheet-media { margin: var(--space-xs) 0 var(--space-xs) var(--space-xl); }
   .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
+  .setup-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
   .answer { position: static; min-height: 0; }
 

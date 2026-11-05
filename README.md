@@ -26,10 +26,16 @@ APIs or undocumented routes as data sources.
 
 Installer walkthroughs use the canonical narrated v3 MP4s in each product repository,
 not copied video binaries. The `installerVideo` entries in `src/data.ts` feed the
-embedded player on each solution's detail page; the home page links to those pages
-rather than embedding the videos.
+embedded player on each solution's setup page (`#/setup/<id>`); the home page links
+to those pages rather than embedding the videos.
 Keep native player controls, no autoplay, deferred media loading and the visible
 AI-narration/simulated-service disclosure. Verify public media URLs before changing them.
+
+Setup pages share one template. Their steps, guides and downloads live in
+`src/setup.ts`; take steps only from each repo's setup docs on `main` and link the
+source. AI in One links to its own setup site instead. The DataHub App overview
+(`overviewVideo`) uses the canonical MP4, captions, poster and transcript in the
+DataHub App repository.
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
