@@ -26,7 +26,8 @@ APIs or undocumented routes as data sources.
 
 Installer walkthroughs use the canonical narrated v3 MP4s in each product repository,
 not copied video binaries. The `installerVideo` entries in `src/data.ts` feed the
-DataHub installer guide's four embedded players and the relevant detail pages.
+embedded player on each solution's detail page; the home page links to those pages
+rather than embedding the videos.
 Keep native player controls, no autoplay, deferred media loading and the visible
 AI-narration/simulated-service disclosure. Verify public media URLs before changing them.
 

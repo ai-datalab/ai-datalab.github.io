@@ -507,11 +507,17 @@ function InstallerSection() {
           <a className="key" href="#installer-apis">Explore data sources</a>
         </div>
         <div className="installer-video-guide">
-          <h3>Watch the installer walkthroughs</h3>
-          <p>Start with DataHub App, or watch a standalone product's own setup path. These videos use AI-generated narration and simulated services.</p>
-        </div>
-        <div className="installer-videos">
-          {ordered.map((s) => s.installerVideo && <VideoPlayer key={s.installerVideo.url} video={s.installerVideo} poster={s.preview.src} />)}
+          <h3>Installer walkthroughs</h3>
+          <p>
+            Each walkthrough is on its solution's page:{' '}
+            {ordered.filter((s) => s.installerVideo).map((s, i, list) => (
+              <span key={s.id}>
+                {i > 0 && (i === list.length - 1 ? ' and ' : ', ')}
+                <a href={`#/s/${s.id}`}>{s.name}</a>
+              </span>
+            ))}
+            .
+          </p>
         </div>
       </div>
     </section>
