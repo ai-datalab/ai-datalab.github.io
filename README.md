@@ -5,14 +5,14 @@ DataHub App for Microsoft Copilot, Agents, Cowork and Autopilots, the platform t
 ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (agents) and GitHub Copilot Panel (GitHub Copilot).
 
 The site uses the names Copilot-DataLab and DataHub App. The repos keep their own names: this one is AI-DataLab, and
-DataHub App is [microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots).
+DataHub App is [microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots).
 
 It also has an Insights section (posts on measuring AI adoption and value, written with Shailendra Hegde, each readable
 in full on the site) and an About page.
 
 The `#installer` section describes only the DataHub App installer, using the
-[installer reference](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/blob/main/installer/README.md)
-and [prerequisites](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/blob/main/docs/PREREQUISITES.md).
+[installer reference](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/blob/main/installer/README.md)
+and [prerequisites](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/blob/main/docs/PREREQUISITES.md).
 Keep its Fabric/Azure scope and cost/permission caveats explicit; it is not an
 all-app installer. Keep the product name DataHub App and introduce it with the
 tagline "for Microsoft Copilot, Agents, Cowork and Autopilots". Legacy solution IDs stay unchanged.
@@ -44,10 +44,10 @@ the published manifest. Each solution has separately labelled app/report buttons
 there and on its solution card. Unpublished bundles never create a live link;
 adding a verified manifest entry also adds it to the directory.
 
-The DataHub App bundle is pinned to `microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots` at
+The DataHub App bundle is pinned to `microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots` at
 `938ca8dc057dda115125f4d606569116e353c442`. Its imported `SHA256SUMS.txt`
 records the 83 payload files; the manifest itself has SHA-256
-`0d49df78ee549de747983d1d497c2efd440e45b6d811709fbc8fc9f0172e10fc`.
+`2f9a25d51e60bdcd40207dbbc5fb36d3a4d30ac25d8596e53f8cd69500fc2885`.
 Only the two HTML titles/descriptions and the provenance repository URL have been
 updated for the product tagline and repository rename, with checksums refreshed.
 Keep its MIT licence, dependency notices and remaining original bytes. Site staging only

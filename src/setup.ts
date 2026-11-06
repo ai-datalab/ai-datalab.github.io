@@ -14,7 +14,7 @@ export interface Setup {
 
 const gh = (repo: string, path: string) => `https://github.com/${repo}/blob/main/${path}`
 
-const dh = 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots'
+const dh = 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots'
 const vl = 'microsoft/ValueLens-for-Microsoft-Copilot'
 const cc = 'microsoft/ConsumptionCentral-for-Microsoft-Copilot'
 const am = 'ai-datalab/Agent-Monitor'
