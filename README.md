@@ -1,7 +1,7 @@
 # Copilot-DataLab
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
-DataHub App for Microsoft Copilot, Agents and Autopilots, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
+DataHub App for Microsoft Copilot, Agents, Cowork and Autopilots, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
 ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (agents) and GitHub Copilot Panel (GitHub Copilot).
 
 The site uses the names Copilot-DataLab and DataHub App. The repos keep their own names: this one is AI-DataLab, and
@@ -15,7 +15,7 @@ The `#installer` section describes only the DataHub App installer, using the
 and [prerequisites](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/blob/main/docs/PREREQUISITES.md).
 Keep its Fabric/Azure scope and cost/permission caveats explicit; it is not an
 all-app installer. Keep the product name DataHub App and introduce it with the
-tagline "for Microsoft Copilot, Agents and Autopilots". Legacy solution IDs stay unchanged.
+tagline "for Microsoft Copilot, Agents, Cowork and Autopilots". Legacy solution IDs stay unchanged.
 
 The `#installer-apis` section below the installer guide summarises data that
 DataHub App can ingest through public APIs. Its cards are in `dataSources` in
@@ -47,7 +47,7 @@ adding a verified manifest entry also adds it to the directory.
 The DataHub App bundle is pinned to `microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots` at
 `938ca8dc057dda115125f4d606569116e353c442`. Its imported `SHA256SUMS.txt`
 records the 83 payload files; the manifest itself has SHA-256
-`a089d181e7662b009efd3bbe460e3e293db6b5dbfc5e0ad1a18c7afa3f7a3203`.
+`0d49df78ee549de747983d1d497c2efd440e45b6d811709fbc8fc9f0172e10fc`.
 Only the two HTML titles/descriptions and the provenance repository URL have been
 updated for the product tagline and repository rename, with checksums refreshed.
 Keep its MIT licence, dependency notices and remaining original bytes. Site staging only
@@ -68,7 +68,7 @@ labelled canned demo responses, not a live AI answer.
 ```bash
 npm ci
 npm run dev      # local dev server
-npm run test:content # data-source catalogue checks
+npm run test:content # data sources, DataHub copy and demo integrity
 npm run build    # production build in dist/
 ```
 
