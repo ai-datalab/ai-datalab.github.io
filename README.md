@@ -35,7 +35,7 @@ Setup pages share one template. Their steps, guides and downloads live in
 `src/setup.ts`; take steps only from each repo's setup docs on `main` and link the
 source. AI in One links to its own setup site instead. The DataHub App overview
 (`overviewVideo`) uses the canonical MP4, captions, poster and transcript in the
-DataHub App repository.
+DataHub App repository. The home hero and DataHub App page share that overview.
 
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
