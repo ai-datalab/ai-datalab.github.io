@@ -67,10 +67,10 @@ export const solutions: Solution[] = [
   {
     id: 'ai-datahub',
     name: 'DataHub App',
-    tagline: 'for Microsoft Copilot, Agents and Autopilots',
+    tagline: 'for Microsoft Copilot, Agents, Cowork and Autopilots',
     repo: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots',
     summary:
-      'The platform that brings it together: one installer sets up an app on Microsoft Fabric or Azure with Copilot and agent adoption, value, consumption and governance in one place.',
+      'The platform that brings it together: one installer sets up an app on Microsoft Fabric or Azure for Copilot and agent adoption, value, consumption, governance and Cowork readiness.',
     question: 'I want it all in one app, refreshed every day.',
     runsAs: ['The app', 'Power BI', 'Fabric', 'Azure'],
     measures: [
