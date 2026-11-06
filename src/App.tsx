@@ -548,6 +548,7 @@ function VideoPlayer({ video, poster, hero = false }: { video: HostedVideo; post
       setFailed(true)
       return
     }
+    player.focus()
     void player.play().catch(() => setFailed(true))
   }
   return (
