@@ -6,7 +6,7 @@
       "solution": "ai-datahub",
       "kind": "app",
       "source": {
-        "repository": "microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots",
+        "repository": "microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots",
         "commit": "938ca8dc057dda115125f4d606569116e353c442",
         "directory": "app"
       },
@@ -14,7 +14,7 @@
         "command": "npm ci && python -m pip install -e ..\\core && npm run build:demo (from app)",
         "runtime": "Node.js 26.13.0; Python 3.12.10; DuckDB 1.5.5",
         "checksumManifest": "SHA256SUMS.txt",
-        "checksumManifestSha256": "0d49df78ee549de747983d1d497c2efd440e45b6d811709fbc8fc9f0172e10fc"
+        "checksumManifestSha256": "2f9a25d51e60bdcd40207dbbc5fb36d3a4d30ac25d8596e53f8cd69500fc2885"
       },
       "safety": {
         "inventedFixtures": true,

@@ -27,7 +27,7 @@ export interface HostedVideo extends Video {
 const installerVideoDisclosure = 'AI-generated narration. This walkthrough uses simulated services; it is not a recording of a live deployment.'
 
 // Pinned to the commit that adds the overview; switch to main once that change merges upstream.
-const overviewMedia = 'https://raw.githubusercontent.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/b5c635e6bc311eeeadb1a19b26b48571734742c0/media/'
+const overviewMedia = 'https://raw.githubusercontent.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/b5c635e6bc311eeeadb1a19b26b48571734742c0/media/'
 
 export const dataHubOverviewVideo: HostedVideo = {
   label: 'DataHub App overview',
@@ -68,7 +68,7 @@ export const solutions: Solution[] = [
     id: 'ai-datahub',
     name: 'DataHub App',
     tagline: 'for Microsoft Copilot, Agents, Cowork and Autopilots',
-    repo: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots',
+    repo: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots',
     summary:
       'The platform that brings it together: one installer sets up an app on Microsoft Fabric or Azure for Copilot and agent adoption, value, consumption, governance and Cowork readiness.',
     question: 'I want it all in one app, refreshed every day.',
@@ -86,10 +86,10 @@ export const solutions: Solution[] = [
       'Rights to register an app in Entra, or an admin who can',
       'A Windows 10 or 11 PC. No admin rights needed',
     ],
-    videos: [{ label: 'The app, page by page', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots#videos', length: '2 min' }],
+    videos: [{ label: 'The app, page by page', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots#videos', length: '2 min' }],
     installerVideo: {
       label: 'DataHub App installer walkthrough',
-      url: 'https://raw.githubusercontent.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/main/media/datahub-app-installer-walkthrough-v3.mp4',
+      url: 'https://raw.githubusercontent.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/main/media/datahub-app-installer-walkthrough-v3.mp4',
       disclosure: installerVideoDisclosure,
     },
     overviewVideo: dataHubOverviewVideo,
@@ -299,9 +299,9 @@ export interface LogEntry {
 export const log: LogEntry[] = [
   { date: '2026-11-01', solution: 'valuelens', text: 'The installer branch is merged, and the app picks up a round of design fixes.', url: 'https://github.com/microsoft/ValueLens-for-Microsoft-Copilot/pull/216' },
   { date: '2026-11-01', solution: 'consumption-central', text: 'The Fabric App gets the same design fixes as ValueLens.', url: 'https://github.com/microsoft/ConsumptionCentral-for-Microsoft-Copilot/pull/79' },
-  { date: '2026-10-27', solution: 'ai-datahub', text: 'Links that keep your place, a phone layout, and plainer errors.', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/pull/217' },
+  { date: '2026-10-27', solution: 'ai-datahub', text: 'Links that keep your place, a phone layout, and plainer errors.', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/pull/217' },
   { date: '2026-10-27', solution: 'agent-monitor', text: 'A pinned filter dock, denser tables and tighter page layouts.', url: 'https://github.com/ai-datalab/Agent-Monitor/pull/12' },
-  { date: '2026-10-26', solution: 'ai-datahub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/releases/tag/installer-v0.6.8' },
+  { date: '2026-10-26', solution: 'ai-datahub', text: 'Installer 0.6.8 released.', url: 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/releases/tag/installer-v0.6.8' },
   { date: '2026-10-25', solution: 'ai-in-one', text: 'The app now copes with missing users, Agent 365 and empty interactions files.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/pull/81' },
   { date: '2026-10-14', solution: 'github-copilot-panel', text: 'A two-minute intro video walks through the report, page by page.', url: 'https://github.com/microsoft/GitHubCopilotPanel/pull/8' },
   { date: '2026-10-06', solution: 'ai-in-one', text: 'AI in One 2.0 released.', url: 'https://github.com/microsoft/AI-in-One-Dashboard/releases/tag/AIO-v2.0.0' },
@@ -331,7 +331,7 @@ export const dataSourceCategories: Record<DataSourceCategory, string> = {
   cost: 'Consumption & cost',
 }
 
-export const dataSourceReference = 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/tree/2eaf37cc2f5f4d0e5a79ca1d8c8b617212811573'
+export const dataSourceReference = 'https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/tree/2eaf37cc2f5f4d0e5a79ca1d8c8b617212811573'
 
 export const dataSources: DataSource[] = [
   {

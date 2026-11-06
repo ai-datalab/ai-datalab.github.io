@@ -20,7 +20,7 @@ test('data source cards are concise and link to public API documentation', () =>
       urls.add(link.url)
     }
   }
-  assert.match(dataSourceReference, /^https:\/\/github\.com\/microsoft\/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots\/tree\/[a-f0-9]{40}$/)
+  assert.match(dataSourceReference, /^https:\/\/github\.com\/microsoft\/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots\/tree\/[a-f0-9]{40}$/)
 })
 
 test('catalogue keeps key ingestion paths and their limitations visible', () => {
