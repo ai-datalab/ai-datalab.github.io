@@ -1,7 +1,7 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Platform } from './Platform'
 import { SignalField } from './SignalField'
-import { byId, componentLabels, dataSourceCategories, dataSourceReference, dataSources, hub, log, ordered, parts, related, steps, type HostedVideo, type Solution } from './data'
+import { byId, componentLabels, dataHubOverviewVideo, dataSourceCategories, dataSourceReference, dataSources, hub, log, ordered, parts, related, steps, type HostedVideo, type Solution } from './data'
 import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 import { solutionDemos } from './demos'
@@ -132,8 +132,14 @@ function Home({ live }: { live: Live }) {
     <>
       <section className="hero">
         <div className="wrap hero-grid">
+          <h1 className="hero-heading">Copilot and agent analytics, in your tenant.</h1>
+          <div className="hero-shot" data-ui="screen">
+            <p className="hero-shot-title">
+              <span className="kind kind-platform">The platform</span> {hub.name} {hub.tagline}
+            </p>
+            <VideoPlayer video={dataHubOverviewVideo} poster={hub.preview.src} hero />
+          </div>
           <div className="opening">
-            <h1>Copilot and agent analytics, in your tenant.</h1>
             <p className="lede">Open-source apps and reports, one per question, joined up in {hub.name} {hub.tagline}. The tools are flexible, adaptable starting points. Many can be tailored to your organisation’s needs; customisation and deployment options vary by product.</p>
             <div className="cta-row">
               <a className="key key-primary" href="#demos">Try the browser demos</a>
@@ -147,12 +153,6 @@ function Home({ live }: { live: Live }) {
             <li><strong>Your data stays put.</strong> Everything reads from, and stays in, your own tenant.</li>
             <li><strong>An app or a report.</strong> Most come as an app for leaders and a Power BI report for analysts.</li>
           </ul>
-          <figure className="hero-shot" data-ui="screen">
-            <figcaption>
-              <span className="kind kind-platform">The platform</span> {hub.name} {hub.tagline}
-            </figcaption>
-            <img src={hub.preview.src} alt={hub.preview.alt} width="1100" height="658" />
-          </figure>
         </div>
       </section>
       <SectionTabs />
@@ -537,19 +537,40 @@ function InstallerSection() {
   )
 }
 
-function VideoPlayer({ video, poster }: { video: HostedVideo; poster: string }) {
+function VideoPlayer({ video, poster, hero = false }: { video: HostedVideo; poster: string; hero?: boolean }) {
   const captionId = useId()
   const [failed, setFailed] = useState(false)
+  const [started, setStarted] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const play = () => {
+    const player = videoRef.current
+    if (!player) {
+      setFailed(true)
+      return
+    }
+    void player.play().catch(() => setFailed(true))
+  }
   return (
-    <figure className="video-player">
-      <video controls playsInline preload="none" crossOrigin={video.captions ? 'anonymous' : undefined} poster={video.poster ?? poster} aria-label={video.label} aria-describedby={captionId} onError={() => setFailed(true)}>
-        <source src={video.url} type="video/mp4" onError={() => setFailed(true)} />
-        {video.captions && <track kind="captions" src={video.captions} srcLang="en-GB" label="English captions" default />}
-        Your browser does not support embedded video. Use the video link below.
-      </video>
+    <figure className={`video-player${hero ? ' video-player-hero' : ''}`}>
+      <div className="video-frame">
+        <video ref={videoRef} width="1920" height="1080" controls playsInline preload="none" crossOrigin={video.captions ? 'anonymous' : undefined} poster={video.poster ?? poster} aria-label={video.label} aria-describedby={captionId} onPlay={() => setStarted(true)} onEnded={() => setStarted(false)} onError={() => setFailed(true)}>
+          <source src={video.url} type="video/mp4" onError={() => setFailed(true)} />
+          {video.captions && <track kind="captions" src={video.captions} srcLang="en-GB" label="English captions" default />}
+          Your browser does not support embedded video. Use the video link below.
+        </video>
+        {hero && !started && (
+          <button type="button" className="video-play" onClick={play} aria-label={`Play ${video.label}`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 4.5v15l12-7.5Z" /></svg>
+          </button>
+        )}
+      </div>
       <figcaption id={captionId}>
-        <p><strong>{video.label}</strong>{video.length && ` (${video.length})`}</p>
-        <p>{video.disclosure}</p>
+        {hero ? <p>AI narration · Synthetic demo data</p> : (
+          <>
+            <p><strong>{video.label}</strong>{video.length && ` (${video.length})`}</p>
+            <p>{video.disclosure}</p>
+          </>
+        )}
         {failed && <p role="status">The video could not load here. Try opening the video directly.</p>}
         <span className="video-links">
           <a href={video.url} target="_blank" rel="noreferrer">Open the video</a>
