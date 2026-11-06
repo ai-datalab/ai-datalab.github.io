@@ -44,24 +44,24 @@ the published manifest. Each solution has separately labelled app/report buttons
 there and on its solution card. Unpublished bundles never create a live link;
 adding a verified manifest entry also adds it to the directory.
 
-The DataHub App bundle is pinned to `microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots` at
-`938ca8dc057dda115125f4d606569116e353c442`. Its imported `SHA256SUMS.txt`
-records the 83 payload files; the manifest itself has SHA-256
-`a089d181e7662b009efd3bbe460e3e293db6b5dbfc5e0ad1a18c7afa3f7a3203`.
-Only the two HTML titles/descriptions and the provenance repository URL have been
-updated for the product tagline and repository rename, with checksums refreshed.
-Keep its MIT licence, dependency notices and remaining original bytes. Site staging only
-adds the standard HTML isolation policy. The demo uses DataHub App branding;
-the existing `/demo/copilot-datahub/` URL stays unchanged.
-`SOURCE_PROVENANCE.json` pins the synthetic sample tree and 36 build inputs.
-Original sample dates and separate export grains are preserved: 13,337 tasks,
-170 inventory people and 2,476.65 typical expert-equivalent hours; all dated
-tenant exports total 162,222.8531 credits. Filters narrow dated totals, while
-user/agent exports remain separate snapshots. Missing Microsoft 365 telemetry,
-evaluation, Defender and Resource Graph data are labelled rather than invented.
-The demo's cross-vendor view uses a separately labelled synthetic comparison
-period and local vendor/product filters, not the app-wide filters. Ask returns
-labelled canned demo responses, not a live AI answer.
+The DataHub App bundle is the analytics-only demo build from
+`microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots` at
+`f903120cfcf6e54f880172b668da794e310b088b` (`app/dist-demo-analytics`). It has
+no cross-vendor comparison view. Its `SHA256SUMS.txt` records the 78 payload files;
+the checksum manifest itself has SHA-256
+`0e45b8bd5c4047658dc1646235ac4e2440450e7bf91b4b778f50dd78eef3432b`.
+The bundle is copied unchanged; its `SOURCE_PROVENANCE.json` still uses the
+repository's former name, which redirects. Keep its MIT licence, dependency
+notices and original bytes. Site staging only adds the standard HTML isolation
+policy. The existing `/demo/copilot-datahub/` URL stays unchanged.
+Core pages use the published synthetic samples with original dates: 13,337 tasks,
+170 inventory people and 2,476.65 typical expert-equivalent hours; dated tenant
+exports total 162,222.8531 credits, and user/agent exports remain separate
+snapshots. Microsoft 365 activity, agent evaluations, Defender findings, Resource
+Graph configuration and Azure-billed Copilot are deterministic generated synthetic
+scenarios for the same 170 people and June–August 2026 dates. `COVERAGE.json`
+maps each page to its sources. Budgets are editable demo assumptions, and Ask is
+a labelled offline example, not a live AI answer.
 
 ## Run it
 
