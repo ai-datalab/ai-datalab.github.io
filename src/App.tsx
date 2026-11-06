@@ -55,7 +55,7 @@ export default function App() {
           ? 'Insights | Copilot-DataLab'
           : page === '/about'
             ? 'About Keith McGrane | Copilot-DataLab'
-            : 'Copilot-DataLab: Copilot and agent analytics by Keith McGrane'
+            : 'Copilot-DataLab: Copilot and agent analytics you run in your own tenant'
   }, [detail, setupFor, page, post])
 
   // Section links (#solutions) scroll within the home page; if we're on a
@@ -107,17 +107,10 @@ function Header({ current }: { current?: string }) {
   return (
     <header className="site-header">
       <div className="wrap header-row">
-        <div className="brand-row">
-          <a className="brand" href="#">
-            <Logo />
-            <span>Copilot-DataLab</span>
-          </a>
-          <p className="byline">
-            <span>by <a href="#/about">Keith McGrane</a></span>
-            <a className="byline-icon" href={keith.url} target="_blank" rel="noreferrer" aria-label="Keith McGrane on LinkedIn"><LinkedInIcon /></a>
-            <a className="byline-icon" href="https://github.com/Keithland89" target="_blank" rel="noreferrer" aria-label="Keith McGrane on GitHub"><GitHubIcon /></a>
-          </p>
-        </div>
+        <a className="brand" href="#">
+          <Logo />
+          <span>Copilot-DataLab</span>
+        </a>
         <nav aria-label="Site">
           <a href="#demos">Browser demos</a>
           <a href="#solutions">Solutions</a>
@@ -1001,7 +994,6 @@ function Footer() {
       <div className="wrap footer-row">
         <div>
           <a className="brand" href="#"><Logo /><span>Copilot-DataLab</span></a>
-          <p>Built by Keith McGrane (<a href="https://github.com/Keithland89">@Keithland89</a>).</p>
           <p className="footer-links">
             <a href="#solutions">Solutions</a>
             <a href="#/insights">Insights</a>
@@ -1012,16 +1004,15 @@ function Footer() {
           These are community templates, provided as-is. They are not official Microsoft Copilot reports, and they aren’t
           covered by Microsoft support. Report problems as issues in each repo. You own the data you extract.
         </p>
+        <p className="footer-credit">
+          Made by <a href="#/about">Keith McGrane</a>
+          <span aria-hidden="true"> · </span>
+          <a href={keith.url} target="_blank" rel="noreferrer">LinkedIn</a>
+          <span aria-hidden="true"> · </span>
+          <a href="https://github.com/Keithland89" target="_blank" rel="noreferrer">GitHub</a>
+        </p>
       </div>
     </footer>
-  )
-}
-
-function LinkedInIcon() {
-  return (
-    <svg className="icon" viewBox="0 0 16 16" aria-hidden="true">
-      <path fill="currentColor" d="M0 1.15C0 .52.52 0 1.15 0h13.7C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.15 1.15H1.15C.52 16 0 15.48 0 14.85V1.15ZM4.94 13.4V6.17h-2.4v7.23h2.4ZM3.74 5.18c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01Zm2.53 8.22h2.4V9.36c0-.21.02-.43.08-.58.17-.43.57-.88 1.23-.88.87 0 1.22.66 1.22 1.63v3.87h2.4V9.25c0-2.22-1.18-3.25-2.76-3.25-1.28 0-1.85.7-2.17 1.19v.03h-.02l.02-.03V6.17h-2.4c.03.68 0 7.23 0 7.23Z" />
-    </svg>
   )
 }
 
