@@ -32,6 +32,11 @@ test('DataHub descriptions include the Cowork tagline', async () => {
   }
 })
 
+test('homepage hero headline includes Cowork', async () => {
+  const app = await readFile(path.join(root, 'src', 'App.tsx'), 'utf8')
+  assert.match(app, /<h1 className="hero-heading">Copilot, agent and Cowork analytics, in your tenant\.<\/h1>/)
+})
+
 test('DataHub demo checksums match the bundle and manifest', async () => {
   const manifest = JSON.parse(await readFile(path.join(root, 'demos', 'manifest.json'), 'utf8'))
   const demo = manifest.demos.find((item) => item.slug === 'copilot-datahub')

@@ -132,7 +132,7 @@ function Home({ live }: { live: Live }) {
     <>
       <section className="hero">
         <div className="wrap hero-grid">
-          <h1 className="hero-heading">Copilot and agent analytics, in your tenant.</h1>
+          <h1 className="hero-heading">Copilot, agent and Cowork analytics, in your tenant.</h1>
           <div className="hero-shot" data-ui="screen">
             <p className="hero-shot-title">
               <span className="kind kind-platform">The platform</span> {hub.name} {hub.tagline}
