@@ -19,9 +19,15 @@ export interface Video {
 
 export interface HostedVideo extends Video {
   disclosure: string
+  captions?: string
+  transcript?: string
+  poster?: string
 }
 
 const installerVideoDisclosure = 'AI-generated narration. This walkthrough uses simulated services; it is not a recording of a live deployment.'
+
+// Pinned to the commit that adds the overview; switch to main once that change merges upstream.
+const overviewMedia = 'https://raw.githubusercontent.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/b5c635e6bc311eeeadb1a19b26b48571734742c0/media/'
 
 export interface Solution {
   id: string
@@ -40,6 +46,7 @@ export interface Solution {
   tryFirst?: { label: string; url: string }
   videos: Video[]
   installerVideo?: HostedVideo
+  overviewVideo?: HostedVideo
   preview: { src: string; alt: string }
   includes?: string[]
   related?: string[]
@@ -74,6 +81,15 @@ export const solutions: Solution[] = [
       label: 'DataHub App installer walkthrough',
       url: 'https://raw.githubusercontent.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-and-Autopilots/main/media/datahub-app-installer-walkthrough-v3.mp4',
       disclosure: installerVideoDisclosure,
+    },
+    overviewVideo: {
+      label: 'DataHub App overview',
+      url: `${overviewMedia}DataHub-App-Overview-OpenMontage-42s.mp4`,
+      length: '42 s',
+      disclosure: 'AI-generated narration. Synthetic demo data; values shown are not customer results.',
+      captions: `${overviewMedia}DataHub-App-Overview-OpenMontage.en-GB.vtt`,
+      transcript: `${overviewMedia}DataHub-App-Overview-OpenMontage-transcript.txt`,
+      poster: `${overviewMedia}DataHub-App-Overview-OpenMontage-poster.jpg`,
     },
     preview: { src: 'previews/analytics-hub.gif', alt: 'DataHub App, cycling through its pages on sample data' },
     includes: ['valuelens', 'agent-monitor', 'consumption-central'],
