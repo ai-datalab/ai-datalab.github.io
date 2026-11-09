@@ -67,3 +67,28 @@ test('watch routes are unique and the existing DataHub destination is preserved'
   assert.equal(new Set(routes).size, routes.length)
   for (const route of routes) assert.match(route, /^\/watch\/[a-z-]+-explainer$/)
 })
+
+test('every registered explainer has captions, poster, ordered chapters and a public media source', async () => {
+  for (const solution of solutions) {
+    if (!solution.explainer) continue
+    const { video, note } = solution.explainer
+    const url = new URL(video.url)
+    assert.equal(url.protocol, 'https:')
+    assert.equal(url.hostname, 'raw.githubusercontent.com')
+    assert.ok(url.pathname.startsWith(`/${solution.repo}/`), solution.id)
+    assert.ok(url.pathname.endsWith('.mp4'))
+    assert.ok(video.label && video.length && video.disclosure && note)
+    assert.ok(video.chapters?.length > 0)
+    assert.equal(video.chapters[0].time, 0)
+    for (const [index, chapter] of video.chapters.entries()) {
+      assert.ok(Number.isFinite(chapter.time) && chapter.time >= 0)
+      assert.ok(chapter.label.trim())
+      if (index) assert.ok(chapter.time > video.chapters[index - 1].time)
+    }
+    assert.match(video.captions, /^\/media\/[a-zA-Z0-9.-]+\.vtt$/)
+    assert.match(video.poster, /^\/media\/[a-zA-Z0-9.-]+\.jpg$/)
+    assert.match(await read(`public${video.captions}`), /^WEBVTT/)
+    const poster = await readFile(new URL(`../public${video.poster}`, import.meta.url))
+    assert.equal(poster.readUInt16BE(), 0xffd8)
+  }
+})
