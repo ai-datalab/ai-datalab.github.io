@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Platform } from './Platform'
 import { SignalField } from './SignalField'
-import { byId, componentLabels, dataHubExplainerRoute, dataHubExplainerVideo, dataHubOverviewVideo, dataSourceCategories, dataSourceReference, dataSources, hub, log, ordered, parts, related, steps, type HostedVideo, type Solution } from './data'
+import { byId, componentLabels, dataHubOverviewVideo, dataSourceCategories, dataSourceReference, dataSources, hub, log, ordered, parts, related, solutions, steps, type HostedVideo, type Solution } from './data'
 import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 import { solutionDemos } from './demos'
@@ -43,11 +43,11 @@ export default function App() {
   const setupFor = route.startsWith('/setup/') && setups[route.slice(7)] ? byId(route.slice(7)) : undefined
   const page = route === '/insights' || route === '/about' ? route : undefined
   const post = route.startsWith('/insights/') ? insightBySlug(route.slice(10)) : undefined
-  const explainer = route === dataHubExplainerRoute
+  const explainerFor = solutions.find((s) => s.explainer?.route === route)
 
   useEffect(() => {
-    document.title = explainer
-      ? 'DataHub App explainer | Copilot-DataLab'
+    document.title = explainerFor
+      ? `${explainerFor.name} explainer | Copilot-DataLab`
       : detail
       ? `${detail.name}${detail.tagline ? ` ${detail.tagline}` : ''} | Copilot-DataLab`
       : setupFor
@@ -59,7 +59,7 @@ export default function App() {
           : page === '/about'
             ? 'About Keith McGrane | Copilot-DataLab'
             : 'Copilot-DataLab: Copilot and agent analytics you run in your own tenant'
-  }, [detail, setupFor, page, post, explainer])
+  }, [detail, setupFor, page, post, explainerFor])
 
   // Section links (#solutions) scroll within the home page; if we're on a
   // detail page, render home first and then scroll.
@@ -74,8 +74,8 @@ export default function App() {
       <a className="skip" href="#main">Skip to content</a>
       <Header current={post ? '/insights' : page} />
       <main id="main" tabIndex={-1}>
-        {explainer ? (
-          <ExplainerPage />
+        {explainerFor?.explainer ? (
+          <ExplainerPage key={explainerFor.id} s={explainerFor} explainer={explainerFor.explainer} />
         ) : detail ? (
           <SolutionPage s={detail} live={live} />
         ) : setupFor ? (
@@ -231,6 +231,10 @@ function SetupLink({ s, className }: { s: { id: string; name: string }; classNam
   )
 }
 
+function ExplainerLink({ s, className = 'key' }: { s: Solution; className?: string }) {
+  return s.explainer ? <a className={className} href={`#${s.explainer.route}`}>Explainer</a> : null
+}
+
 function BrowserDemos() {
   const available = [...ordered, { id: 'agent-evaluator', name: 'Agent Evaluator' }]
     .filter((s) => solutionDemos(s.id).length > 0)
@@ -292,7 +296,7 @@ function SolutionsSection({ live }: { live: Live }) {
                 <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
                 <DemoLinks id={hub.id} className="key" />
                 <SetupLink s={hub} className="key" />
-                <a className="key" href={`#${dataHubExplainerRoute}`}>Explainer</a>
+                <ExplainerLink s={hub} />
                 <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
               </div>
             </div>
@@ -323,6 +327,7 @@ function SolutionsSection({ live }: { live: Live }) {
                 <div className="demo-actions">
                   <DemoLinks id={s.id} className="key key-sm" />
                   <SetupLink s={s} className="key key-sm" />
+                  <ExplainerLink s={s} className="key key-sm" />
                 </div>
                 <div className="tile-links">
                   <a className="text-link" href={`#/s/${s.id}`}>Details</a>
@@ -624,14 +629,14 @@ function VideoPlayer({ video, poster, hero = false }: { video: HostedVideo; post
   )
 }
 
-function ExplainerPage() {
+function ExplainerPage({ s, explainer }: { s: Solution; explainer: NonNullable<Solution['explainer']> }) {
   return (
     <article className="detail watch-page">
       <div className="wrap">
-        <a className="back" href={`#/s/${hub.id}`}>DataHub App</a>
-        <h1>DataHub App explainer</h1>
-        <VideoPlayer video={dataHubExplainerVideo} poster={hub.preview.src} />
-        <p className="watch-note">A page-by-page guide. Cross-vendor views are excluded. Some optional sources show their demo empty states; worked arithmetic is fictional. Captions are approximate.</p>
+        <a className="back" href={`#/s/${s.id}`}>{s.name}</a>
+        <h1>{s.name} explainer</h1>
+        <VideoPlayer video={explainer.video} poster={s.preview.src} />
+        <p className="watch-note">{explainer.note}</p>
       </div>
     </article>
   )
@@ -688,7 +693,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           <div className="cta-row">
             <DemoLinks id={s.id} className="key" />
             <SetupLink s={s} className="key" />
-            {s.id === hub.id && <a className="key" href={`#${dataHubExplainerRoute}`}>Explainer</a>}
+            <ExplainerLink s={s} />
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
             </a>
