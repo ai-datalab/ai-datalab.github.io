@@ -22,6 +22,10 @@ test('requires supported unique routes, matching kinds, provenance and safety re
     ...demo, slug: 'copilot-datahub', solution: 'ai-datahub',
     source: { ...demo.source, repository: 'microsoft/DataHub' },
   }])))
+  assert.doesNotThrow(() => validateManifest(manifest([{
+    ...demo, slug: 'copilot-datahub', solution: 'ai-datahub',
+    source: { ...demo.source, repository: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots' },
+  }])))
   for (const invalid of [
     { schemaVersion: 2, demos: [] },
     manifest([{ ...demo, slug: '../outside' }]), manifest([demo, demo]),

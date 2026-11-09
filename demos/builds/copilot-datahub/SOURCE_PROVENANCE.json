@@ -1,6 +1,6 @@
 {
-  "repository": "https://github.com/microsoft/DataHub",
-  "sourceRevision": "938ca8dc057dda115125f4d606569116e353c442",
+  "repository": "https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots",
+  "sourceRevision": "36f86f778a1b4f4e458c9141364bb9af79badbea",
   "sourceDirty": false,
   "sampleTree": "8280b20447058886574903d87976da40edc809bb",
   "node": "v26.13.0",

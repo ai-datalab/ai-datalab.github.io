@@ -8,7 +8,7 @@ const sources = {
   'consumption-central': 'microsoft/ConsumptionCentral-for-Microsoft-Copilot',
   'agent-monitor': 'ai-datalab/Agent-Monitor',
   'github-copilot-panel': 'microsoft/GitHubCopilotPanel',
-  'ai-datahub': 'microsoft/DataHub',
+  'ai-datahub': 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots',
   'agent-evaluator': 'microsoft/AgentEvaluator-for-Copilot-Studio',
 }
 const routes = {
@@ -39,6 +39,7 @@ export function validateManifest(manifest) {
     seen.add(demo.slug)
     const repositories = [sources[demo.solution]]
     if (demo.solution === 'ai-in-one') repositories.push('Keithland89/AI-in-One-Dashboard')
+    if (demo.solution === 'ai-datahub') repositories.push('microsoft/DataHub')
     if (!repositories.includes(demo.source?.repository) ||
         !/^[a-f0-9]{40}$/i.test(demo.source?.commit ?? '') ||
         typeof demo.source?.directory !== 'string' || !demo.source.directory ||

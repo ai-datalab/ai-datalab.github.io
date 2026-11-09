@@ -24,14 +24,18 @@ the published manifest. Each solution has separately labelled app/report buttons
 there and on its solution card. Unpublished bundles never create a live link;
 adding a verified manifest entry also adds it to the directory.
 
-The DataHub App bundle is pinned to `microsoft/DataHub` at
-`938ca8dc057dda115125f4d606569116e353c442`. Its imported `SHA256SUMS.txt`
-records the 83 frozen payload files; the manifest itself has SHA-256
-`06c9710030c9cb5cb9d1f5052082e385e00900e7e40921002c21b59827941cd7`.
+The DataHub App bundle is pinned to
+`microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots` at
+`36f86f778a1b4f4e458c9141364bb9af79badbea`. Its imported `SHA256SUMS.txt`
+records the 84 frozen payload files; the manifest itself has SHA-256
+`b6b5d7c70c5b5e03a14fa8e61ce4faa50692345ec0fccc6d8fd8c4696caf7727`.
 Keep its MIT licence, dependency notices and original bytes. Site staging only
 adds the standard HTML isolation policy. The demo uses DataHub App branding;
 the existing `/demo/copilot-datahub/` URL stays unchanged.
 `SOURCE_PROVENANCE.json` pins the synthetic sample tree and 36 build inputs.
+The Appendix now follows the app's three-tab copy and links its existing
+guide PDF; the guide remains byte-identical to the source file. The legacy
+Power BI report and interpretation PDF are not part of this update.
 Original sample dates and separate export grains are preserved: 13,337 tasks,
 170 inventory people and 2,476.65 typical expert-equivalent hours; all dated
 tenant exports total 162,222.8531 credits. Filters narrow dated totals, while
