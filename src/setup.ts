@@ -48,7 +48,7 @@ export const setups: Record<string, Setup> = {
       { title: 'Check it worked', text: 'Read the Done page, then open the report, and the app on the PAX route.' },
     ],
     guide: gh(vl, 'docs/INSTALL.md'),
-    downloads: { label: 'Installer downloads (coming soon)', url: `https://github.com/${vl}/releases?q=valuelens-installer-v` },
+    downloads: { label: 'Installer downloads', url: `https://github.com/${vl}/releases/tag/valuelens-installer-v0.1.0` },
     links: [
       { label: 'Prerequisites', url: gh(vl, 'docs/PREREQUISITES.md#the-valuelens-installer') },
       { label: 'Manual setup: Fabric', url: gh(vl, '1.%20Fabric/README.md') },
@@ -63,7 +63,7 @@ export const setups: Record<string, Setup> = {
       { title: 'Check it worked', text: 'Open the link to the report, and the app on the No Fabric route.' },
     ],
     guide: gh(cc, 'docs/INSTALL.md'),
-    downloads: { label: 'Installer downloads (coming soon)', url: `https://github.com/${cc}/releases?q=consumption-central-installer-v` },
+    downloads: { label: 'Installer downloads', url: `https://github.com/${cc}/releases/tag/consumption-central-installer-v0.1.0` },
     links: [
       { label: 'Prerequisites', url: gh(cc, 'installer/README.md#before-you-start') },
       { label: 'Manual setup', url: gh(cc, 'README.md#manual') },
