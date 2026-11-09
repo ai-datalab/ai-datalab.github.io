@@ -46,8 +46,9 @@ test('local captions and poster are present with valid timing coverage', async (
 
 test('explainer stays in DataHub actions and uses the existing deferred native player', async () => {
   const app = await read('src/App.tsx')
-  assert.equal((app.match(/className="explainer-link"/g) ?? []).length, 2)
-  assert.match(app, /s\.id === hub\.id && <a className="explainer-link"/)
+  assert.equal((app.match(/<a className="key" href=\{`#\$\{dataHubExplainerRoute\}`\}>Explainer<\/a>/g) ?? []).length, 2)
+  assert.match(app, /s\.id === hub\.id && <a className="key" href=\{`#\$\{dataHubExplainerRoute\}`\}/)
+  assert.doesNotMatch(await read('src/index.css'), /\.explainer-link/)
   assert.match(app, /route === dataHubExplainerRoute/)
   assert.match(app, /<details className="video-chapters">/)
   assert.match(app, /controls playsInline preload="none"/)

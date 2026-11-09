@@ -795,7 +795,6 @@ main:focus { outline: none; }
 .installer-video-guide p { max-width: 72ch; color: var(--color-ink-2); }
 .installer-video-guide a { color: var(--color-accent-deep); }
 .video-player { margin: 0; min-width: 0; }
-.explainer-link { display: inline-flex; align-items: center; min-height: 44px; padding-inline: var(--space-sm); color: var(--color-accent-deep); }
 .watch-page > .wrap { max-width: 1000px; }
 .watch-page h1 { margin-bottom: var(--space-lg); }
 .watch-note { margin-top: var(--space-lg); color: var(--color-ink-2); font-size: var(--text-sm); max-width: 72ch; }
