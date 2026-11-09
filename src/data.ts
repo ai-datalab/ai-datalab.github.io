@@ -22,6 +22,7 @@ export interface HostedVideo extends Video {
   captions?: string
   transcript?: string
   poster?: string
+  chapters?: { time: number; label: string }[]
 }
 
 const installerVideoDisclosure = 'AI-generated narration. This walkthrough uses simulated services; it is not a recording of a live deployment.'
@@ -37,6 +38,66 @@ export const dataHubOverviewVideo: HostedVideo = {
   captions: `${overviewMedia}DataHub-App-Overview-OpenMontage.en-GB.vtt`,
   transcript: `${overviewMedia}DataHub-App-Overview-OpenMontage-transcript.txt`,
   poster: `${overviewMedia}DataHub-App-Overview-OpenMontage-poster.jpg`,
+}
+
+export const dataHubExplainerRoute = '/watch/datahub-explainer'
+
+export const dataHubExplainerVideo: HostedVideo = {
+  label: 'DataHub App explainer',
+  url: 'https://raw.githubusercontent.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots/main/media/datahub-app-explainer.mp4',
+  length: '29 min 6 s',
+  disclosure: 'AI-generated narration. Synthetic demo data; values shown are not customer results.',
+  captions: '/media/datahub-explainer.en-GB.vtt',
+  poster: '/media/datahub-explainer-poster.jpg',
+  chapters: [
+    { time: 0, label: 'Start here / How to read the DataHub App' },
+    { time: 45.250, label: 'Start here / Dates, filters and coverage' },
+    { time: 92.667, label: 'Executive summary / The bottom line' },
+    { time: 140.333, label: 'Executive summary / Is it growing?' },
+    { time: 186.583, label: 'Executive summary / Where it is landing' },
+    { time: 234.917, label: 'Executive summary / What needs attention' },
+    { time: 272.917, label: 'Adoption / Adoption' },
+    { time: 319.667, label: 'Adoption / Activation' },
+    { time: 359.917, label: 'Adoption / Habit formation' },
+    { time: 406.250, label: 'Adoption / Trend heatmap' },
+    { time: 446.250, label: 'Value / Task breakdown' },
+    { time: 500.167, label: 'Value / Estimated value' },
+    { time: 559.333, label: 'Value / Value by habit' },
+    { time: 604.417, label: 'Value / Cost vs value' },
+    { time: 665.333, label: 'Consumption / All products' },
+    { time: 707.417, label: 'Consumption / Budget runway' },
+    { time: 745.667, label: 'Consumption / Cowork / Work IQ' },
+    { time: 792.417, label: 'Consumption / Copilot Studio' },
+    { time: 838.583, label: 'Consumption / Azure' },
+    { time: 889.583, label: 'Efficiency / Cowork fit' },
+    { time: 937.417, label: 'Efficiency / Model fit' },
+    { time: 976.500, label: 'Leaderboards / Leaderboard' },
+    { time: 1015.167, label: 'Leaderboards / Agents' },
+    { time: 1057.333, label: 'Work patterns / Microsoft 365 activity' },
+    { time: 1089.250, label: 'Work patterns / Apps and devices' },
+    { time: 1112.417, label: 'Work patterns / Copilot in the flow of work' },
+    { time: 1140.417, label: 'Readiness / License readiness' },
+    { time: 1184.167, label: 'Readiness / Heavy users without a licence' },
+    { time: 1217.417, label: 'Readiness / Cowork readiness' },
+    { time: 1251.083, label: 'Agent Evaluation / Performance' },
+    { time: 1288.167, label: 'Agent Evaluation / Conversations & topics' },
+    { time: 1313.167, label: 'Governance / Estate health' },
+    { time: 1344.583, label: 'Governance / Exposure' },
+    { time: 1371.583, label: 'Governance / Accountability' },
+    { time: 1396.167, label: 'Governance / Review queue' },
+    { time: 1423.250, label: 'Governance / Shadow AI' },
+    { time: 1457.000, label: 'Feedback / Feedback' },
+    { time: 1498.750, label: 'Reference / Time per task' },
+    { time: 1530.333, label: 'Reference / Glossary' },
+    { time: 1553.250, label: 'Reference / Signal to Impact' },
+    { time: 1582.833, label: 'Reference / How grading works' },
+    { time: 1608.250, label: 'Ask / Ask' },
+    { time: 1630.500, label: 'Reports / Exec pre-read' },
+    { time: 1651.917, label: 'Reports / Finance weekly' },
+    { time: 1672.917, label: 'Reports / Adoption review' },
+    { time: 1693.000, label: 'Reports / Custom packs and safe exports' },
+    { time: 1712.667, label: 'Putting it together / A simple reading order' },
+  ],
 }
 
 export interface Solution {

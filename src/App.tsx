@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Platform } from './Platform'
 import { SignalField } from './SignalField'
-import { byId, componentLabels, dataHubOverviewVideo, dataSourceCategories, dataSourceReference, dataSources, hub, log, ordered, parts, related, steps, type HostedVideo, type Solution } from './data'
+import { byId, componentLabels, dataHubExplainerRoute, dataHubExplainerVideo, dataHubOverviewVideo, dataSourceCategories, dataSourceReference, dataSources, hub, log, ordered, parts, related, steps, type HostedVideo, type Solution } from './data'
 import { insightBySlug, insights, keith, loadPost, shailendra, topics, type Insight, type PostBody, type Topic } from './insights'
 import { formatDay, relative, useLiveRepoStats, type Live } from './live'
 import { solutionDemos } from './demos'
@@ -43,9 +43,12 @@ export default function App() {
   const setupFor = route.startsWith('/setup/') && setups[route.slice(7)] ? byId(route.slice(7)) : undefined
   const page = route === '/insights' || route === '/about' ? route : undefined
   const post = route.startsWith('/insights/') ? insightBySlug(route.slice(10)) : undefined
+  const explainer = route === dataHubExplainerRoute
 
   useEffect(() => {
-    document.title = detail
+    document.title = explainer
+      ? 'DataHub App explainer | Copilot-DataLab'
+      : detail
       ? `${detail.name}${detail.tagline ? ` ${detail.tagline}` : ''} | Copilot-DataLab`
       : setupFor
         ? `Set up ${setupFor.name} | Copilot-DataLab`
@@ -56,7 +59,7 @@ export default function App() {
           : page === '/about'
             ? 'About Keith McGrane | Copilot-DataLab'
             : 'Copilot-DataLab: Copilot and agent analytics you run in your own tenant'
-  }, [detail, setupFor, page, post])
+  }, [detail, setupFor, page, post, explainer])
 
   // Section links (#solutions) scroll within the home page; if we're on a
   // detail page, render home first and then scroll.
@@ -71,7 +74,9 @@ export default function App() {
       <a className="skip" href="#main">Skip to content</a>
       <Header current={post ? '/insights' : page} />
       <main id="main" tabIndex={-1}>
-        {detail ? (
+        {explainer ? (
+          <ExplainerPage />
+        ) : detail ? (
           <SolutionPage s={detail} live={live} />
         ) : setupFor ? (
           <SetupPage s={setupFor} />
@@ -287,6 +292,7 @@ function SolutionsSection({ live }: { live: Live }) {
                 <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
                 <DemoLinks id={hub.id} className="key" />
                 <SetupLink s={hub} className="key" />
+                <a className="explainer-link" href={`#${dataHubExplainerRoute}`}>Explainer</a>
                 <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
               </div>
             </div>
@@ -542,6 +548,27 @@ function VideoPlayer({ video, poster, hero = false }: { video: HostedVideo; post
   const [failed, setFailed] = useState(false)
   const [started, setStarted] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const pendingSeek = useRef<number | null>(null)
+  const seek = (time: number) => {
+    const player = videoRef.current
+    if (!player) {
+      setFailed(true)
+      return
+    }
+    if (player.readyState === 0) {
+      pendingSeek.current = time
+      player.load()
+    } else {
+      player.currentTime = time
+    }
+    player.focus()
+  }
+  const onLoadedMetadata = () => {
+    if (pendingSeek.current !== null && videoRef.current) {
+      videoRef.current.currentTime = pendingSeek.current
+      pendingSeek.current = null
+    }
+  }
   const play = () => {
     const player = videoRef.current
     if (!player) {
@@ -554,7 +581,7 @@ function VideoPlayer({ video, poster, hero = false }: { video: HostedVideo; post
   return (
     <figure className={`video-player${hero ? ' video-player-hero' : ''}`}>
       <div className="video-frame">
-        <video ref={videoRef} width="1920" height="1080" controls playsInline preload="none" crossOrigin={video.captions ? 'anonymous' : undefined} poster={video.poster ?? poster} aria-label={video.label} aria-describedby={captionId} onPlay={() => setStarted(true)} onEnded={() => setStarted(false)} onError={() => setFailed(true)}>
+        <video ref={videoRef} width="1920" height="1080" controls playsInline preload="none" crossOrigin={video.captions ? 'anonymous' : undefined} poster={video.poster ?? poster} aria-label={video.label} aria-describedby={captionId} onLoadedMetadata={onLoadedMetadata} onPlay={() => setStarted(true)} onEnded={() => setStarted(false)} onError={() => setFailed(true)}>
           <source src={video.url} type="video/mp4" onError={() => setFailed(true)} />
           {video.captions && <track kind="captions" src={video.captions} srcLang="en-GB" label="English captions" default />}
           Your browser does not support embedded video. Use the video link below.
@@ -578,7 +605,35 @@ function VideoPlayer({ video, poster, hero = false }: { video: HostedVideo; post
           {video.transcript && <a href={video.transcript} target="_blank" rel="noreferrer">Read the transcript</a>}
         </span>
       </figcaption>
+      {video.chapters && (
+        <details className="video-chapters">
+          <summary>Chapters</summary>
+          <ol>
+            {video.chapters.map((chapter) => (
+              <li key={chapter.time}>
+                <button type="button" onClick={() => seek(chapter.time)}>
+                  <span>{Math.floor(chapter.time / 60)}:{String(Math.floor(chapter.time % 60)).padStart(2, '0')}</span>
+                  {chapter.label}
+                </button>
+              </li>
+            ))}
+          </ol>
+        </details>
+      )}
     </figure>
+  )
+}
+
+function ExplainerPage() {
+  return (
+    <article className="detail watch-page">
+      <div className="wrap">
+        <a className="back" href={`#/s/${hub.id}`}>DataHub App</a>
+        <h1>DataHub App explainer</h1>
+        <VideoPlayer video={dataHubExplainerVideo} poster={hub.preview.src} />
+        <p className="watch-note">A page-by-page guide. Cross-vendor views are excluded. Some optional sources show their demo empty states; worked arithmetic is fictional. Captions are approximate.</p>
+      </div>
+    </article>
   )
 }
 
@@ -633,6 +688,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           <div className="cta-row">
             <DemoLinks id={s.id} className="key" />
             <SetupLink s={s} className="key" />
+            {s.id === hub.id && <a className="explainer-link" href={`#${dataHubExplainerRoute}`}>Explainer</a>}
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
             </a>
