@@ -292,7 +292,7 @@ function SolutionsSection({ live }: { live: Live }) {
                 <a className="key key-primary" href={`#/s/${hub.id}`}>See what’s inside</a>
                 <DemoLinks id={hub.id} className="key" />
                 <SetupLink s={hub} className="key" />
-                <a className="explainer-link" href={`#${dataHubExplainerRoute}`}>Explainer</a>
+                <a className="key" href={`#${dataHubExplainerRoute}`}>Explainer</a>
                 <a className="key" href={`https://github.com/${hub.repo}`} target="_blank" rel="noreferrer">Open the repo</a>
               </div>
             </div>
@@ -688,7 +688,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           <div className="cta-row">
             <DemoLinks id={s.id} className="key" />
             <SetupLink s={s} className="key" />
-            {s.id === hub.id && <a className="explainer-link" href={`#${dataHubExplainerRoute}`}>Explainer</a>}
+            {s.id === hub.id && <a className="key" href={`#${dataHubExplainerRoute}`}>Explainer</a>}
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
               <GitHubIcon /> Open the repo
             </a>
