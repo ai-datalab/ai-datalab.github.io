@@ -53,6 +53,15 @@ template and secondary **Explainer** buttons on cards and detail pages. Add an
 entry only when its reviewed media and companion assets are ready; solutions
 without one show no link. Keep routes unique and chapter seeking user-initiated.
 
+ValueLens, Consumption Central and Agent Monitor use the same template at
+`#/watch/valuelens-explainer`, `#/watch/consumption-central-explainer` and
+`#/watch/agent-monitor-explainer`. Their MP4s live once in each source repository;
+only reviewed posters and captions are copied to this site's `public/media/`.
+Their chapter timings come from each delivered chapter JSON. Keep the product
+caveats: estimated value is not a measured outcome, missing source coverage is
+not zero, and current app captures can differ from older public demo revisions.
+Merge and verify source media before publishing the corresponding site links.
+
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
 The header and hero link to `#demos`, a browser-demo directory generated from
