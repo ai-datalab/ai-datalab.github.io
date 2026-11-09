@@ -47,6 +47,12 @@ until opened and seeking does not start playback. Keep the hero overview separat
 Publish the source MP4 before publishing these links and verify the actual public
 URL supports embedded playback, seeking and captions.
 
+Watch pages are driven by each solution's optional `explainer` metadata in
+`src/data.ts`. Its route, hosted video and short caveat feed the shared watch
+template and secondary **Explainer** buttons on cards and detail pages. Add an
+entry only when its reviewed media and companion assets are ready; solutions
+without one show no link. Keep routes unique and chapter seeking user-initiated.
+
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
 The header and hero link to `#demos`, a browser-demo directory generated from

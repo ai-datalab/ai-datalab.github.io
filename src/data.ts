@@ -118,6 +118,7 @@ export interface Solution {
   videos: Video[]
   installerVideo?: HostedVideo
   overviewVideo?: HostedVideo
+  explainer?: { route: string; video: HostedVideo; note: string }
   preview: { src: string; alt: string }
   includes?: string[]
   related?: string[]
@@ -154,6 +155,11 @@ export const solutions: Solution[] = [
       disclosure: installerVideoDisclosure,
     },
     overviewVideo: dataHubOverviewVideo,
+    explainer: {
+      route: dataHubExplainerRoute,
+      video: dataHubExplainerVideo,
+      note: 'A page-by-page guide. Cross-vendor views are excluded. Some optional sources show their demo empty states; worked arithmetic is fictional. Captions are approximate.',
+    },
     preview: { src: 'previews/analytics-hub.gif', alt: 'DataHub App, cycling through its pages on sample data' },
     includes: ['valuelens', 'agent-monitor', 'consumption-central'],
     stars: 10,

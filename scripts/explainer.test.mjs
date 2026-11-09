@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
-import { dataHubExplainerRoute, dataHubExplainerVideo, dataHubOverviewVideo } from '../src/data.ts'
+import { dataHubExplainerRoute, dataHubExplainerVideo, dataHubOverviewVideo, hub, solutions } from '../src/data.ts'
 
 const read = (file) => readFile(new URL(`../${file}`, import.meta.url), 'utf8')
 
@@ -44,14 +44,26 @@ test('local captions and poster are present with valid timing coverage', async (
   assert.equal(poster.readUInt16BE(), 0xffd8)
 })
 
-test('explainer stays in DataHub actions and uses the existing deferred native player', async () => {
+test('explainers share secondary buttons and the existing deferred native player', async () => {
   const app = await read('src/App.tsx')
-  assert.equal((app.match(/<a className="key" href=\{`#\$\{dataHubExplainerRoute\}`\}>Explainer<\/a>/g) ?? []).length, 2)
-  assert.match(app, /s\.id === hub\.id && <a className="key" href=\{`#\$\{dataHubExplainerRoute\}`\}/)
+  assert.match(app, /function ExplainerLink\(\{ s, className = 'key' \}/)
+  assert.match(app, /s\.explainer \? <a className=\{className\} href=\{`#\$\{s\.explainer\.route\}`\}>Explainer<\/a> : null/)
+  assert.match(app, /<ExplainerLink s=\{hub\} \/>/)
+  assert.match(app, /<ExplainerLink s=\{s\} className="key key-sm" \/>/)
+  assert.match(app, /<ExplainerLink s=\{s\} \/>/)
   assert.doesNotMatch(await read('src/index.css'), /\.explainer-link/)
-  assert.match(app, /route === dataHubExplainerRoute/)
+  assert.match(app, /solutions\.find\(\(s\) => s\.explainer\?\.route === route\)/)
+  assert.match(app, /<ExplainerPage key=\{explainerFor\.id\}/)
   assert.match(app, /<details className="video-chapters">/)
   assert.match(app, /controls playsInline preload="none"/)
   assert.doesNotMatch(app, /autoPlay|autoplay/)
   assert.match(app, /<VideoPlayer video=\{dataHubOverviewVideo\} poster=\{hub\.preview\.src\} hero \/>/)
+})
+
+test('watch routes are unique and the existing DataHub destination is preserved', () => {
+  assert.equal(hub.explainer.route, dataHubExplainerRoute)
+  assert.equal(hub.explainer.video, dataHubExplainerVideo)
+  const routes = solutions.flatMap((s) => s.explainer ? [s.explainer.route] : [])
+  assert.equal(new Set(routes).size, routes.length)
+  for (const route of routes) assert.match(route, /^\/watch\/[a-z-]+-explainer$/)
 })
