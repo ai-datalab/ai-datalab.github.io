@@ -37,6 +37,16 @@ source. AI in One links to its own setup site instead. The DataHub App overview
 (`overviewVideo`) uses the canonical MP4, captions, poster and transcript in the
 DataHub App repository. The home hero and DataHub App page share that overview.
 
+The understated **Explainer** links on the DataHub card and detail page open
+`https://ai-datalab.github.io/#/watch/datahub-explainer`, also shared by the app
+and its README. This dedicated watch page uses the unchanged long-form MP4 in
+the DataHub repository's `media/datahub-app-explainer.mp4`, with local poster
+and English captions in `public/media/`. The 47 chapter timings in
+`dataHubExplainerVideo` follow the supplied chapter VTT; chapters stay collapsed
+until opened and seeking does not start playback. Keep the hero overview separate.
+Publish the source MP4 before publishing these links and verify the actual public
+URL supports embedded playback, seeking and captions.
+
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
 The header and hero link to `#demos`, a browser-demo directory generated from

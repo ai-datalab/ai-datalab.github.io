@@ -795,6 +795,16 @@ main:focus { outline: none; }
 .installer-video-guide p { max-width: 72ch; color: var(--color-ink-2); }
 .installer-video-guide a { color: var(--color-accent-deep); }
 .video-player { margin: 0; min-width: 0; }
+.explainer-link { display: inline-flex; align-items: center; min-height: 44px; padding-inline: var(--space-sm); color: var(--color-accent-deep); }
+.watch-page > .wrap { max-width: 1000px; }
+.watch-page h1 { margin-bottom: var(--space-lg); }
+.watch-note { margin-top: var(--space-lg); color: var(--color-ink-2); font-size: var(--text-sm); max-width: 72ch; }
+.video-chapters { margin-top: var(--space-lg); border-block: 1px solid var(--color-rule); }
+.video-chapters summary { padding-block: var(--space-md); cursor: pointer; }
+.video-chapters ol { list-style: none; padding: 0; margin: 0 0 var(--space-md); }
+.video-chapters button { display: flex; gap: var(--space-md); width: 100%; min-height: 44px; padding: var(--space-sm); border: 0; background: transparent; color: var(--color-ink); text-align: left; font: inherit; cursor: pointer; }
+.video-chapters button:hover { background: var(--color-paper); color: var(--color-accent-deep); text-decoration: underline; }
+.video-chapters button span { min-width: 5ch; font-variant-numeric: tabular-nums; color: var(--color-muted); }
 .video-frame { position: relative; aspect-ratio: 16 / 9; }
 .video-player video { display: block; width: 100%; height: 100%; aspect-ratio: 16 / 9; background: var(--color-graphite); object-fit: contain; border-radius: 4px; }
 .video-player figcaption { display: grid; gap: var(--space-xs); margin-top: var(--space-md); font-size: var(--text-sm); color: var(--color-ink-2); }
