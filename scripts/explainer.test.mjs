@@ -115,7 +115,10 @@ test('published Power BI tours stay collapsed beneath the unchanged app explaine
   for (const solution of review) {
     const video = solution.powerBiExplainer
     assert.ok(solution.explainer)
-    assert.equal(video.url, `https://raw.githubusercontent.com/${solution.repo}/main/media/${solution.id}-powerbi-explainer.mp4`)
+    const source = solution.id === 'valuelens'
+      ? 'Keithland89/ValueLens-for-Microsoft-Copilot/ffc0888d4c5953029b1d23c3cc3e9a23adba6ae1'
+      : `${solution.repo}/main`
+    assert.equal(video.url, `https://raw.githubusercontent.com/${source}/media/${solution.id}-powerbi-explainer.mp4`)
     assert.match(video.disclosure, /Demo data.*AI-generated narration/)
     assert.match(video.disclosure, /Caption timing is approximate/)
     assert.match(await read(`public${video.captions}`), /^WEBVTT/)
