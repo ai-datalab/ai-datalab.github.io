@@ -203,7 +203,7 @@ export const solutions: Solution[] = [
     name: 'ValueLens',
     powerBiExplainer: {
       label: 'ValueLens in Power BI',
-      url: 'https://raw.githubusercontent.com/Keithland89/ValueLens-for-Microsoft-Copilot/ffc0888d4c5953029b1d23c3cc3e9a23adba6ae1/media/valuelens-powerbi-explainer.mp4',
+      url: 'https://raw.githubusercontent.com/microsoft/ValueLens-for-Microsoft-Copilot/main/media/valuelens-powerbi-explainer.mp4',
       length: '2 min 33 s',
       disclosure: 'Demo data. AI-generated narration. Agent-name detail is omitted. Caption timing is approximate. Modelled value is not a measured outcome or realised cash saving.',
       captions: '/media/valuelens-powerbi-explainer.en-GB.vtt',
