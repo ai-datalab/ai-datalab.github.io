@@ -67,12 +67,12 @@
       "kind": "app",
       "source": {
         "repository": "microsoft/ConsumptionCentral-for-Microsoft-Copilot",
-        "commit": "a719a725915876aa80575b499e4f38001aa5b9a4",
+        "commit": "936c44c3c5fac7c221c61e99e10c8de537716f9e",
         "directory": "app"
       },
       "build": {
-        "command": "npm --prefix app ci && npm --prefix app run build:demo",
-        "runtime": "Node.js 24.x; Python 3.12+"
+        "command": "npm --prefix app ci && npm --prefix app run build:file",
+        "runtime": "Node.js 22.12+; tested with Node.js 26.13.0"
       },
       "safety": {
         "inventedFixtures": true,
