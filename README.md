@@ -71,7 +71,7 @@ Ollie DragonHD narration workflow and OpenMontage/HyperFrames composition;
 identifier tables are explicitly omitted. Posters and approximate English
 captions are in `public/media/`. Each approved MP4 is hosted in a product
 repository's `media/` folder, not this site's Git history. ValueLens currently
-pins the reviewed immutable commit in the public contributor fork while its
+pins the reviewed immutable commit in the public contributor repository while its
 upstream publication is pending; Consumption Central uses its published main branch.
 Any local review copies are Git-ignored and must not be included in the Pages
 build. Verify canonical media, seeking and captions before publishing. Do not commit report
