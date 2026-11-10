@@ -148,6 +148,11 @@ GitHub Copilot Panel is a report demo, not an app demo.
    full source commit, relative source directory, actual build command and runtime.
    Rebuild from that revision and its lockfile; never copy an uncommitted live build.
 
+Consumption Central's standalone app demo uses the `app/download/Consumption-Central-App.html`
+output from the build command pinned in its manifest entry. Copy that file to
+`demos/builds/consumption-central/index.html` before staging, and keep the source
+commit, command, runtime and bundled file in sync.
+
 Example entry inside the manifest's `demos` array (replace placeholder provenance):
 
 ```json
