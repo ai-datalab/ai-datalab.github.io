@@ -630,13 +630,27 @@ function VideoPlayer({ video, poster, hero = false }: { video: HostedVideo; post
 }
 
 function ExplainerPage({ s, explainer }: { s: Solution; explainer: NonNullable<Solution['explainer']> }) {
+  const powerBiVideo = s.powerBiExplainer
+  const [powerBiOpen, setPowerBiOpen] = useState(false)
   return (
     <article className="detail watch-page">
       <div className="wrap">
         <a className="back" href={`#/s/${s.id}`}>{s.name}</a>
         <h1>{s.name} explainer</h1>
+        {powerBiVideo && <h2 className="watch-player-title">The app</h2>}
         <VideoPlayer video={explainer.video} poster={s.preview.src} />
         <p className="watch-note">{explainer.note}</p>
+        {powerBiVideo && (
+          <details className="watch-alternate" onToggle={(event) => setPowerBiOpen(event.currentTarget.open)}>
+            <summary>Power BI version · {powerBiVideo.length}</summary>
+            {powerBiOpen && (
+              <section id="powerbi-explainer" aria-labelledby="powerbi-explainer-title">
+                <h2 className="watch-player-title" id="powerbi-explainer-title">Power BI · short tour</h2>
+                <VideoPlayer video={powerBiVideo} poster={s.preview.src} />
+              </section>
+            )}
+          </details>
+        )}
       </div>
     </article>
   )

@@ -92,3 +92,42 @@ test('every registered explainer has captions, poster, ordered chapters and a pu
     assert.equal(poster.readUInt16BE(), 0xffd8)
   }
 })
+
+test('published Power BI tours stay collapsed beneath the unchanged app explainers', async () => {
+  const app = await read('src/App.tsx')
+  assert.match(app, /const powerBiVideo = s\.powerBiExplainer/)
+  assert.doesNotMatch(app, /import\.meta\.env\.DEV \? s\.powerBiExplainer/)
+  assert.match(app, /<VideoPlayer video=\{explainer\.video\}/)
+  assert.match(app, /<VideoPlayer video=\{powerBiVideo\}/)
+  assert.match(app, /Power BI version/)
+  assert.match(app, /<h2 className="watch-player-title">The app<\/h2>/)
+  assert.match(app, /<h2 className="watch-player-title" id="powerbi-explainer-title">Power BI · short tour<\/h2>/)
+  const css = await read('src/index.css')
+  assert.match(css, /\.watch-player-title \{ font-size: var\(--text-lg\)/)
+  assert.match(css, /\.watch-alternate \{ margin-top: var\(--space-lg\)/)
+  assert.ok(app.indexOf('<VideoPlayer video={explainer.video}') < app.indexOf('<details className="watch-alternate"'))
+  assert.match(app, /<details className="watch-alternate" onToggle=/)
+  assert.match(app, /const \[powerBiOpen, setPowerBiOpen\] = useState\(false\)/)
+  assert.match(app, /powerBiOpen && \(/)
+  assert.doesNotMatch(app, /<details className="watch-alternate"[^>]*\bopen[=\s>]/)
+  const review = solutions.filter((s) => s.powerBiExplainer)
+  assert.deepEqual(review.map((s) => s.id), ['valuelens', 'consumption-central'])
+  for (const solution of review) {
+    const video = solution.powerBiExplainer
+    assert.ok(solution.explainer)
+    const source = solution.id === 'valuelens'
+      ? 'Keithland89/ValueLens-for-Microsoft-Copilot/ffc0888d4c5953029b1d23c3cc3e9a23adba6ae1'
+      : `${solution.repo}/main`
+    assert.equal(video.url, `https://raw.githubusercontent.com/${source}/media/${solution.id}-powerbi-explainer.mp4`)
+    assert.match(video.disclosure, /Demo data.*AI-generated narration/)
+    assert.match(video.disclosure, /Caption timing is approximate/)
+    assert.match(await read(`public${video.captions}`), /^WEBVTT/)
+    const poster = await readFile(new URL(`../public${video.poster}`, import.meta.url))
+    assert.equal(poster.readUInt16BE(), 0xffd8)
+    assert.equal(video.chapters[0].time, 0)
+    for (const [index, chapter] of video.chapters.entries()) {
+      assert.ok(Number.isFinite(chapter.time) && chapter.time >= 0 && chapter.time < 180)
+      if (index) assert.ok(chapter.time > video.chapters[index - 1].time)
+    }
+  }
+})

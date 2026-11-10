@@ -119,6 +119,7 @@ export interface Solution {
   installerVideo?: HostedVideo
   overviewVideo?: HostedVideo
   explainer?: { route: string; video: HostedVideo; note: string }
+  powerBiExplainer?: HostedVideo
   preview: { src: string; alt: string }
   includes?: string[]
   related?: string[]
@@ -200,6 +201,22 @@ export const solutions: Solution[] = [
     id: 'valuelens',
     component: 'value',
     name: 'ValueLens',
+    powerBiExplainer: {
+      label: 'ValueLens in Power BI',
+      url: 'https://raw.githubusercontent.com/Keithland89/ValueLens-for-Microsoft-Copilot/ffc0888d4c5953029b1d23c3cc3e9a23adba6ae1/media/valuelens-powerbi-explainer.mp4',
+      length: '2 min 33 s',
+      disclosure: 'Demo data. AI-generated narration. Agent-name detail is omitted. Caption timing is approximate. Modelled value is not a measured outcome or realised cash saving.',
+      captions: '/media/valuelens-powerbi-explainer.en-GB.vtt',
+      poster: '/media/valuelens-powerbi-explainer-poster.jpg',
+      chapters: [
+        { time: 0, label: 'Start with activation' },
+        { time: 23.25, label: 'Read adoption over time' },
+        { time: 48.75, label: 'Understand the work' },
+        { time: 73.667, label: 'Treat value as an estimate' },
+        { time: 99.917, label: 'Find the next conversation' },
+        { time: 125.083, label: 'Check the assumptions' },
+      ],
+    },
     explainer: {
       route: '/watch/valuelens-explainer',
       video: {
@@ -296,6 +313,23 @@ export const solutions: Solution[] = [
     id: 'consumption-central',
     component: 'cost',
     name: 'Consumption Central',
+    powerBiExplainer: {
+      label: 'Consumption Central in Power BI',
+      url: 'https://raw.githubusercontent.com/microsoft/ConsumptionCentral-for-Microsoft-Copilot/main/media/consumption-central-powerbi-explainer.mp4',
+      length: '2 min 56 s',
+      disclosure: 'Demo data. AI-generated narration. Agent, resource and application identifiers are omitted. Caption timing is approximate. Credit units, cost bases and snapshot periods differ; forecasts are scenarios, not invoices.',
+      captions: '/media/consumption-central-powerbi-explainer.en-GB.vtt',
+      poster: '/media/consumption-central-powerbi-explainer-poster.jpg',
+      chapters: [
+        { time: 0, label: 'One reading order' },
+        { time: 25.25, label: 'Compare the right things' },
+        { time: 49.75, label: 'Follow Cowork demand' },
+        { time: 76.667, label: 'Separate totals from snapshots' },
+        { time: 101.583, label: 'Look beyond model tokens' },
+        { time: 130.333, label: 'Distinguish usage value from billing' },
+        { time: 153.333, label: 'Use forecasts as scenarios' },
+      ],
+    },
     explainer: {
       route: '/watch/consumption-central-explainer',
       video: {
