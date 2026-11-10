@@ -62,6 +62,19 @@ caveats: estimated value is not a measured outcome, missing source coverage is
 not zero, and current app captures can differ from older public demo revisions.
 Merge and verify source media before publishing the corresponding site links.
 
+ValueLens and Consumption Central also have `powerBiExplainer` metadata.
+Their existing watch pages show a small **Power BI version** disclosure,
+collapsed by default, beneath the unchanged visible long app explainer.
+Expanding it mounts a second native player; collapsing it unmounts and stops that
+player. These short tours use approved demo report-canvas captures, the original
+Ollie DragonHD narration workflow and OpenMontage/HyperFrames composition;
+identifier tables are explicitly omitted. Posters and approximate English
+captions are in `public/media/`. Each approved MP4 is hosted once in its
+product repository's `media/` folder, not this site's Git history.
+Any local review copies are Git-ignored and must not be included in the Pages
+build. Verify canonical media, seeking and captions before publishing. Do not commit report
+URLs, identifiers, account details or unreviewed report captures.
+
 Built with Vite, React and TypeScript. It has no UI framework: the styling is plain CSS in `src/index.css`.
 
 The header and hero link to `#demos`, a browser-demo directory generated from
