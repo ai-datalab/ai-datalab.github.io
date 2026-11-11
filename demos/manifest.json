@@ -67,7 +67,7 @@
       "kind": "app",
       "source": {
         "repository": "microsoft/ConsumptionCentral-for-Microsoft-Copilot",
-        "commit": "936c44c3c5fac7c221c61e99e10c8de537716f9e",
+        "commit": "a644c8b9da6676a67c6448d72522e359b568c7df",
         "directory": "app"
       },
       "build": {
