@@ -248,7 +248,7 @@ function BrowserDemos() {
         <ul className="demo-directory">
           {available.map((s) => (
             <li key={s.id}>
-              <h3>{s.name}</h3>
+              <h3>{byId(s.id) ? <a href={`#/s/${s.id}`}>{s.name}</a> : s.name}</h3>
               {s.id === hub.id && <p>{hub.tagline}</p>}
               <div className="demo-actions">
                 {solutionDemos(s.id).map((demo) => (
