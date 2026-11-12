@@ -214,10 +214,12 @@ function Stars({ s, live }: { s: Solution; live: Live }) {
   )
 }
 
-function DemoLinks({ id, className }: { id: string; className: string }) {
-  return solutionDemos(id).map((demo) => (
-    <a key={demo.url} className={className} href={demo.url}>{demo.label}</a>
-  ))
+function DemoLinks({ id, className, excludeValueLensReport = false }: { id: string; className: string; excludeValueLensReport?: boolean }) {
+  return solutionDemos(id)
+    .filter((demo) => !excludeValueLensReport || demo.url !== '/demo/valuelens-report/')
+    .map((demo) => (
+      <a key={demo.url} className={className} href={demo.url}>{demo.label}</a>
+    ))
 }
 
 function SetupLink({ s, className }: { s: { id: string; name: string }; className: string }) {
@@ -705,7 +707,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
             {live[s.id]?.pushedAt && <span className="muted">Updated {relative(live[s.id]?.pushedAt)}</span>}
           </div>
           <div className="cta-row">
-            <DemoLinks id={s.id} className="key" />
+            <DemoLinks id={s.id} className="key" excludeValueLensReport={s.id === 'valuelens'} />
             <SetupLink s={s} className="key" />
             <ExplainerLink s={s} />
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
