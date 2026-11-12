@@ -115,6 +115,7 @@ export interface Solution {
   measures: string[]
   beforeYouStart: string[]
   tryFirst?: { label: string; url: string }
+  powerBiDemo?: string
   videos: Video[]
   installerVideo?: HostedVideo
   overviewVideo?: HostedVideo
@@ -169,6 +170,7 @@ export const solutions: Solution[] = [
     id: 'ai-in-one',
     component: 'adoption',
     name: 'AI in One',
+    powerBiDemo: 'https://microsoft.github.io/Analytics-Hub/demos/#ai-in-one',
     repo: 'microsoft/AI-in-One-Dashboard',
     summary:
       'One dashboard for every Microsoft 365 Copilot, Copilot Chat and agent adoption signal, with row-level security and privacy controls built in.',
@@ -201,6 +203,7 @@ export const solutions: Solution[] = [
     id: 'valuelens',
     component: 'value',
     name: 'ValueLens',
+    powerBiDemo: 'https://microsoft.github.io/Analytics-Hub/demos/#value-lens',
     powerBiExplainer: {
       label: 'ValueLens in Power BI',
       url: 'https://raw.githubusercontent.com/microsoft/ValueLens-for-Microsoft-Copilot/main/media/valuelens-powerbi-explainer.mp4',
@@ -313,6 +316,7 @@ export const solutions: Solution[] = [
     id: 'consumption-central',
     component: 'cost',
     name: 'Consumption Central',
+    powerBiDemo: 'https://microsoft.github.io/Analytics-Hub/demos/#consumption-central',
     powerBiExplainer: {
       label: 'Consumption Central in Power BI',
       url: 'https://raw.githubusercontent.com/microsoft/ConsumptionCentral-for-Microsoft-Copilot/main/media/consumption-central-powerbi-explainer.mp4',

@@ -707,6 +707,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
           </div>
           <div className="cta-row">
             <DemoLinks id={s.id} className="key" />
+            {s.powerBiDemo && <a className="key" href={s.powerBiDemo} target="_blank" rel="noreferrer">Live Power BI demo</a>}
             <SetupLink s={s} className="key" />
             <ExplainerLink s={s} />
             <a className="key key-primary" href={`https://github.com/${s.repo}`} target="_blank" rel="noreferrer">
@@ -716,6 +717,7 @@ function SolutionPage({ s, live }: { s: Solution; live: Live }) {
               <a className="key" href={s.tryFirst.url} target="_blank" rel="noreferrer">{s.tryFirst.label}</a>
             )}
           </div>
+          {s.powerBiDemo && <p className="muted">Microsoft employees and partners; sign-in and access required.</p>}
         </div>
         {s.overviewVideo && (
           <section className="detail-walkthrough detail-overview" aria-label={`${s.name} overview video`}>
