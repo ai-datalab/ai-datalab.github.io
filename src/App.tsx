@@ -221,6 +221,16 @@ function DemoLinks({ id, className }: { id: string; className: string }) {
     ))
 }
 
+function PowerBiDemoLink({ s, className }: { s: Solution | undefined; className: string }) {
+  if (!s?.powerBiDemo) return null
+  return (
+    <div className="powerbi-demo">
+      <a className={className} href={s.powerBiDemo} target="_blank" rel="noreferrer" aria-label={`${s.name}: Live Power BI demo`}>Live Power BI demo</a>
+      <span className="muted">Microsoft employees and partners; sign-in and access required.</span>
+    </div>
+  )
+}
+
 function SetupLink({ s, className }: { s: { id: string; name: string }; className: string }) {
   const href = setupHref(s.id)
   if (!href) return null
@@ -244,7 +254,7 @@ function BrowserDemos() {
       <div className="wrap">
         <div className="section-head">
           <h2 id="demos-title">Try the browser demos</h2>
-          <p>Explore clickable dashboards and filters with invented sample data. No sign-in, installation or connection to your tenant. App demos and static browser report ports are labelled separately.</p>
+          <p>App demos use invented sample data and need no sign-in, installation or connection to your tenant. Live Power BI demos require access.</p>
         </div>
         <ul className="demo-directory">
           {available.map((s) => (
@@ -255,6 +265,7 @@ function BrowserDemos() {
                 {solutionDemos(s.id).map((demo) => (
                   <a key={demo.url} className="key" href={demo.url} aria-label={`${s.name}: ${demo.label}`}>{demo.label}</a>
                 ))}
+                <PowerBiDemoLink s={byId(s.id)} className="key" />
                 <SetupLink s={s} className="key" />
               </div>
             </li>
@@ -327,6 +338,7 @@ function SolutionsSection({ live }: { live: Live }) {
                 <p className="tile-question">{s.question}</p>
                 <div className="demo-actions">
                   <DemoLinks id={s.id} className="key key-sm" />
+                  <PowerBiDemoLink s={s} className="key key-sm" />
                   <SetupLink s={s} className="key key-sm" />
                   <ExplainerLink s={s} className="key key-sm" />
                 </div>

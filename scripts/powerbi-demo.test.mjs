@@ -13,11 +13,17 @@ test('live Power BI demos point to the matching walkthroughs only', () => {
   })
 })
 
-test('restricted walkthroughs are shown only on solution pages with an access note', async () => {
+test('restricted walkthroughs appear beside main-page app demos and on solution pages', async () => {
   const app = await readFile(new URL('../src/App.tsx', import.meta.url), 'utf8')
-  const [before, solutionPage] = app.split('function SolutionPage(')
-  const [detail, after] = solutionPage.split('function SetupPage(')
-  assert.doesNotMatch(before + after, /powerBiDemo/)
+  const [directory, solutionsSection] = app.split('function BrowserDemos(')[1].split('function SolutionsSection(')
+  const tiles = solutionsSection.split('function SolutionPage(')[0]
+  const detail = app.split('function SolutionPage(')[1].split('function SetupPage(')[0]
+  assert.match(directory, /App demos use invented sample data and need no sign-in/)
+  assert.match(directory, /Live Power BI demos require access/)
+  assert.match(directory, /<PowerBiDemoLink s=\{byId\(s\.id\)\} className="key" \/>/)
+  assert.match(tiles, /<PowerBiDemoLink s=\{s\} className="key key-sm" \/>/)
+  assert.match(app, /aria-label=\{`\$\{s\.name\}: Live Power BI demo`\}/)
   assert.match(detail, /href=\{s\.powerBiDemo\} target="_blank" rel="noreferrer">Live Power BI demo/)
-  assert.match(detail, /Microsoft employees and partners; sign-in and access required\./)
+  assert.equal(app.split('Microsoft employees and partners; sign-in and access required.').length - 1, 2)
+  assert.doesNotMatch(app, /Try the report demo/)
 })
