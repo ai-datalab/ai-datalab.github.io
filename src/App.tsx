@@ -226,7 +226,7 @@ function PowerBiDemoLink({ s, className }: { s: Solution | undefined; className:
   return (
     <div className="powerbi-demo">
       <a className={className} href={s.powerBiDemo} target="_blank" rel="noreferrer" aria-label={`${s.name}: Live Power BI demo`}>Live Power BI demo</a>
-      <span className="muted">Microsoft employees and partners; sign-in and access required.</span>
+      <span className="muted">Microsoft employees &amp; partners<br />Sign-in and access required</span>
     </div>
   )
 }

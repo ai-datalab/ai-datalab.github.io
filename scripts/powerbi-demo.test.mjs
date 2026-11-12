@@ -24,6 +24,7 @@ test('restricted walkthroughs appear beside main-page app demos and on solution 
   assert.match(tiles, /<PowerBiDemoLink s=\{s\} className="key key-sm" \/>/)
   assert.match(app, /aria-label=\{`\$\{s\.name\}: Live Power BI demo`\}/)
   assert.match(detail, /href=\{s\.powerBiDemo\} target="_blank" rel="noreferrer">Live Power BI demo/)
-  assert.equal(app.split('Microsoft employees and partners; sign-in and access required.').length - 1, 2)
+  assert.match(app, /Microsoft employees &amp; partners<br \/>Sign-in and access required/)
+  assert.match(detail, /Microsoft employees and partners; sign-in and access required\./)
   assert.doesNotMatch(app, /Try the report demo/)
 })
