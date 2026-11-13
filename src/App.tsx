@@ -47,18 +47,18 @@ export default function App() {
 
   useEffect(() => {
     document.title = explainerFor
-      ? `${explainerFor.name} explainer | Copilot-DataLab`
+      ? `${explainerFor.name} explainer | Copilot-DataHub`
       : detail
-      ? `${detail.name}${detail.tagline ? ` ${detail.tagline}` : ''} | Copilot-DataLab`
+      ? `${detail.name}${detail.tagline ? ` ${detail.tagline}` : ''} | Copilot-DataHub`
       : setupFor
-        ? `Set up ${setupFor.name} | Copilot-DataLab`
+        ? `Set up ${setupFor.name} | Copilot-DataHub`
         : post
-        ? `${post.title} | Copilot-DataLab`
+        ? `${post.title} | Copilot-DataHub`
         : page === '/insights'
-          ? 'Insights | Copilot-DataLab'
+          ? 'Insights | Copilot-DataHub'
           : page === '/about'
-            ? 'About Keith McGrane | Copilot-DataLab'
-            : 'Copilot-DataLab: Copilot and agent analytics you run in your own tenant'
+            ? 'About Keith McGrane | Copilot-DataHub'
+            : 'Copilot-DataHub: Copilot and agent analytics you run in your own tenant'
   }, [detail, setupFor, page, post, explainerFor])
 
   // Section links (#solutions) scroll within the home page; if we're on a
@@ -114,7 +114,7 @@ function Header({ current }: { current?: string }) {
       <div className="wrap header-row">
         <a className="brand" href="#">
           <Logo />
-          <span>Copilot-DataLab</span>
+          <span>Copilot-DataHub</span>
         </a>
         <nav aria-label="Site">
           <a href="#demos">Browser demos</a>
@@ -1105,7 +1105,7 @@ function Footer() {
     <footer className="site-footer">
       <div className="wrap footer-row">
         <div>
-          <a className="brand" href="#"><Logo /><span>Copilot-DataLab</span></a>
+          <a className="brand" href="#"><Logo /><span>Copilot-DataHub</span></a>
           <p className="footer-links">
             <a href="#solutions">Solutions</a>
             <a href="#/insights">Insights</a>

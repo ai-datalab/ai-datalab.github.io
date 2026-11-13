@@ -1,10 +1,10 @@
-# Copilot-DataLab
+# Copilot-DataHub
 
 A hub site for my open-source Microsoft 365 Copilot and agent analytics solutions:
 DataHub App for Microsoft Copilot, Agents, Cowork and Autopilots, the platform that brings them together (GitHub Copilot Panel isn't in it yet), and its components: AI in One (adoption),
 ValueLens (value), Consumption Central (consumption and cost), Agent Monitor (agents) and GitHub Copilot Panel (GitHub Copilot).
 
-The site uses the names Copilot-DataLab and DataHub App. The repos keep their own names: this one is AI-DataLab, and
+The site uses the names Copilot-DataHub and DataHub App. The repos keep their own names: this one is AI-DataLab, and
 DataHub App is [microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots](https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots).
 
 It also has an Insights section (posts on measuring AI adoption and value, written with Shailendra Hegde, each readable
