@@ -10,6 +10,7 @@ const sources = {
   'github-copilot-panel': 'microsoft/GitHubCopilotPanel',
   'ai-datahub': 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots',
   'agent-evaluator': 'microsoft/AgentEvaluator-for-Copilot-Studio',
+  'datahub-finops': 'ai-datalab/DataHub-FinOps',
 }
 const routes = {
   'ai-in-one': ['ai-in-one', 'app'],
@@ -22,9 +23,11 @@ const routes = {
   'valuelens-report': ['valuelens', 'report'],
   'consumption-central-report': ['consumption-central', 'report'],
   'agent-evaluator-report': ['agent-evaluator', 'report'],
+  'datahub-finops': ['datahub-finops', 'app'],
 }
 
 const policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; form-action 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'self'"
+const webAssemblyPolicy = policy.replace("script-src 'self'", "script-src 'self' 'wasm-unsafe-eval'")
 
 export function validateManifest(manifest) {
   if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.demos)) {
@@ -52,6 +55,9 @@ export function validateManifest(manifest) {
         demo.safety?.noAdminActions !== true) {
       throw new Error(`Demo ${demo.slug} needs all three safety review declarations`)
     }
+    if (demo.webAssembly !== undefined && typeof demo.webAssembly !== 'boolean') {
+      throw new Error(`Demo ${demo.slug} webAssembly must be true or false`)
+    }
   }
 }
 
@@ -67,13 +73,13 @@ async function bundleFiles(directory, relative = '') {
   return files
 }
 
-export function protectHtml(html, name) {
+export function protectHtml(html, name, { webAssembly = false } = {}) {
   if (!/<head(?:\s[^>]*)?>/i.test(html)) throw new Error(`Demo HTML needs a head element: ${name}`)
   const icon = /<link\b[^>]*\brel\s*=\s*["'][^"']*\bicon\b/i.test(html)
     ? ''
     : '\n<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1 1%22/%3E">'
   return html.replace(/<head(?:\s[^>]*)?>/i, (head) =>
-    `${head}\n<meta http-equiv="Content-Security-Policy" content="${policy}">${icon}`)
+    `${head}\n<meta http-equiv="Content-Security-Policy" content="${webAssembly ? webAssemblyPolicy : policy}">${icon}`)
 }
 
 export async function stageDemos(root) {
@@ -87,7 +93,9 @@ export async function stageDemos(root) {
       const target = path.join(root, 'dist', 'demo', demo.slug, file)
       const content = await readFile(path.join(source, file))
       await mkdir(path.dirname(target), { recursive: true })
-      await writeFile(target, /\.html?$/i.test(file) ? protectHtml(content.toString('utf8'), file) : content)
+      await writeFile(target, /\.html?$/i.test(file)
+        ? protectHtml(content.toString('utf8'), file, { webAssembly: demo.webAssembly === true })
+        : content)
     }
   }
   const output = path.join(root, 'dist', 'demo')

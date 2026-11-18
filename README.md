@@ -142,8 +142,10 @@ solutions section only when its demo is available.
 
 Supported paths: `ai-in-one`, `valuelens`, `consumption-central`, `agent-monitor`,
 `github-copilot-panel`, `copilot-datahub` (after its release), `ai-in-one-report`,
-`valuelens-report`, `consumption-central-report` and `agent-evaluator-report`.
-GitHub Copilot Panel is a report demo, not an app demo.
+`valuelens-report`, `consumption-central-report`, `agent-evaluator-report` and
+`datahub-finops`. GitHub Copilot Panel is a report demo, not an app demo.
+DataHub - FinOps (`ai-datalab/DataHub-FinOps`) has no solution card; it is listed
+only in the browser demos directory.
 
 ### Integrating a source build
 
@@ -204,6 +206,11 @@ Policy is inserted before resources in every HTML entry point, blocking cross-or
 connections, external assets, forms, frames, workers and plugins. Same-origin requests
 are allowed so demos can fetch their bundled static fixtures. The main site's
 behaviour is unchanged. CSP is defence in depth, not a substitute for source review.
+A demo that runs WebAssembly (for example Python through Pyodide) sets
+`"webAssembly": true` in its manifest entry. Only that demo's policy then adds
+`'wasm-unsafe-eval'` to `script-src`; JavaScript `eval` stays blocked. If an entry's
+`build` names a `checksumManifest` and its `checksumManifestSha256`, `npm run test:demos`
+checks the file's hash and every file it lists.
 Fixtures may be embedded or fetched from the demo's own static files. Source review
 must still confirm that no live service calls occur; same-origin CSP is not a
 restriction to a particular fixture directory or HTTP method.
@@ -252,6 +259,14 @@ and the copyright holder's permission to host and redistribute this demo and
 required source-derived assets at `/demo/agent-monitor/`. This is not a general
 open-source licence for its repository. Preserve its full third-party notices.
 Live source, telemetry, upload and administration controls are unavailable.
+
+DataHub - FinOps runs its Python dashboard in the browser through Pyodide
+(WebAssembly). Its bundle is the unmodified `dist/demo` output of the pinned
+source revision and command; `PROVENANCE.md` records the data sources, the owner's
+publication request and third-party notices. Every record is invented: the
+anonymised FinOps Foundation sample used by its local app is not bundled. Files a
+visitor imports are processed in the tab and never uploaded. The repository has
+no open-source licence.
 
 Before publication, use `npm run preview` and exercise each demo's navigation and
 filters, direct entry, refresh and narrow layouts. Check developer tools for sign-in,

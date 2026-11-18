@@ -1,9 +1,13 @@
 import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import test from 'node:test'
+import { fileURLToPath } from 'node:url'
 import { protectHtml, stageDemos, validateManifest } from './stage-demos.mjs'
+
+const sha256 = (data) => createHash('sha256').update(data).digest('hex')
 
 const demo = {
   slug: 'ai-in-one', solution: 'ai-in-one', kind: 'app',
@@ -22,6 +26,8 @@ test('requires supported unique routes, matching kinds, provenance and safety re
     ...demo, slug: 'copilot-datahub', solution: 'ai-datahub',
     source: { ...demo.source, repository: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots' },
   }])))
+  const finops = { ...demo, slug: 'datahub-finops', solution: 'datahub-finops', source: { ...demo.source, repository: 'ai-datalab/DataHub-FinOps' } }
+  assert.doesNotThrow(() => validateManifest(manifest([{ ...finops, webAssembly: true }])))
   for (const invalid of [
     { schemaVersion: 2, demos: [] },
     manifest([{ ...demo, slug: '../outside' }]), manifest([demo, demo]),
@@ -33,6 +39,7 @@ test('requires supported unique routes, matching kinds, provenance and safety re
     manifest([{ ...demo, slug: 'valuelens', solution: 'valuelens', source: { ...demo.source, repository: 'Keithland89/AI-in-One-Dashboard' } }]),
     manifest([{ ...demo, build: {} }]),
     manifest([{ ...demo, safety: { ...demo.safety, noLiveServices: false } }]),
+    manifest([{ ...finops, webAssembly: 'true' }]),
   ]) assert.throws(() => validateManifest(invalid))
 })
 
@@ -48,6 +55,29 @@ test('isolation precedes scripts and allows only same-origin fixture connections
   assert.equal((existingIcon.match(/rel="icon"/g) ?? []).length, 1)
   assert.ok(existingIcon.includes('href="./favicon.svg"'))
   assert.throws(() => protectHtml('<script></script>', 'index.html'))
+})
+
+test('only demos that declare WebAssembly may compile it', () => {
+  const scriptSrc = (html) => html.match(/script-src ([^;]+)/)?.[1]
+  assert.equal(scriptSrc(protectHtml('<head></head>', 'index.html')), "'self' 'unsafe-inline'")
+  const wasm = protectHtml('<head></head>', 'index.html', { webAssembly: true })
+  assert.equal(scriptSrc(wasm), "'self' 'wasm-unsafe-eval' 'unsafe-inline'")
+  assert.ok(!wasm.includes("'unsafe-eval'"))
+  assert.equal(wasm.replace(" 'wasm-unsafe-eval'", ''), protectHtml('<head></head>', 'index.html'))
+})
+
+test('published bundles match their declared checksum manifests', async () => {
+  const root = fileURLToPath(new URL('..', import.meta.url))
+  const published = JSON.parse(await readFile(path.join(root, 'demos', 'manifest.json'), 'utf8'))
+  for (const entry of published.demos.filter((item) => item.build.checksumManifest)) {
+    const dir = path.join(root, 'demos', 'builds', entry.slug)
+    const sums = await readFile(path.join(dir, entry.build.checksumManifest))
+    assert.equal(sha256(sums), entry.build.checksumManifestSha256, entry.slug)
+    for (const line of sums.toString('utf8').trim().split('\n')) {
+      const [, hash, file] = line.match(/^([a-f0-9]{64})  (.+)$/) ?? assert.fail(`${entry.slug}: ${line}`)
+      assert.equal(sha256(await readFile(path.join(dir, file))), hash, `${entry.slug}/${file}`)
+    }
+  }
 })
 
 async function fixture(t, demos) {

@@ -247,7 +247,7 @@ function ExplainerLink({ s, className = 'key' }: { s: Solution; className?: stri
 }
 
 function BrowserDemos() {
-  const available = [...ordered, { id: 'agent-evaluator', name: 'Agent Evaluator' }]
+  const available = [...ordered, { id: 'agent-evaluator', name: 'Agent Evaluator' }, { id: 'datahub-finops', name: 'DataHub - FinOps' }]
     .filter((s) => solutionDemos(s.id).length > 0)
   return (
     <section id="demos" className="section" aria-labelledby="demos-title">

@@ -1,0 +1,5 @@
+Pyodide 0.29.5 (MPL-2.0), unmodified. Source: https://github.com/pyodide/pyodide
+Licence: https://www.mozilla.org/en-US/MPL/2.0/
+It includes CPython 3.13.2 and its standard library (PSF License Agreement:
+https://docs.python.org/3.13/license.html) and Emscripten 4.0.9 runtime code
+(MIT / University of Illinois/NCSA: https://github.com/emscripten-core/emscripten/blob/main/LICENSE).
