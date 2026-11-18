@@ -142,10 +142,18 @@ solutions section only when its demo is available.
 
 Supported paths: `ai-in-one`, `valuelens`, `consumption-central`, `agent-monitor`,
 `github-copilot-panel`, `copilot-datahub` (after its release), `ai-in-one-report`,
-`valuelens-report`, `consumption-central-report`, `agent-evaluator-report` and
-`datahub-finops`. GitHub Copilot Panel is a report demo, not an app demo.
+`valuelens-report`, `consumption-central-report`, `agent-evaluator-report`,
+`datahub-finops` and `datahub-business-impact`. GitHub Copilot Panel is a report demo, not an app demo.
 DataHub - FinOps (`ai-datalab/DataHub-FinOps`) has no solution card; it is listed
 only in the browser demos directory.
+
+The DataHub solution also links to **Business impact preview**, a separate feedback build.
+It opens the Bottom line with eight BPS/SAP outcome measures and three separately labelled
+D365 Sales examples, alongside functional personas and the fuller process scorecard.
+All figures are synthetic, source adapters are proposed, and no BPS, SAP or D365 environment
+is connected. Its cohorts do not reconcile to the core demo's Value figures. This is a
+publicly listed, no-sign-in preview, not private hosting. Its HTML requests no search indexing.
+The existing DataHub and FinOps demos are left unchanged.
 
 ### Integrating a source build
 

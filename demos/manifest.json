@@ -2,6 +2,27 @@
   "schemaVersion": 1,
   "demos": [
     {
+      "slug": "datahub-business-impact",
+      "solution": "ai-datahub",
+      "kind": "app",
+      "source": {
+        "repository": "microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots",
+        "commit": "f1cc58a8f9cf886a63154acc410ed98335126a1f",
+        "directory": "app"
+      },
+      "build": {
+        "command": "npm ci && python -m pip install -e ..\\core && npm run build:demo:impact (from app)",
+        "runtime": "Node.js 26.13.0; Python 3.12.10; DuckDB 1.5.5",
+        "checksumManifest": "SHA256SUMS.txt",
+        "checksumManifestSha256": "e85b8915101dc9c951317beae0d41f75addfa1bb0d62e389ff0c494735bfa031"
+      },
+      "safety": {
+        "inventedFixtures": true,
+        "noLiveServices": true,
+        "noAdminActions": true
+      }
+    },
+    {
       "slug": "copilot-datahub",
       "solution": "ai-datahub",
       "kind": "app",

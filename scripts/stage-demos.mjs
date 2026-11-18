@@ -19,6 +19,7 @@ const routes = {
   'agent-monitor': ['agent-monitor', 'app'],
   'github-copilot-panel': ['github-copilot-panel', 'report'],
   'copilot-datahub': ['ai-datahub', 'app'],
+  'datahub-business-impact': ['ai-datahub', 'app'],
   'ai-in-one-report': ['ai-in-one', 'report'],
   'valuelens-report': ['valuelens', 'report'],
   'consumption-central-report': ['consumption-central', 'report'],

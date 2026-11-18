@@ -26,6 +26,10 @@ test('requires supported unique routes, matching kinds, provenance and safety re
     ...demo, slug: 'copilot-datahub', solution: 'ai-datahub',
     source: { ...demo.source, repository: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots' },
   }])))
+  assert.doesNotThrow(() => validateManifest(manifest([{
+    ...demo, slug: 'datahub-business-impact', solution: 'ai-datahub',
+    source: { ...demo.source, repository: 'microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots' },
+  }])))
   const finops = { ...demo, slug: 'datahub-finops', solution: 'datahub-finops', source: { ...demo.source, repository: 'ai-datalab/DataHub-FinOps' } }
   assert.doesNotThrow(() => validateManifest(manifest([{ ...finops, webAssembly: true }])))
   for (const invalid of [
@@ -77,6 +81,24 @@ test('published bundles match their declared checksum manifests', async () => {
       const [, hash, file] = line.match(/^([a-f0-9]{64})  (.+)$/) ?? assert.fail(`${entry.slug}: ${line}`)
       assert.equal(sha256(await readFile(path.join(dir, file))), hash, `${entry.slug}/${file}`)
     }
+  }
+})
+
+test('Business impact preview has a clean pinned source and keeps the existing demo separate', async () => {
+  const root = fileURLToPath(new URL('..', import.meta.url))
+  const published = JSON.parse(await readFile(path.join(root, 'demos', 'manifest.json'), 'utf8'))
+  const preview = published.demos.find((entry) => entry.slug === 'datahub-business-impact')
+  const existing = published.demos.find((entry) => entry.slug === 'copilot-datahub')
+  assert.ok(preview && existing)
+  const directory = path.join(root, 'demos', 'builds', preview.slug)
+  const provenance = JSON.parse(await readFile(path.join(directory, 'SOURCE_PROVENANCE.json'), 'utf8'))
+  assert.equal(provenance.sourceRevision, preview.source.commit)
+  assert.equal(provenance.sourceDirty, false)
+  assert.equal(provenance.variant, 'business-impact-review')
+  for (const file of ['index.html', 'demo.html']) {
+    const html = await readFile(path.join(directory, file), 'utf8')
+    assert.match(html, /name="robots" content="noindex, nofollow, noarchive"/)
+    assert.match(html, /if \(!location.hash\).*#\/business-impact\/impact-summary/)
   }
 })
 
