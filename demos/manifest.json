@@ -7,14 +7,14 @@
       "kind": "app",
       "source": {
         "repository": "microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots",
-        "commit": "f1cc58a8f9cf886a63154acc410ed98335126a1f",
+        "commit": "0221be83799896494dd34718553964e25f025820",
         "directory": "app"
       },
       "build": {
         "command": "npm ci && python -m pip install -e ..\\core && npm run build:demo:impact (from app)",
         "runtime": "Node.js 26.13.0; Python 3.12.10; DuckDB 1.5.5",
         "checksumManifest": "SHA256SUMS.txt",
-        "checksumManifestSha256": "e85b8915101dc9c951317beae0d41f75addfa1bb0d62e389ff0c494735bfa031"
+        "checksumManifestSha256": "98e952b8c7aea9ef7ef35580de8e41773540ded77c15ebaf32369e28d6e76d04"
       },
       "safety": {
         "inventedFixtures": true,

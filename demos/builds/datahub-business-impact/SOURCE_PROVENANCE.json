@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/microsoft/DataHub-App-for-Microsoft-Copilot-Agents-Cowork-and-Autopilots",
-  "sourceRevision": "f1cc58a8f9cf886a63154acc410ed98335126a1f",
+  "sourceRevision": "0221be83799896494dd34718553964e25f025820",
   "sourceDirty": false,
   "sampleTree": "505143c911709063d95bcfff41b36e49f98ec06b",
   "node": "v26.13.0",
@@ -8,7 +8,7 @@
   "businessImpact": {
     "classification": "Synthetic BPS/SAP scenario and a separate invented D365 Sales cohort. No live sources.",
     "source": "app/src/screens/business-impact/scenario.ts",
-    "sha256": "6a6ea8b00d9ee14a0cfaca07e84c49124809bae97d70782f34977b1e1c30b223"
+    "sha256": "1d554558eae2fd8ac9904f8d00ab2d449c76ae6d4da3396ef5f5e9fae235fc3f"
   },
   "description": "Published synthetic CSV samples; no live Fabric or tenant export; dates are not shifted.",
   "classification": "Shared core classification with ingestion exclusions disabled to preserve the published curated sample rows.",
