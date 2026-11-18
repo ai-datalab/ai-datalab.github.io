@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<!--
+THESIS: Match the DataHub demo's visual language for AI cost data: charts first, tables only for detail.
+OWN-WORLD: Fluent blue, white sidebar, bordered white cards on a #fafafa canvas, Segoe UI.
+STORY: See vendors side by side, read what they consumed, then replace the sample with a checked CSV.
+FIRST VIEWPORT: Sidebar, sample notice, page header, filter chips, tabs, vendor KPI cards with sparklines.
+FORM: User-pinned DataHub layout (cross-vendor and consumption pages); no external assets or libraries.
+-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataHub - FinOps | Online demo</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="demo.css">
+  <script src="demo-shim.js"></script>
+  <script type="module" src="dashboard.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">D</span><div><strong>DataHub - FinOps</strong><small>Cloud &amp; AI cost</small></div></div>
+    <nav aria-label="Dashboard">
+      <a href="#/cross-vendor/portfolio" data-section="cross-vendor"><svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M2.5 10h15M10 2.5c2.2 2.2 3.3 4.7 3.3 7.5s-1.1 5.3-3.3 7.5c-2.2-2.2-3.3-4.7-3.3-7.5S7.8 4.7 10 2.5z"/></svg>Cross-vendor view</a>
+      <a href="#/consumption/usage" data-section="consumption"><svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><ellipse cx="10" cy="5.5" rx="6" ry="2.5"/><path d="M4 5.5v4c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-4M4 9.5v4c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-4"/></svg>Product usage</a>
+      <a href="#/sources" data-section="sources"><svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V3.5M6.5 7 10 3.5 13.5 7M3.5 12v3.5h13V12"/></svg>Data sources</a>
+    </nav>
+    <p class="nav-group">Reference</p>
+    <nav aria-label="Reference">
+      <a href="#/methodology" data-section="methodology"><svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 4.5c2.5-1 4.5-1 6.5.5 2-1.5 4-1.5 6.5-.5v11c-2.5-1-4.5-1-6.5.5-2-1.5-4-1.5-6.5-.5zM10 5v11"/></svg>Methodology</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <span class="local-dot" aria-hidden="true"></span> Online demo
+      <p>Invented data. No sign-in.<br>Runs in your browser; nothing is uploaded.</p>
+    </div>
+  </aside>
+  <main id="main" tabindex="-1">
+    <p class="demo-strip"><strong>Online demo</strong><span>No sign-in. All data is invented and processed in your browser.</span> <a href="/#solutions">All dashboard demos</a></p>
+    <div class="banner" id="dataset-notice"><strong>Loading</strong><span>Reading the illustrative cross-vendor scenario...</span></div>
+    <div class="view-switch" id="view-switch" role="group" aria-label="Sample scenario" hidden>
+      <span>View</span>
+      <button type="button" data-kind="ai" aria-pressed="false">AI FinOps</button>
+      <button type="button" data-kind="cloud" aria-pressed="false">Multi-cloud FinOps</button>
+    </div>
+    <header class="page-header">
+      <div class="tile" id="page-tile" aria-hidden="true"></div>
+      <div class="page-title"><h1 id="page-title">DataHub - FinOps</h1><p id="page-sub"></p><p id="page-data" class="page-data"></p></div>
+      <a class="button" id="import-link" href="#/sources">Import cloud cost CSV</a>
+    </header>
+    <div id="error" class="error" role="alert" hidden></div>
+    <form class="filter-bar" id="filters" aria-label="Filter spend">
+      <label class="chip"><span>Period</span><select name="month" id="month"><option value="">All periods</option></select></label>
+      <label class="chip"><span>Vendor</span><select name="provider" id="provider"><option value="">All vendors</option></select></label>
+      <label class="chip"><span>Service</span><select name="service" id="service"><option value="">All services</option></select></label>
+      <label class="chip"><span>Currency</span><select name="currency" id="currency"></select></label>
+      <label class="chip"><span>Model</span><select name="model" id="model"><option value="">All models</option></select></label>
+      <label class="chip"><span>Workload</span><select name="workload" id="workload"><option value="">All workloads</option></select></label>
+      <label class="chip"><span>Filter by</span><select name="dimension" id="dimension"><option value="">All dimensions</option></select></label>
+      <label class="chip"><span>Value</span><input name="dimensionValue" id="dimensionValue" list="dimension-values-options" placeholder="All values" autocomplete="off"><datalist id="dimension-values-options"></datalist></label>
+      <button type="button" class="text-button" id="reset">Reset filters</button>
+    </form>
+    <div class="tabs" id="tabs" role="tablist" hidden></div>
+    <p id="status" role="status" aria-live="polite">Loading data...</p>
+    <div id="view" role="tabpanel" tabindex="-1"></div>
+
+    <section class="page-section" id="sources-page" aria-labelledby="sources-title" hidden>
+      <div class="stage"><h2 id="sources-title">Import cloud cost CSV</h2><p>Bring your own standardized cloud cost export, or load a sample. Files are processed in your browser, kept in memory, and never uploaded.</p></div>
+      <div class="sample-actions"><button id="ai-sample" type="button" class="button">Load AI scenario</button><button id="sample" type="button" class="button">Load multi-cloud scenario</button></div>
+      <form id="import-form" class="import-form">
+        <label for="files"><strong>Select a complete CSV snapshot</strong><span>UTF-8 CSV only. Up to 100 files, 20 MiB and 100,000 rows combined.</span></label>
+        <input id="files" type="file" accept=".csv,text/csv" multiple required>
+        <p id="selection" class="hint">Select every partition for the snapshot together. Files are combined, not deduplicated.</p>
+        <label class="confirmation"><input type="checkbox" id="complete" required> These files are one complete snapshot. Replace the current dataset; do not append it.</label>
+        <button type="submit" class="button primary" id="import">Validate &amp; import</button>
+        <a href="ai-sample.csv" download="ai-scenario.csv">Download synthetic AI CSV</a>
+        <a href="sample.csv" download="multi-cloud-scenario.csv">Download the multi-cloud scenario CSV</a>
+      </form>
+      <h3>Loaded files</h3>
+      <div class="table-scroll" id="file-list"></div>
+      <div id="warnings" class="warnings"></div>
+      <p class="hint">Uses FinOps Open Cost and Usage Specification (FOCUS) columns, but you do not need to know the standard to use this dashboard. Basic structural checks only: this is not full certification. Invalid snapshots are rejected without changing the last good dataset.</p>
+      <p class="hint">Claude and OpenAI live billing connectors are not connected. API cost/usage, enterprise seats and cloud-hosted models have different billing sources; never count a reseller bill and a direct-provider bill for the same charge.</p>
+    </section>
+
+    <section class="page-section" id="methodology-page" aria-labelledby="methodology-title" hidden>
+      <div class="stage"><h2 id="methodology-title">From a file to a trustworthy total</h2><p>What the dashboard does with your data, and what it deliberately does not claim.</p></div>
+      <div class="method-grid">
+        <div><h3>Keep the money intact</h3><p>Billed and effective costs are summed with decimal arithmetic. Credits stay negative. Currencies are filtered separately, never added or converted.</p></div>
+        <div><h3>Replace, don't double-count</h3><p>Every import replaces this session's full snapshot. Include all partitions once. Repeated charge rows are preserved because the source format does not guarantee row uniqueness.</p></div>
+        <div><h3>Missing is not zero</h3><p>Token counters, models and workloads that a file does not supply show as "Not supplied". Days with no charges are not drawn as zero.</p></div>
+        <div><h3>Ratios are blended</h3><p>Cost per million tokens uses only rows that report every token counter. It mixes input, output and cache pricing, so it is not a model price benchmark.</p></div>
+        <div><h3>Run-rate is not a forecast</h3><p>Month-end figures extend the spend to date at a straight-line pace. They ignore weekends, launches and price changes.</p></div>
+        <div><h3>Fabric comes next</h3><p>The included Fabric loader uses the same parser to write a prototype Delta table. No workspace, export, Power BI model or scheduled ingestion has been deployed.</p></div>
+      </div>
+      <p class="attribution">The AI scenario is synthetic: illustrative model-family labels, costs and usage, not actual rates or invoices. The multi-cloud scenario is also invented: made-up accounts, resources, tags and amounts, with public service and region names for readability. It is not provider pricing or billing data. Amounts display to two decimal places. Visual layout follows the DataHub App demo. No vendor endorsement.</p>
+    </section>
+    <footer>DataHub - FinOps <span>Cloud &amp; AI cost · Online demo with invented data</span></footer>
+  </main>
+</body>
+</html>
